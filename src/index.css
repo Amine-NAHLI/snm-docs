@@ -89,7 +89,7 @@ img, canvas {
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.15), 0 0 40px rgba(0, 255, 255, 0.05);
 }
 
-/* Code block */
+/* Code block — outer clips (border-radius), inner scrolls */
 .code-block {
   background: #0d1117;
   border: 1px solid rgba(0, 255, 255, 0.15);
@@ -97,8 +97,7 @@ img, canvas {
   font-family: var(--font-mono);
   font-size: 0.875rem;
   position: relative;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
 }
 .code-block::before {
   content: '';
@@ -106,6 +105,14 @@ img, canvas {
   top: 0; left: 0; right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(0,255,255,0.5), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+/* Inner scrollable area — copy button stays pinned above this */
+.code-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1rem 5rem 1rem 1rem;
 }
 
 /* Grid background */
@@ -320,14 +327,10 @@ section {
 }
 .table-scroll-x .table-inner { min-width: 480px; }
 
-/* Code blocks — scroll instead of overflow */
-.code-block {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
+/* Code blocks — mobile size, inner scroll already handled by .code-scroll */
 @media (max-width: 640px) {
   .code-block { font-size: 0.75rem; }
-  .code-block pre { white-space: pre; }
+  .code-scroll { padding-right: 4rem; }
 }
 
 /* Timeline circles — smaller on mobile */
@@ -406,4 +409,21 @@ section {
   .footer-grid { text-align: center; }
   .footer-grid a, .footer-grid button { justify-content: center !important; text-align: center !important; }
   .bottom-bar { text-align: center; }
+}
+
+/* ── Global: prose text always wraps ── */
+p, li, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+/* Code identifiers and URLs break at any character boundary */
+code, pre {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+/* But inside .code-scroll, pre should NOT break — it should scroll */
+.code-scroll pre, .code-scroll code {
+  word-break: normal;
+  overflow-wrap: normal;
+  white-space: pre;
 }
