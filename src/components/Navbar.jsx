@@ -168,7 +168,7 @@ export default function Navbar() {
               background: 'none', border: 'none', cursor: 'pointer',
               color: open ? 'var(--cyan)' : 'var(--text-secondary)',
               padding: '0.5rem', minHeight: '44px', minWidth: '44px',
-              display: 'none', alignItems: 'center', justifyContent: 'center',
+              alignItems: 'center', justifyContent: 'center',
               transition: 'color 0.2s',
             }}
           >

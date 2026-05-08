@@ -199,7 +199,7 @@ export default function AIEngine() {
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
                   >
                     <div style={{ width: '4px', height: '2.5rem', borderRadius: '9999px', flexShrink: 0, background: meta.color, boxShadow: `0 0 10px ${meta.color}` }} />
-                    <div style={{ flex: 1 }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontWeight: 700, fontSize: '0.875rem', color: meta.color, marginBottom: '0.1rem' }}>{threat.level}</p>
                       <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{threat.score}</p>
                     </div>

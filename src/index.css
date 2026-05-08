@@ -285,6 +285,13 @@ img, canvas {
    MOBILE RESPONSIVE FIXES
    ══════════════════════════════════════════ */
 
+/* Prevent ALL sections from causing horizontal scroll */
+section {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
 /* Pipeline arrows — hide when steps stack vertically */
 .pipeline-arrow { display: flex; align-items: center; flex-shrink: 0; }
 @media (max-width: 639px) {
@@ -313,10 +320,14 @@ img, canvas {
 }
 .table-scroll-x .table-inner { min-width: 480px; }
 
-/* Code blocks — smaller font + pre min-width on mobile */
+/* Code blocks — scroll instead of overflow */
+.code-block {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 @media (max-width: 640px) {
   .code-block { font-size: 0.75rem; }
-  .code-block pre { width: max-content; min-width: 100%; }
+  .code-block pre { white-space: pre; }
 }
 
 /* Timeline circles — smaller on mobile */
@@ -352,13 +363,13 @@ img, canvas {
   width: 100%;
 }
 
-/* Reduce grid gap on mobile */
+/* Grids: reduce gap and force single column below min thresholds */
 @media (max-width: 640px) {
-  .grid-auto-3 { gap: 1rem; }
-  .grid-auto-2 { gap: 1rem; }
+  .grid-auto-3 { gap: 1rem; grid-template-columns: 1fr; }
+  .grid-auto-2 { gap: 1rem; grid-template-columns: 1fr; }
 }
 
-/* Tablet: 2-column grid for features */
+/* Tablet: 2-column grid for 3-col grids */
 @media (min-width: 640px) and (max-width: 900px) {
   .grid-auto-3 { grid-template-columns: repeat(2, 1fr); }
 }
@@ -366,4 +377,33 @@ img, canvas {
 /* Prevent badge overflow in hero */
 @media (max-width: 480px) {
   .hero-badge { font-size: 0.65rem !important; padding: 0.25rem 0.625rem !important; }
+}
+
+/* ── Mobile section backgrounds (stronger on mobile — desktop bg is too faint) ── */
+@media (max-width: 768px) {
+  #overview  { background-image: radial-gradient(ellipse 160% 60% at 50% 0%,   rgba(0,255,255,0.10)   0%, transparent 70%) !important; }
+  #features  { background-image: radial-gradient(ellipse 160% 60% at 50% 50%,  rgba(124,58,237,0.12)  0%, transparent 70%) !important; }
+  #installation { background-image: radial-gradient(ellipse 160% 60% at 50% 0%, rgba(255,0,255,0.09)  0%, transparent 70%) !important; }
+  #usage     { background-image: radial-gradient(ellipse 160% 60% at 50% 50%,  rgba(0,255,255,0.08)   0%, transparent 70%) !important; }
+  #ai-engine { background-image: radial-gradient(ellipse 160% 60% at 50% 30%,  rgba(124,58,237,0.12)  0%, transparent 70%) !important; }
+  #dataset   { background-image: radial-gradient(ellipse 160% 60% at 50% 60%,  rgba(0,255,136,0.09)   0%, transparent 70%) !important; }
+  #author    { background-image: radial-gradient(ellipse 160% 80% at 50% 50%,  rgba(124,58,237,0.14)  0%, transparent 70%) !important; }
+}
+
+/* ── Smaller section headings on mobile ── */
+@media (max-width: 480px) {
+  .section-pad > div > div[style*="textAlign: center"] h2 { font-size: 1.75rem !important; }
+}
+
+/* ── Ensure flex items never overflow their containers ── */
+@media (max-width: 768px) {
+  .ai-grid > * { min-width: 0; }
+  .author-grid > * { min-width: 0; }
+}
+
+/* ── Footer: center text on mobile ── */
+@media (max-width: 767px) {
+  .footer-grid { text-align: center; }
+  .footer-grid a, .footer-grid button { justify-content: center !important; text-align: center !important; }
+  .bottom-bar { text-align: center; }
 }

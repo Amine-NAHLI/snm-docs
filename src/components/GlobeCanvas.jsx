@@ -4,7 +4,7 @@ import * as THREE from 'three'
 
 const RADIUS = 3
 const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-const N = isMobile ? 800 : 2000
+const N = isMobile ? 600 : 2000
 const PING_INTERVAL = isMobile ? 5 : 3
 
 function Globe() {

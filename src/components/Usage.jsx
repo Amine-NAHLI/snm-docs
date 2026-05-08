@@ -13,7 +13,7 @@ function StepList({ steps }) {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: i * 0.07 }}
-          style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}
+          style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', minWidth: 0 }}
         >
           <div className="font-orbitron" style={{
             flexShrink: 0, width: '1.75rem', height: '1.75rem',
@@ -30,7 +30,7 @@ function StepList({ steps }) {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
               <ChevronRight size={13} style={{ color: 'var(--cyan)', flexShrink: 0 }} />
-              <code style={{ color: '#67e8f9', fontSize: '0.875rem', fontFamily: 'var(--font-mono)' }}>{s.cmd}</code>
+              <code style={{ color: '#67e8f9', fontSize: '0.875rem', fontFamily: 'var(--font-mono)', wordBreak: 'break-all', minWidth: 0 }}>{s.cmd}</code>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.825rem', paddingLeft: '1.25rem' }}>{s.desc}</p>
           </div>
