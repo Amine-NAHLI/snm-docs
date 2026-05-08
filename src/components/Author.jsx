@@ -66,7 +66,7 @@ function AuthorPhoto() {
         transition: 'opacity 0.3s',
       }} />
       <motion.img
-        src="/nahli.png"
+        src="https://i.imgur.com/1GJBwZO.jpeg"
         alt="Amine Nahli"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
