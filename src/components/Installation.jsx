@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { Copy, Check, AlertTriangle, Shield, Download, Terminal } from 'lucide-react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { Copy, Check, AlertTriangle, Shield, Download, Terminal, ChevronDown, ExternalLink } from 'lucide-react'
 import { useLang } from '../context/LanguageContext'
 import { t } from '../translations'
 
@@ -79,12 +79,13 @@ function AlertBox({ type = 'warning', children }) {
       border: `1px solid ${color}22`,
     }}>
       <Icon size={16} style={{ color, flexShrink: 0, marginTop: '0.1rem' }} />
-      <p style={{ fontSize: '0.825rem', lineHeight: 1.65, color: `${color}cc`, wordBreak: 'break-word', overflowWrap: 'break-word' }}>{children}</p>
+      <div style={{ fontSize: '0.825rem', lineHeight: 1.65, color: `${color}cc`, wordBreak: 'break-word', overflowWrap: 'break-word' }}>{children}</div>
     </div>
   )
 }
 
 export default function Installation({ isEmbed = false }) {
+  const [showNpcap, setShowNpcap] = useState(false)
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
   const { lang } = useLang()
@@ -104,6 +105,56 @@ export default function Installation({ isEmbed = false }) {
             ))}
           </ul>
           <AlertBox type="warning">{tx.s1w1}</AlertBox>
+
+          <button 
+            onClick={() => setShowNpcap(!showNpcap)}
+            style={{
+              marginTop: '1rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '0.75rem 1rem', borderRadius: '0.625rem', background: 'rgba(0,255,255,0.05)',
+              border: '1px solid rgba(0,255,255,0.15)', color: 'var(--cyan)', cursor: 'pointer',
+              fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Download size={14} /> {tx.npcapBtn}
+            </div>
+            <ChevronDown size={14} style={{ transform: showNpcap ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
+          </button>
+
+          <AnimatePresence>
+            {showNpcap && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                style={{ overflow: 'hidden' }}
+              >
+                <div style={{ padding: '1rem', marginTop: '0.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '0.75rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <h4 style={{ fontSize: '0.85rem', color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {tx.npcapGuide.title}
+                  </h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                    {[tx.npcapGuide.step1, tx.npcapGuide.step2, tx.npcapGuide.step3].map((step, idx) => (
+                      <div key={idx} style={{ display: 'flex', gap: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                        <span style={{ color: 'var(--cyan)', fontWeight: 700 }}>{idx + 1}.</span>
+                        <p>{step}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--cyan)', marginBottom: '0.375rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      {tx.npcapGuide.verifyTitle}
+                    </p>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                      {tx.npcapGuide.verifyText}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <AlertBox type="info">{tx.s1w2}</AlertBox>
         </div>
       ),
@@ -143,6 +194,7 @@ export default function Installation({ isEmbed = false }) {
         <>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>{tx.s5sub}</p>
           <CodeBlock code={`python app.py`} />
+          <AlertBox type="warning">{tx.s5admin}</AlertBox>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '1rem', marginBottom: '0.25rem' }}>{tx.s5or}</p>
           <CodeBlock code={`python main.py`} />
         </>

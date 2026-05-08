@@ -60,7 +60,16 @@ export const t = {
       s2t: 'Clone the Repository',
       s3t: 'Install Python Dependencies', s3sub: 'Install all required packages:', s3inc: 'Includes: scapy, psutil, scikit-learn, joblib, pandas, customtkinter',
       s4t: 'Download AI Models (~5.1 GB)', s4sub: 'Fetch the Random Forest model from Hugging Face:', s4link: 'Models hosted at:',
-      s5t: 'Launch SNM', s5sub: 'Start the Cyberpunk GUI:', s5or: 'Or use the interactive CLI mode:',
+      s5t: 'Launch SNM', s5sub: 'Start the Cyberpunk GUI:', s5admin: 'Important: Run PowerShell as Administrator to ensure full access to your network interfaces.', s5or: 'Or use the interactive CLI mode:',
+      npcapBtn: 'Npcap Setup Guide',
+      npcapGuide: {
+        title: 'Npcap Installation (Windows)',
+        step1: 'Download the installer from npcap.com',
+        step2: 'Run the .exe and check "Install Npcap in WinPcap API-compatible Mode"',
+        step3: 'Restart your computer to apply drivers',
+        verifyTitle: 'How to verify?',
+        verifyText: 'Launch SNM in PowerShell (Admin). If the interface list appears and scanning starts without "Scapy error", it is correctly installed.',
+      },
       copy: 'Copy', copied: 'Copied!',
     },
     usage: {
@@ -70,7 +79,7 @@ export const t = {
       guiTitle: 'Cyberpunk GUI Mode', guiRec: 'Recommended',
       guiDesc: 'Full-featured graphical interface with real-time dashboard and one-click export.',
       guiSteps: [
-        { cmd: 'python app.py', desc: 'Launch the Cyberpunk GUI with admin privileges' },
+        { cmd: 'python app.py', desc: 'Launch the Cyberpunk GUI (Requires PowerShell as Administrator for network access)' },
         { cmd: 'Click "Auto Detect"', desc: 'Detects your active network interface and subnet' },
         { cmd: 'Click "Discover Hosts"', desc: 'ARP + TCP hybrid scan finds all live hosts' },
         { cmd: 'Select target IP', desc: 'Click on any discovered host in the list' },
@@ -213,7 +222,16 @@ export const t = {
       s2t: 'Cloner le Dépôt',
       s3t: 'Installer les Dépendances Python', s3sub: 'Installez tous les packages requis :', s3inc: 'Inclut : scapy, psutil, scikit-learn, joblib, pandas, customtkinter',
       s4t: 'Télécharger les Modèles IA (~5.1 Go)', s4sub: 'Récupérez le modèle depuis Hugging Face :', s4link: 'Modèles hébergés sur :',
-      s5t: 'Lancer SNM', s5sub: 'Démarrez l\'interface graphique Cyberpunk :', s5or: 'Ou utilisez le mode CLI interactif :',
+      s5t: 'Lancer SNM', s5sub: 'Démarrez l\'interface graphique Cyberpunk :', s5admin: 'Important : Lancez PowerShell en tant qu\'Administrateur pour permettre l\'accès complet à vos cartes réseau.', s5or: 'Ou utilisez le mode CLI interactif :',
+      npcapBtn: 'Guide d\'installation Npcap',
+      npcapGuide: {
+        title: 'Installation Npcap (Windows)',
+        step1: 'Téléchargez l\'installeur sur npcap.com',
+        step2: 'Lancez l\'.exe et cochez "Install Npcap in WinPcap API-compatible Mode"',
+        step3: 'Redémarrez votre ordinateur pour appliquer les pilotes',
+        verifyTitle: 'Comment vérifier ?',
+        verifyText: 'Lancez SNM en PowerShell (Admin). Si la liste des interfaces s\'affiche et que le scan démarre sans erreur "Scapy", l\'installation est réussie.',
+      },
       copy: 'Copier', copied: 'Copié !',
     },
     usage: {
@@ -223,7 +241,7 @@ export const t = {
       guiTitle: 'Mode Interface Cyberpunk', guiRec: 'Recommandé',
       guiDesc: 'Interface graphique complète avec dashboard temps réel et export en un clic.',
       guiSteps: [
-        { cmd: 'python app.py', desc: 'Lancez l\'interface Cyberpunk avec les droits admin' },
+        { cmd: 'python app.py', desc: 'Lancez l\'interface Cyberpunk (Nécessite PowerShell en tant qu\'Administrateur pour l\'accès réseau)' },
         { cmd: 'Cliquez "Auto Detect"', desc: 'Détecte automatiquement votre interface et sous-réseau' },
         { cmd: 'Cliquez "Discover Hosts"', desc: 'Scan hybride ARP + TCP trouve tous les hôtes actifs' },
         { cmd: 'Sélectionnez une IP cible', desc: 'Cliquez sur un hôte découvert dans la liste' },
