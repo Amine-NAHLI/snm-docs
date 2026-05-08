@@ -7,10 +7,12 @@ import AIEngine from './components/AIEngine'
 import CVEDataset from './components/CVEDataset'
 import Author from './components/Author'
 import Footer from './components/Footer'
+import GlobalBackground from './components/GlobalBackground'
 
 export default function App() {
   return (
     <div style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)', minHeight: '100vh' }}>
+      <GlobalBackground />
       <Navbar />
       <main>
         <Hero />

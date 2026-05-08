@@ -1,24 +1,8 @@
 import { useState, useRef } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Monitor, Terminal, ChevronRight, Layers } from 'lucide-react'
-
-const GUI_STEPS = [
-  { cmd: 'python app.py', desc: 'Launch the Cyberpunk GUI with admin privileges' },
-  { cmd: 'Click "Auto Detect"', desc: 'Automatically detects your active network interface and subnet' },
-  { cmd: 'Click "Discover Hosts"', desc: 'ARP + TCP hybrid scan finds all live hosts on your subnet' },
-  { cmd: 'Select target IP', desc: 'Click on any discovered host in the host list panel' },
-  { cmd: 'Click "Launch Scan"', desc: 'Start multi-threaded port scanning with AI vulnerability analysis' },
-  { cmd: 'Export Report', desc: 'Generate HTML or JSON report with one click from the results panel' },
-]
-
-const CLI_STEPS = [
-  { cmd: 'sudo python main.py', desc: 'Start the interactive CLI menu (root required for ARP scan)' },
-  { cmd: '[1] Auto-detect network', desc: 'Select option 1 to detect and display your current subnet' },
-  { cmd: '[2] Discover hosts', desc: 'Enumerate all live hosts using ARP broadcast + TCP probes' },
-  { cmd: '[3] Select & scan target', desc: 'Enter a target IP and choose scan mode (Fast/Full/Custom)' },
-  { cmd: '[4] AI vulnerability analysis', desc: 'Automatically runs after scan; displays threat level predictions' },
-  { cmd: '[5] Export results', desc: 'Save results as JSON or HTML report to the /reports directory' },
-]
+import { useLang } from '../context/LanguageContext'
+import { t } from '../translations'
 
 function StepList({ steps }) {
   return (
@@ -35,20 +19,14 @@ function StepList({ steps }) {
             flexShrink: 0, width: '1.75rem', height: '1.75rem',
             borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '0.7rem', fontWeight: 700, marginTop: '0.125rem',
-            background: 'rgba(0,255,255,0.08)',
-            border: '1px solid rgba(0,255,255,0.22)',
-            color: 'var(--cyan)',
+            background: 'rgba(0,255,255,0.08)', border: '1px solid rgba(0,255,255,0.22)', color: 'var(--cyan)',
           }}>
             {i + 1}
           </div>
           <div style={{
-            flex: 1,
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(0,255,255,0.08)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            borderRadius: '0.75rem',
-            padding: '0.875rem 1rem',
+            flex: 1, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(0,255,255,0.08)',
+            backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+            borderRadius: '0.75rem', padding: '0.875rem 1rem',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
               <ChevronRight size={13} style={{ color: 'var(--cyan)', flexShrink: 0 }} />
@@ -66,6 +44,8 @@ export default function Usage({ isEmbed = false }) {
   const [tab, setTab] = useState('gui')
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
+  const { lang } = useLang()
+  const tx = t[lang].usage
 
   const content = (
     <div ref={ref} style={isEmbed ? {} : { maxWidth: '52rem', margin: '0 auto', position: 'relative', zIndex: 10 }}>
@@ -83,12 +63,12 @@ export default function Usage({ isEmbed = false }) {
             color: 'var(--magenta)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
             marginBottom: '1.5rem', letterSpacing: '0.12em',
           }}>
-            <Layers size={13} /> HOW TO USE
+            <Layers size={13} /> {tx.label}
           </div>
           <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1rem' }}>
-            <span className="gradient-text">Usage Guide</span>
+            <span className="gradient-text">{tx.title}</span>
           </h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Two ways to run SNM — choose what fits your workflow.</p>
+          <p style={{ color: 'var(--text-secondary)' }}>{tx.subtitle}</p>
         </motion.div>
       )}
 
@@ -104,8 +84,8 @@ export default function Usage({ isEmbed = false }) {
         }}
       >
         {[
-          { id: 'gui', label: 'GUI Mode', icon: Monitor },
-          { id: 'cli', label: 'CLI Mode', icon: Terminal },
+          { id: 'gui', label: tx.tabGui, icon: Monitor },
+          { id: 'cli', label: tx.tabCli, icon: Terminal },
         ].map(({ id, label, icon: Icon }) => (
           <button
             key={id}
@@ -117,8 +97,7 @@ export default function Usage({ isEmbed = false }) {
               border: tab === id ? '1px solid rgba(0,255,255,0.25)' : '1px solid transparent',
               background: tab === id ? 'rgba(0,255,255,0.1)' : 'transparent',
               color: tab === id ? 'var(--cyan)' : 'var(--text-muted)',
-              transition: 'all 0.2s',
-              fontFamily: 'var(--font-heading)',
+              transition: 'all 0.2s', fontFamily: 'var(--font-heading)',
             }}
           >
             <Icon size={15} /> {label}
@@ -137,26 +116,21 @@ export default function Usage({ isEmbed = false }) {
             transition={{ duration: 0.3 }}
           >
             <div style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(0,255,255,0.12)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
+              background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(0,255,255,0.12)',
+              backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
               borderRadius: '1rem', padding: '1.5rem',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                 <Monitor size={18} style={{ color: 'var(--cyan)' }} />
-                <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>Cyberpunk GUI Mode</h3>
+                <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>{tx.guiTitle}</h3>
                 <span style={{
                   marginLeft: 'auto', fontSize: '0.7rem', fontFamily: 'var(--font-mono)',
                   padding: '0.2rem 0.625rem', borderRadius: '9999px',
-                  background: 'rgba(0,255,255,0.08)', color: 'var(--cyan)',
-                  border: '1px solid rgba(0,255,255,0.2)',
-                }}>Recommended</span>
+                  background: 'rgba(0,255,255,0.08)', color: 'var(--cyan)', border: '1px solid rgba(0,255,255,0.2)',
+                }}>{tx.guiRec}</span>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>
-                Full-featured graphical interface with real-time dashboard, animated scan results, and one-click export. Ideal for interactive use and visual analysis.
-              </p>
-              <StepList steps={GUI_STEPS} />
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>{tx.guiDesc}</p>
+              <StepList steps={tx.guiSteps} />
             </div>
           </motion.div>
         ) : (
@@ -168,26 +142,21 @@ export default function Usage({ isEmbed = false }) {
             transition={{ duration: 0.3 }}
           >
             <div style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,0,255,0.12)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
+              background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,0,255,0.12)',
+              backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
               borderRadius: '1rem', padding: '1.5rem',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                 <Terminal size={18} style={{ color: 'var(--magenta)' }} />
-                <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>CLI / Headless Mode</h3>
+                <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>{tx.cliTitle}</h3>
                 <span style={{
                   marginLeft: 'auto', fontSize: '0.7rem', fontFamily: 'var(--font-mono)',
                   padding: '0.2rem 0.625rem', borderRadius: '9999px',
-                  background: 'rgba(255,0,255,0.07)', color: 'var(--magenta)',
-                  border: '1px solid rgba(255,0,255,0.2)',
+                  background: 'rgba(255,0,255,0.07)', color: 'var(--magenta)', border: '1px solid rgba(255,0,255,0.2)',
                 }}>Server-friendly</span>
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>
-                Interactive menu-driven CLI — perfect for remote servers, scripting, and headless environments. All features available without a display.
-              </p>
-              <StepList steps={CLI_STEPS} />
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>{tx.cliDesc}</p>
+              <StepList steps={tx.cliSteps} />
             </div>
           </motion.div>
         )}

@@ -1,9 +1,14 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Copy, Check, AlertTriangle, Shield, Download, Terminal } from 'lucide-react'
+import { useLang } from '../context/LanguageContext'
+import { t } from '../translations'
 
 function CopyButton({ text }) {
   const [copied, setCopied] = useState(false)
+  const { lang } = useLang()
+  const tx = t[lang].installation
+
   const copy = () => {
     navigator.clipboard.writeText(text).catch(() => {})
     setCopied(true)
@@ -14,21 +19,17 @@ function CopyButton({ text }) {
       onClick={copy}
       style={{
         position: 'absolute', top: '0.625rem', right: '0.625rem',
-        padding: '0.375rem 0.625rem',
-        display: 'flex', alignItems: 'center', gap: '0.3rem',
-        borderRadius: '0.375rem',
-        border: '1px solid rgba(0,255,255,0.15)',
+        padding: '0.375rem 0.625rem', display: 'flex', alignItems: 'center', gap: '0.3rem',
+        borderRadius: '0.375rem', border: '1px solid rgba(0,255,255,0.15)',
         background: copied ? 'rgba(16,185,129,0.12)' : 'rgba(0,255,255,0.06)',
         color: copied ? '#10b981' : 'var(--text-secondary)',
-        cursor: 'pointer', fontSize: '0.7rem',
-        fontFamily: 'var(--font-mono)',
-        transition: 'all 0.2s',
+        cursor: 'pointer', fontSize: '0.7rem', fontFamily: 'var(--font-mono)', transition: 'all 0.2s',
       }}
       onMouseEnter={(e) => { if (!copied) { e.currentTarget.style.color = 'var(--cyan)'; e.currentTarget.style.borderColor = 'rgba(0,255,255,0.35)' } }}
       onMouseLeave={(e) => { if (!copied) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'rgba(0,255,255,0.15)' } }}
     >
       {copied ? <Check size={12} /> : <Copy size={12} />}
-      {copied ? 'Copied!' : 'Copy'}
+      {copied ? tx.copied : tx.copy}
     </button>
   )
 }
@@ -81,66 +82,71 @@ function AlertBox({ type = 'warning', children }) {
   )
 }
 
-const STEPS = [
-  {
-    num: '01', title: 'Prerequisites', icon: Shield,
-    content: (
-      <div>
-        <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {['Python 3.8 or higher', 'Administrator / root privileges', 'Git (to clone the repository)', 'Npcap (Windows only) — required for raw packet capture'].map((item) => (
-            <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--cyan)', flexShrink: 0 }} />
-              {item}
-            </li>
-          ))}
-        </ul>
-        <AlertBox type="warning"><strong>Windows users:</strong> Install Npcap from npcap.com before running SNM. Without it, ARP-based host discovery will not function.</AlertBox>
-        <AlertBox type="info"><strong>Admin rights required:</strong> Raw socket operations for ARP scanning and OS fingerprinting require elevated privileges on all platforms.</AlertBox>
-      </div>
-    ),
-  },
-  { num: '02', title: 'Clone the Repository', icon: Download, content: <CodeBlock code={`git clone https://github.com/Amine-NAHLI/smart-network-mapper.git\ncd smart-network-mapper`} /> },
-  {
-    num: '03', title: 'Install Python Dependencies', icon: Terminal,
-    content: (
-      <>
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Install all required packages from the requirements file:</p>
-        <CodeBlock code={`pip install -r requirements.txt`} />
-        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem', fontFamily: 'var(--font-mono)' }}>Includes: scapy, psutil, scikit-learn, joblib, pandas, customtkinter, matplotlib</p>
-      </>
-    ),
-  },
-  {
-    num: '04', title: 'Download AI Models (~5.1 GB)', icon: Download,
-    content: (
-      <>
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Fetch the Random Forest model and preprocessing artifacts from Hugging Face:</p>
-        <CodeBlock code={`python download_models.py`} />
-        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-          Models at:{' '}
-          <a href="https://huggingface.co/aminenahli/smart-network-mapper-models" target="_blank" rel="noreferrer" style={{ color: 'var(--cyan)' }}>
-            huggingface.co/aminenahli/smart-network-mapper-models
-          </a>
-        </p>
-      </>
-    ),
-  },
-  {
-    num: '05', title: 'Launch SNM', icon: Terminal,
-    content: (
-      <>
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Start the Cyberpunk GUI application:</p>
-        <CodeBlock code={`python app.py`} />
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '1rem', marginBottom: '0.25rem' }}>Or use the interactive CLI mode:</p>
-        <CodeBlock code={`python main.py`} />
-      </>
-    ),
-  },
-]
-
 export default function Installation({ isEmbed = false }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
+  const { lang } = useLang()
+  const tx = t[lang].installation
+
+  const steps = [
+    {
+      num: '01', title: tx.s1t, icon: Shield,
+      content: (
+        <div>
+          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {tx.s1items.map((item) => (
+              <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--cyan)', flexShrink: 0 }} />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <AlertBox type="warning">{tx.s1w1}</AlertBox>
+          <AlertBox type="info">{tx.s1w2}</AlertBox>
+        </div>
+      ),
+    },
+    {
+      num: '02', title: tx.s2t, icon: Download,
+      content: <CodeBlock code={`git clone https://github.com/Amine-NAHLI/smart-network-mapper.git\ncd smart-network-mapper`} />,
+    },
+    {
+      num: '03', title: tx.s3t, icon: Terminal,
+      content: (
+        <>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>{tx.s3sub}</p>
+          <CodeBlock code={`pip install -r requirements.txt`} />
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem', fontFamily: 'var(--font-mono)' }}>{tx.s3inc}</p>
+        </>
+      ),
+    },
+    {
+      num: '04', title: tx.s4t, icon: Download,
+      content: (
+        <>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>{tx.s4sub}</p>
+          <CodeBlock code={`python download_models.py`} />
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+            {tx.s4link}{' '}
+            <a href="https://huggingface.co/aminenahli/smart-network-mapper-models" target="_blank" rel="noreferrer" style={{ color: 'var(--cyan)' }}>
+              huggingface.co/aminenahli/smart-network-mapper-models
+            </a>
+          </p>
+        </>
+      ),
+    },
+    {
+      num: '05', title: tx.s5t, icon: Terminal,
+      content: (
+        <>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>{tx.s5sub}</p>
+          <CodeBlock code={`python app.py`} />
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '1rem', marginBottom: '0.25rem' }}>{tx.s5or}</p>
+          <CodeBlock code={`python main.py`} />
+        </>
+      ),
+    },
+  ]
 
   const content = (
     <div ref={ref} style={isEmbed ? {} : { maxWidth: '52rem', margin: '0 auto', position: 'relative', zIndex: 10 }}>
@@ -158,24 +164,23 @@ export default function Installation({ isEmbed = false }) {
             color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
             marginBottom: '1.5rem', letterSpacing: '0.12em',
           }}>
-            <Download size={13} /> SETUP GUIDE
+            <Download size={13} /> {tx.label}
           </div>
           <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1rem' }}>
-            <span className="gradient-text">Installation</span>
+            <span className="gradient-text">{tx.title}</span>
           </h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Get SNM running in 5 steps.</p>
+          <p style={{ color: 'var(--text-secondary)' }}>{tx.subtitle}</p>
         </motion.div>
       )}
 
       <div style={{ position: 'relative' }}>
-        {/* Timeline vertical line */}
         <div style={{
           position: 'absolute', left: '1.75rem', top: '2rem', bottom: '2rem',
           width: '1px', background: 'linear-gradient(to bottom, rgba(0,255,255,0.3), rgba(124,58,237,0.3), rgba(255,0,255,0.1))',
         }} />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {STEPS.map((step, i) => (
+          {steps.map((step, i) => (
             <motion.div
               key={step.num}
               initial={{ opacity: 0, x: -30 }}
@@ -183,31 +188,22 @@ export default function Installation({ isEmbed = false }) {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               style={{ display: 'flex', gap: '1.5rem' }}
             >
-              {/* Circle */}
               <div style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
                 <div className="font-orbitron" style={{
                   width: '3.5rem', height: '3.5rem', borderRadius: '50%',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontWeight: 700, fontSize: '0.75rem',
-                  background: 'rgba(5,5,8,0.95)',
-                  border: '1px solid rgba(0,255,255,0.3)',
-                  boxShadow: '0 0 15px rgba(0,255,255,0.1)',
-                  color: 'var(--cyan)',
+                  background: 'rgba(5,5,8,0.95)', border: '1px solid rgba(0,255,255,0.3)',
+                  boxShadow: '0 0 15px rgba(0,255,255,0.1)', color: 'var(--cyan)',
                 }}>
                   {step.num}
                 </div>
               </div>
 
-              {/* Content */}
               <div style={{
-                flex: 1,
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(0,255,255,0.1)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-                borderRadius: '1rem',
-                padding: '1.5rem',
-                paddingBottom: '2rem',
+                flex: 1, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(0,255,255,0.1)',
+                backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+                borderRadius: '1rem', padding: '1.5rem', paddingBottom: '2rem',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
                   <step.icon size={15} style={{ color: 'var(--cyan)' }} />

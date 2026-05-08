@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Database, Filter, ChevronRight, ExternalLink } from 'lucide-react'
+import { useLang } from '../context/LanguageContext'
+import { t } from '../translations'
+import { useSpotlight } from '../hooks/useSpotlight'
 
 function GithubIcon({ size = 18 }) {
   return (
@@ -10,91 +13,58 @@ function GithubIcon({ size = 18 }) {
   )
 }
 
-const PIPELINE_STEPS = [
-  { label: 'NVD API', sub: 'NIST source', color: '#00ffff' },
-  { label: 'CVE Collection', sub: 'Vulnerability fetch', color: '#7c3aed' },
-  { label: 'Service Mapping', sub: 'Port & banner match', color: '#ff00ff' },
-  { label: 'One-Hot Encoding', sub: 'OS & protocol', color: '#f59e0b' },
-  { label: 'ML Dataset', sub: '20K balanced rows', color: '#10b981' },
-]
+const PIPELINE_COLORS = ['#00ffff', '#7c3aed', '#ff00ff', '#f59e0b', '#10b981']
 
-const STATS = [
-  { value: '20,000', label: 'Balanced Records', sub: 'Stratified sampling', color: '#00ffff' },
-  { value: '50/30s', label: 'NVD Rate Limit', sub: 'API constraint handled', color: '#ff00ff' },
-  { value: '6+', label: 'Feature Categories', sub: 'OS, port, version…', color: '#7c3aed' },
-  { value: '0 or 1', label: 'Target Label', sub: 'Binary vulnerability', color: '#10b981' },
-]
-
-const SCHEMA = [
-  { col: 'service', type: 'string', desc: 'Service name (apache, ssh, nginx…)' },
-  { col: 'version_full', type: 'int', desc: 'Numerically encoded version number' },
-  { col: 'port', type: 'int', desc: 'Network port number' },
-  { col: 'vulnerable', type: '0 or 1', desc: 'ML binary target label' },
-  { col: 'os_*', type: '0 or 1', desc: 'One-Hot OS encoding' },
-  { col: 'proto_*', type: '0 or 1', desc: 'One-Hot protocol encoding' },
-]
-
-const FEATURE_CARDS = [
-  {
-    icon: Database, color: '#00ffff',
-    title: 'Automated Collection',
-    desc: 'Fetches CVEs from NIST NVD API and associates each vulnerability with real network service signatures, versions, and OS fingerprints.',
-  },
-  {
-    icon: Filter, color: '#ff00ff',
-    title: 'Balanced & Optimized',
-    desc: 'Raw data reduced to 20,000 balanced rows using stratified sampling, ensuring equal distribution of vulnerable vs safe samples.',
-  },
-]
-
-function PipelineStep({ step, i, inView }) {
+function PipelineStep({ step, color, i, inView }) {
   const [hovered, setHovered] = useState(false)
+  const spotlight = useSpotlight()
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.85 }}
       animate={inView ? { opacity: 1, scale: 1 } : {}}
       transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseMove={spotlight.onMouseMove}
+      onMouseLeave={(e) => { setHovered(false); spotlight.onMouseLeave(e) }}
       style={{
         background: 'rgba(255,255,255,0.03)',
-        border: `1px solid ${hovered ? step.color + '55' : step.color + '25'}`,
+        border: `1px solid ${hovered ? color + '55' : color + '25'}`,
         backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
-        borderRadius: '0.875rem', padding: '0.875rem 1.25rem', textAlign: 'center',
-        minWidth: '120px',
+        borderRadius: '0.875rem', padding: '0.875rem 1.25rem', textAlign: 'center', minWidth: '120px',
         transition: 'border-color 0.3s, box-shadow 0.3s, transform 0.2s',
         transform: hovered ? 'translateY(-3px)' : 'none',
-        boxShadow: hovered ? `0 8px 24px ${step.color}18` : 'none',
+        boxShadow: hovered ? `0 8px 24px ${color}18` : 'none',
       }}
     >
-      <div style={{ width: '8px', height: '8px', borderRadius: '50%', margin: '0 auto 0.5rem', background: step.color, boxShadow: `0 0 8px ${step.color}` }} />
+      <div style={{ width: '8px', height: '8px', borderRadius: '50%', margin: '0 auto 0.5rem', background: color, boxShadow: `0 0 8px ${color}` }} />
       <p style={{ color: 'var(--text-primary)', fontSize: '0.78rem', fontWeight: 600, marginBottom: '0.15rem' }}>{step.label}</p>
-      <p style={{ color: step.color, fontSize: '0.62rem', opacity: 0.75, fontFamily: 'var(--font-mono)' }}>{step.sub}</p>
+      <p style={{ color, fontSize: '0.62rem', opacity: 0.75, fontFamily: 'var(--font-mono)' }}>{step.sub}</p>
     </motion.div>
   )
 }
 
-function StatCard({ s, i, inView }) {
+function StatCard({ s, color, i, inView }) {
   const [hovered, setHovered] = useState(false)
+  const spotlight = useSpotlight()
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: 0.2 + i * 0.08 }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseMove={spotlight.onMouseMove}
+      onMouseLeave={(e) => { setHovered(false); spotlight.onMouseLeave(e) }}
       style={{
         background: 'rgba(255,255,255,0.03)',
-        border: `1px solid ${hovered ? s.color + '45' : s.color + '18'}`,
+        border: `1px solid ${hovered ? color + '45' : color + '18'}`,
         backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
-        borderRadius: '1rem', padding: '1.5rem',
-        textAlign: 'center', cursor: 'default',
+        borderRadius: '1rem', padding: '1.5rem', textAlign: 'center', cursor: 'default',
         transition: 'border-color 0.3s, box-shadow 0.3s, transform 0.3s',
         transform: hovered ? 'translateY(-4px)' : 'none',
-        boxShadow: hovered ? `0 8px 30px ${s.color}18` : 'none',
+        boxShadow: hovered ? `0 8px 30px ${color}18` : 'none',
       }}
     >
-      <div className="font-orbitron" style={{ fontWeight: 900, fontSize: '1.75rem', color: s.color, textShadow: `0 0 20px ${s.color}60`, marginBottom: '0.375rem' }}>
+      <div className="font-orbitron" style={{ fontWeight: 900, fontSize: '1.75rem', color, textShadow: `0 0 20px ${color}60`, marginBottom: '0.375rem' }}>
         {s.value}
       </div>
       <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.2rem' }}>{s.label}</p>
@@ -103,36 +73,38 @@ function StatCard({ s, i, inView }) {
   )
 }
 
-function FeatureInfoCard({ f, i, inView }) {
+function FeatureInfoCard({ title, desc, icon: Icon, color, i, inView }) {
   const [hovered, setHovered] = useState(false)
+  const spotlight = useSpotlight()
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseMove={spotlight.onMouseMove}
+      onMouseLeave={(e) => { setHovered(false); spotlight.onMouseLeave(e) }}
       style={{
         background: 'rgba(255,255,255,0.03)',
-        border: `1px solid ${hovered ? f.color + '45' : 'rgba(0,255,255,0.12)'}`,
+        border: `1px solid ${hovered ? color + '45' : 'rgba(0,255,255,0.12)'}`,
         backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
         borderRadius: '1rem', padding: '1.75rem',
         transition: 'border-color 0.3s, box-shadow 0.3s, transform 0.3s',
         transform: hovered ? 'translateY(-4px)' : 'none',
-        boxShadow: hovered ? `0 8px 30px ${f.color}15` : 'none',
+        boxShadow: hovered ? `0 8px 30px ${color}15` : 'none',
         cursor: 'default',
       }}
     >
       <div style={{
         width: '3rem', height: '3rem', borderRadius: '0.875rem',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: `${f.color}12`, border: `1px solid ${f.color}28`, marginBottom: '1.25rem',
+        background: `${color}12`, border: `1px solid ${color}28`, marginBottom: '1.25rem',
         transition: 'transform 0.3s', transform: hovered ? 'scale(1.08)' : 'scale(1)',
       }}>
-        <f.icon size={20} style={{ color: f.color }} />
+        <Icon size={20} style={{ color }} />
       </div>
-      <h3 style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1rem', marginBottom: '0.625rem' }}>{f.title}</h3>
-      <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.65 }}>{f.desc}</p>
+      <h3 style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '1rem', marginBottom: '0.625rem' }}>{title}</h3>
+      <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.65 }}>{desc}</p>
     </motion.div>
   )
 }
@@ -141,6 +113,25 @@ export default function CVEDataset() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
   const [repoHovered, setRepoHovered] = useState(false)
+  const { lang } = useLang()
+  const tx = t[lang].dataset
+
+  const PIPELINE_STEPS = tx.pipeline.map((label, i) => ({
+    label,
+    sub: ['NIST source', 'Vulnerability fetch', 'Port & banner match', 'OS & protocol', '20K balanced rows'][i],
+  }))
+
+  const STATS = [
+    { value: tx.s1v, label: tx.s1, sub: 'Stratified sampling', color: '#00ffff' },
+    { value: tx.s2v, label: tx.s2, sub: 'API constraint handled', color: '#ff00ff' },
+    { value: tx.s3v, label: tx.s3, sub: 'OS, port, version…', color: '#7c3aed' },
+    { value: tx.s4v, label: tx.s4, sub: 'Binary vulnerability', color: '#10b981' },
+  ]
+
+  const FEATURE_CARDS = [
+    { icon: Database, color: '#00ffff', title: tx.c1t, desc: tx.c1d },
+    { icon: Filter, color: '#ff00ff', title: tx.c2t, desc: tx.c2d },
+  ]
 
   return (
     <section
@@ -168,14 +159,13 @@ export default function CVEDataset() {
             color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
             marginBottom: '1.5rem', letterSpacing: '0.14em',
           }}>
-            <Database size={13} /> TRAINING DATA
+            <Database size={13} /> {tx.label}
           </div>
           <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1.25rem' }}>
-            <span className="gradient-text">CVE Dataset</span>
+            <span className="gradient-text">{tx.title}</span>
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', maxWidth: '44rem', margin: '0 auto', lineHeight: 1.7 }}>
-            The foundation of SNM's AI — a custom pipeline that transforms raw NVD vulnerability data
-            into ML-ready vectors for real-time threat prediction.
+            {tx.subtitle}
           </p>
         </motion.div>
 
@@ -189,11 +179,11 @@ export default function CVEDataset() {
           <p style={{
             fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.15em',
             color: 'var(--text-muted)', textAlign: 'center', marginBottom: '1.75rem', textTransform: 'uppercase',
-          }}>Data Pipeline</p>
+          }}>{tx.pipelineLabel}</p>
           <div className="pipeline-flow">
             {PIPELINE_STEPS.map((step, i) => (
-              <div key={step.label} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                <PipelineStep step={step} i={i} inView={inView} />
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                <PipelineStep step={step} color={PIPELINE_COLORS[i]} i={i} inView={inView} />
                 {i < PIPELINE_STEPS.length - 1 && (
                   <ChevronRight size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
                 )}
@@ -204,7 +194,7 @@ export default function CVEDataset() {
 
         {/* Stats */}
         <div className="grid-auto-3" style={{ marginBottom: '4rem' }}>
-          {STATS.map((s, i) => <StatCard key={s.label} s={s} i={i} inView={inView} />)}
+          {STATS.map((s, i) => <StatCard key={i} s={s} color={s.color} i={i} inView={inView} />)}
         </div>
 
         {/* Schema table */}
@@ -213,46 +203,44 @@ export default function CVEDataset() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
           style={{
-            background: 'rgba(255,255,255,0.025)',
-            border: '1px solid rgba(0,255,255,0.12)',
+            background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(0,255,255,0.12)',
             backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
             borderRadius: '1rem', overflow: 'hidden', marginBottom: '3rem',
           }}
         >
-          {/* Table header */}
           <div style={{
             display: 'grid', gridTemplateColumns: '1fr 1fr 2fr',
-            padding: '0.875rem 1.5rem',
-            borderBottom: '1px solid rgba(0,255,255,0.1)',
+            padding: '0.875rem 1.5rem', borderBottom: '1px solid rgba(0,255,255,0.1)',
             background: 'rgba(0,255,255,0.04)',
           }}>
-            {['Column', 'Type', 'Description'].map((h) => (
+            {tx.cols.map((h) => (
               <span key={h} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 600, color: 'var(--cyan)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{h}</span>
             ))}
           </div>
-          {/* Table rows */}
-          {SCHEMA.map((row, i) => (
+          {tx.rows.map((row, i) => (
             <div
-              key={row.col}
+              key={i}
               style={{
                 display: 'grid', gridTemplateColumns: '1fr 1fr 2fr',
                 padding: '0.875rem 1.5rem',
-                borderBottom: i < SCHEMA.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                borderBottom: i < tx.rows.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
                 transition: 'background 0.2s',
               }}
               onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,255,255,0.03)'}
               onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
             >
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.825rem', color: 'var(--cyan)' }}>{row.col}</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.825rem', color: '#a78bfa' }}>{row.type}</span>
-              <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>{row.desc}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.825rem', color: 'var(--cyan)' }}>{row[0]}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.825rem', color: '#a78bfa' }}>{row[1]}</span>
+              <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>{row[2]}</span>
             </div>
           ))}
         </motion.div>
 
         {/* Feature info cards */}
         <div className="grid-auto-2" style={{ marginBottom: '3.5rem' }}>
-          {FEATURE_CARDS.map((f, i) => <FeatureInfoCard key={f.title} f={f} i={i} inView={inView} />)}
+          {FEATURE_CARDS.map((f, i) => (
+            <FeatureInfoCard key={i} title={f.title} desc={f.desc} icon={f.icon} color={f.color} i={i} inView={inView} />
+          ))}
         </div>
 
         {/* GitHub repo card */}
@@ -274,11 +262,9 @@ export default function CVEDataset() {
         >
           <div style={{ flex: 1, minWidth: '200px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.625rem' }}>
-              <div style={{ color: 'var(--text-primary)' }}>
-                <GithubIcon size={20} />
-              </div>
+              <div style={{ color: 'var(--text-primary)' }}><GithubIcon size={20} /></div>
               <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>
-                cve-dataset-generator
+                {tx.repoTitle}
               </span>
               <span style={{
                 padding: '0.15rem 0.625rem', borderRadius: '9999px',
@@ -287,7 +273,7 @@ export default function CVEDataset() {
               }}>Public</span>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.65 }}>
-              Open source dataset generator — collect, process and encode CVE data from NVD API for ML vulnerability detection.
+              {tx.repoDesc}
             </p>
           </div>
           <a
@@ -305,7 +291,7 @@ export default function CVEDataset() {
             onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,255,255,0.12)'; e.currentTarget.style.boxShadow = '0 0 20px rgba(0,255,255,0.2)' }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0,255,255,0.06)'; e.currentTarget.style.boxShadow = 'none' }}
           >
-            View Repository <ExternalLink size={14} />
+            {tx.repoBtn} <ExternalLink size={14} />
           </a>
         </motion.div>
       </div>

@@ -244,3 +244,26 @@ body {
   background: linear-gradient(90deg, transparent, rgba(0,255,255,0.15), transparent);
   margin: 2rem 0;
 }
+
+/* Scanline overlay for AI Engine section */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+#ai-engine::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(124,58,237,0.4), transparent);
+  animation: scanline 6s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Section atmospheric accent backgrounds */
+#overview { background-image: radial-gradient(ellipse 60% 30% at 80% 20%, rgba(0,255,255,0.025) 0%, transparent 60%); }
+#features { background-image: radial-gradient(ellipse 50% 30% at 20% 80%, rgba(124,58,237,0.03) 0%, transparent 55%); }
+#ai-engine { background-image: radial-gradient(ellipse 40% 40% at 80% 50%, rgba(124,58,237,0.04) 0%, transparent 55%); }
+#dataset { background-image: radial-gradient(ellipse 50% 30% at 20% 30%, rgba(0,255,255,0.03) 0%, transparent 55%); }
+#author { background-image: radial-gradient(ellipse 40% 30% at 80% 80%, rgba(255,0,255,0.025) 0%, transparent 55%); }

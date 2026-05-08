@@ -1,39 +1,24 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Brain, Zap, BarChart3, Network } from 'lucide-react'
+import { useLang } from '../context/LanguageContext'
+import { t } from '../translations'
+import { useSpotlight } from '../hooks/useSpotlight'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   show: (i) => ({ opacity: 1, y: 0, transition: { duration: 0.6, delay: i * 0.15, ease: 'easeOut' } }),
 }
 
-const CARDS = [
-  {
-    icon: Brain, color: '#ff00ff', glow: 'rgba(255,0,255,0.12)',
-    title: 'AI-Powered', sub: 'Intelligence Artificielle',
-    desc: 'Random Forest model with 5.1GB of training data predicts vulnerability severity with high accuracy across thousands of CVEs.',
-  },
-  {
-    icon: Zap, color: '#00ffff', glow: 'rgba(0,255,255,0.12)',
-    title: 'Multi-threaded', sub: 'Hautement Parallèle',
-    desc: 'Up to 200 concurrent scanning workers deliver blazing-fast port enumeration across all 65535 ports in seconds.',
-  },
-  {
-    icon: BarChart3, color: '#7c3aed', glow: 'rgba(124,58,237,0.12)',
-    title: 'Professional Reports', sub: 'Rapports Professionnels',
-    desc: 'Export detailed HTML and JSON reports with threat levels, service fingerprints, and actionable remediation suggestions.',
-  },
+const CARD_META = [
+  { icon: Brain, color: '#ff00ff', glow: 'rgba(255,0,255,0.12)' },
+  { icon: Zap, color: '#00ffff', glow: 'rgba(0,255,255,0.12)' },
+  { icon: BarChart3, color: '#7c3aed', glow: 'rgba(124,58,237,0.12)' },
 ]
 
-const STATS = [
-  { value: '200', label: 'Scan Threads', sub: 'Concurrent workers' },
-  { value: '5.1GB', label: 'AI Model', sub: 'Random Forest classifier' },
-  { value: '65535', label: 'Ports Covered', sub: 'Full port range' },
-  { value: '4+', label: 'Export Formats', sub: 'HTML, JSON & more' },
-]
-
-function FeatureCard({ c, i, inView }) {
+function FeatureCard({ meta, title, sub, desc, i, inView }) {
   const [hovered, setHovered] = useState(false)
+  const spotlight = useSpotlight()
   return (
     <motion.div
       variants={fadeUp}
@@ -41,35 +26,33 @@ function FeatureCard({ c, i, inView }) {
       initial="hidden"
       animate={inView ? 'show' : 'hidden'}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseMove={spotlight.onMouseMove}
+      onMouseLeave={(e) => { setHovered(false); spotlight.onMouseLeave(e) }}
       style={{
         background: 'rgba(255,255,255,0.03)',
-        border: `1px solid ${hovered ? c.color + '50' : c.color + '20'}`,
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderRadius: '1rem',
-        padding: '2rem',
+        border: `1px solid ${hovered ? meta.color + '50' : meta.color + '20'}`,
+        backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+        borderRadius: '1rem', padding: '2rem',
         transition: 'border-color 0.3s, box-shadow 0.3s, transform 0.3s',
         transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        boxShadow: hovered ? `0 0 30px ${c.color}18` : 'none',
+        boxShadow: hovered ? `0 0 30px ${meta.color}18` : 'none',
         cursor: 'default',
       }}
     >
       <div style={{
         width: '3.5rem', height: '3.5rem', borderRadius: '0.875rem',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: c.glow, border: `1px solid ${c.color}30`,
-        marginBottom: '1.5rem',
-        transition: 'transform 0.3s',
+        background: meta.glow, border: `1px solid ${meta.color}30`,
+        marginBottom: '1.5rem', transition: 'transform 0.3s',
         transform: hovered ? 'scale(1.1)' : 'scale(1)',
       }}>
-        <c.icon size={24} style={{ color: c.color }} />
+        <meta.icon size={24} style={{ color: meta.color }} />
       </div>
-      <h3 className="font-orbitron" style={{ color: c.color, fontWeight: 700, fontSize: '1rem', marginBottom: '0.25rem' }}>
-        {c.title}
+      <h3 className="font-orbitron" style={{ color: meta.color, fontWeight: 700, fontSize: '1rem', marginBottom: '0.25rem' }}>
+        {title}
       </h3>
-      <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', marginBottom: '0.875rem' }}>{c.sub}</p>
-      <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.65 }}>{c.desc}</p>
+      <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', marginBottom: '0.875rem' }}>{sub}</p>
+      <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.65 }}>{desc}</p>
     </motion.div>
   )
 }
@@ -77,6 +60,21 @@ function FeatureCard({ c, i, inView }) {
 export default function Overview() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+  const { lang } = useLang()
+  const tx = t[lang].overview
+
+  const CARDS = [
+    { title: tx.c1t, sub: tx.c1s, desc: tx.c1d },
+    { title: tx.c2t, sub: tx.c2s, desc: tx.c2d },
+    { title: tx.c3t, sub: tx.c3s, desc: tx.c3d },
+  ]
+
+  const STATS = [
+    { value: '200', label: tx.s1, sub: tx.s1s },
+    { value: '5.1GB', label: tx.s2, sub: tx.s2s },
+    { value: '65535', label: tx.s3, sub: tx.s3s },
+    { value: '4+', label: tx.s4, sub: tx.s4s },
+  ]
 
   return (
     <section
@@ -90,7 +88,6 @@ export default function Overview() {
       }} />
 
       <div style={{ maxWidth: '80rem', margin: '0 auto', position: 'relative', zIndex: 10 }} ref={ref}>
-        {/* Heading */}
         <motion.div
           variants={fadeUp} custom={0} initial="hidden" animate={inView ? 'show' : 'hidden'}
           style={{ textAlign: 'center', marginBottom: '4rem' }}
@@ -102,23 +99,22 @@ export default function Overview() {
             color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
             marginBottom: '1.5rem', letterSpacing: '0.12em',
           }}>
-            <Network size={13} /> WHAT IS SNM
+            <Network size={13} /> {tx.label}
           </div>
           <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1.25rem' }}>
-            <span className="gradient-text">Overview</span>
+            <span className="gradient-text">{tx.title}</span>
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', maxWidth: '42rem', margin: '0 auto', lineHeight: 1.7 }}>
-            Smart Network Mapper is a comprehensive cybersecurity suite combining real-time network scanning,
-            OS fingerprinting, and machine-learning vulnerability prediction — available in both a Cyberpunk GUI and CLI.
+            {tx.subtitle}
           </p>
         </motion.div>
 
-        {/* 3 feature cards */}
         <div className="grid-auto-3" style={{ marginBottom: '5rem' }}>
-          {CARDS.map((c, i) => <FeatureCard key={c.title} c={c} i={i} inView={inView} />)}
+          {CARDS.map((c, i) => (
+            <FeatureCard key={i} meta={CARD_META[i]} title={c.title} sub={c.sub} desc={c.desc} i={i} inView={inView} />
+          ))}
         </div>
 
-        {/* Stats */}
         <motion.div
           variants={fadeUp} custom={4} initial="hidden" animate={inView ? 'show' : 'hidden'}
           className="grid-stats"

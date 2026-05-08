@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
+import { useLang } from '../context/LanguageContext'
+import { t } from '../translations'
 
 function GithubIcon({ size = 16 }) {
   return (
@@ -9,21 +11,6 @@ function GithubIcon({ size = 16 }) {
     </svg>
   )
 }
-
-const NAV_LINKS = [
-  { label: 'Overview', href: '#overview' },
-  { label: 'Features', href: '#features' },
-  { label: 'Installation', href: '#docs' },
-  { label: 'AI Engine', href: '#ai-engine' },
-  { label: 'Dataset', href: '#dataset' },
-  { label: 'Author', href: '#author' },
-]
-
-const RESOURCES = [
-  { label: 'GitHub Repository', href: 'https://github.com/Amine-NAHLI/smart-network-mapper', icon: GithubIcon },
-  { label: 'Hugging Face Models', href: 'https://huggingface.co/aminenahli/smart-network-mapper-models', emoji: '🤗' },
-  { label: 'Author Website', href: 'https://amine-nahli.dev', emoji: '🌐' },
-]
 
 function FooterLink({ label, href, isExternal }) {
   const [hovered, setHovered] = useState(false)
@@ -37,9 +24,7 @@ function FooterLink({ label, href, isExternal }) {
           display: 'flex', alignItems: 'center', gap: '0.5rem',
           fontSize: '0.875rem',
           color: hovered ? 'var(--cyan)' : 'var(--text-muted)',
-          textDecoration: 'none',
-          transition: 'color 0.2s',
-          padding: '0.25rem 0',
+          textDecoration: 'none', transition: 'color 0.2s', padding: '0.25rem 0',
         }}
       >
         {href.includes('github') ? <GithubIcon size={14} /> : null}
@@ -67,12 +52,27 @@ function FooterLink({ label, href, isExternal }) {
 }
 
 export default function Footer() {
+  const { lang } = useLang()
+  const tx = t[lang].footer
+  const nav = t[lang].nav
+
+  const NAV_LINKS = [
+    { label: nav.overview, href: '#overview' },
+    { label: nav.features, href: '#features' },
+    { label: nav.docs, href: '#docs' },
+    { label: nav.aiEngine, href: '#ai-engine' },
+    { label: nav.dataset, href: '#dataset' },
+    { label: nav.author, href: '#author' },
+  ]
+
+  const RESOURCES = [
+    { label: tx.github, href: 'https://github.com/Amine-NAHLI/smart-network-mapper' },
+    { label: tx.huggingface, href: 'https://huggingface.co/aminenahli/smart-network-mapper-models' },
+    { label: tx.website, href: 'https://amine-nahli.dev' },
+  ]
+
   return (
-    <footer style={{
-      position: 'relative', overflow: 'hidden',
-      background: '#030306',
-      borderTop: '1px solid rgba(0,255,255,0.07)',
-    }}>
+    <footer style={{ position: 'relative', overflow: 'hidden', background: '#030306', borderTop: '1px solid rgba(0,255,255,0.07)' }}>
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'radial-gradient(ellipse 60% 40% at 50% 100%, rgba(0,255,255,0.025) 0%, transparent 60%)',
@@ -93,21 +93,18 @@ export default function Footer() {
               </span>
             </div>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.65, maxWidth: '18rem', marginBottom: '0.75rem' }}>
-              Smart Network Mapper — Next-Generation Network Diagnostic &amp; AI-Powered Security Suite.
-            </p>
-            <p style={{ color: '#2d3748', fontSize: '0.75rem', fontFamily: 'var(--font-mono)' }}>
-              Outil de cartographie réseau intelligent
+              {tx.tagline}
             </p>
           </div>
 
           {/* Navigation */}
           <div>
             <h4 className="font-orbitron" style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '1.25rem', letterSpacing: '0.12em' }}>
-              NAVIGATION
+              {tx.nav}
             </h4>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.125rem' }}>
               {NAV_LINKS.map((l) => (
-                <FooterLink key={l.label} label={l.label} href={l.href} isExternal={false} />
+                <FooterLink key={l.href} label={l.label} href={l.href} isExternal={false} />
               ))}
             </div>
           </div>
@@ -115,7 +112,7 @@ export default function Footer() {
           {/* Resources */}
           <div>
             <h4 className="font-orbitron" style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.75rem', marginBottom: '1.25rem', letterSpacing: '0.12em' }}>
-              RESOURCES
+              {tx.resources}
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem' }}>
               {RESOURCES.map((r) => (
@@ -125,27 +122,16 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="divider-h" />
 
-        {/* Bottom */}
         <div className="bottom-bar" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-            Made with{' '}
+            {tx.copyright.split('❤️')[0]}
             <span style={{ color: '#f472b6' }}>❤</span>
-            {' '}by{' '}
-            <a
-              href="https://github.com/Amine-NAHLI"
-              target="_blank" rel="noreferrer"
-              style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontWeight: 500, transition: 'color 0.2s' }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--cyan)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
-            >
-              Amine Nahli
-            </a>
+            {tx.copyright.split('❤️')[1]}
           </div>
           <div style={{ fontFamily: 'var(--font-mono)' }}>
-            © 2025 SNM — Open Source, MIT License
+            © 2025 SNM — {tx.rights}
           </div>
         </div>
       </div>

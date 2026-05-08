@@ -1,15 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-
-const LINKS = [
-  { label: 'Overview', href: '#overview' },
-  { label: 'Features', href: '#features' },
-  { label: 'Docs', href: '#docs' },
-  { label: 'AI Engine', href: '#ai-engine' },
-  { label: 'Dataset', href: '#dataset' },
-  { label: 'Author', href: '#author' },
-]
+import { useLang } from '../context/LanguageContext'
+import { t } from '../translations'
 
 function NavLink({ label, href, onClick }) {
   const [hovered, setHovered] = useState(false)
@@ -37,15 +30,40 @@ function NavLink({ label, href, onClick }) {
         animate={{ width: hovered ? '70%' : '0%' }}
         transition={{ duration: 0.22, ease: 'easeOut' }}
         style={{
-          position: 'absolute',
-          bottom: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          height: '1px',
-          background: 'var(--cyan)',
-          display: 'block',
+          position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
+          height: '1px', background: 'var(--cyan)', display: 'block',
         }}
       />
+    </button>
+  )
+}
+
+function LangToggle() {
+  const { lang, toggle } = useLang()
+  const [hovered, setHovered] = useState(false)
+  return (
+    <button
+      onClick={toggle}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        marginLeft: '0.5rem',
+        padding: '0.3rem 0.75rem',
+        borderRadius: '9999px',
+        border: `1px solid ${hovered ? 'var(--cyan)' : 'rgba(0,255,255,0.3)'}`,
+        background: hovered ? 'rgba(0,255,255,0.1)' : 'transparent',
+        color: 'var(--cyan)',
+        cursor: 'pointer',
+        fontSize: '0.75rem',
+        fontFamily: 'var(--font-mono)',
+        transition: 'all 0.3s ease',
+        whiteSpace: 'nowrap',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.25rem',
+      }}
+    >
+      {lang === 'en' ? '🇬🇧 EN' : '🇫🇷 FR'}
     </button>
   )
 }
@@ -53,6 +71,16 @@ function NavLink({ label, href, onClick }) {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { lang } = useLang()
+
+  const LINKS = [
+    { label: t[lang].nav.overview, href: '#overview' },
+    { label: t[lang].nav.features, href: '#features' },
+    { label: t[lang].nav.docs, href: '#docs' },
+    { label: t[lang].nav.aiEngine, href: '#ai-engine' },
+    { label: t[lang].nav.dataset, href: '#dataset' },
+    { label: t[lang].nav.author, href: '#author' },
+  ]
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -71,9 +99,7 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
       style={{
-        position: 'fixed',
-        top: 0, left: 0, right: 0,
-        zIndex: 1000,
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
         background: scrolled ? 'rgba(5,5,8,0.88)' : 'transparent',
         backdropFilter: scrolled ? 'blur(20px)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
@@ -103,6 +129,7 @@ export default function Navbar() {
         {/* Desktop links */}
         <div className="nav-desktop" style={{ alignItems: 'center', gap: '0' }}>
           {LINKS.map((l) => <NavLink key={l.href} label={l.label} href={l.href} onClick={scrollTo} />)}
+          <LangToggle />
           <a
             href="https://github.com/Amine-NAHLI/smart-network-mapper"
             target="_blank" rel="noreferrer"
@@ -156,6 +183,9 @@ export default function Navbar() {
                   {l.label}
                 </button>
               ))}
+              <div style={{ marginTop: '0.5rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(0,255,255,0.08)', display: 'flex', justifyContent: 'center' }}>
+                <LangToggle />
+              </div>
             </div>
           </motion.div>
         )}

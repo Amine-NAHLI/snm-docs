@@ -3,15 +3,18 @@ import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { Download, Terminal, BookOpen } from 'lucide-react'
 import Installation from './Installation'
 import Usage from './Usage'
+import { useLang } from '../context/LanguageContext'
+import { t } from '../translations'
 
 export default function Documentation() {
   const [activeTab, setActiveTab] = useState('installation')
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
+  const { lang } = useLang()
 
   const tabs = [
-    { id: 'installation', label: 'Installation', icon: Download },
-    { id: 'usage', label: 'Usage Guide', icon: Terminal },
+    { id: 'installation', label: t[lang].installation.title, icon: Download },
+    { id: 'usage', label: t[lang].usage.title, icon: Terminal },
   ]
 
   return (
@@ -35,13 +38,15 @@ export default function Documentation() {
             color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
             marginBottom: '1.5rem', letterSpacing: '0.12em',
           }}>
-            <BookOpen size={13} /> DOCUMENTATION
+            <BookOpen size={13} /> {lang === 'en' ? 'DOCUMENTATION' : 'DOCUMENTATION'}
           </div>
           <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1rem', color: 'var(--text-primary)' }}>
-            Get <span className="gradient-text">Started</span>
+            {lang === 'en' ? 'Get' : 'Pour'} <span className="gradient-text">{t[lang].hero.btnStart}</span>
           </h2>
           <p style={{ color: 'var(--text-secondary)', maxWidth: '36rem', margin: '0 auto' }}>
-            Everything you need to set up and master the Smart Network Mapper suite.
+            {lang === 'en'
+              ? 'Everything you need to set up and master the Smart Network Mapper suite.'
+              : 'Tout ce qu\'il vous faut pour installer et maîtriser la suite Smart Network Mapper.'}
           </p>
         </motion.div>
 

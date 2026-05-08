@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Globe, Mail, MapPin, GraduationCap, Shield } from 'lucide-react'
+import { useLang } from '../context/LanguageContext'
+import { t } from '../translations'
 
 function GithubIcon({ size = 18 }) {
   return (
@@ -18,14 +20,12 @@ function LinkedinIcon({ size = 18 }) {
   )
 }
 
-const SOCIALS = [
+const SOCIAL_META = [
   { Icon: GithubIcon, label: 'GitHub', href: 'https://github.com/Amine-NAHLI', hoverColor: '#e2e8f0' },
   { Icon: LinkedinIcon, label: 'LinkedIn', href: 'https://linkedin.com/in/amine-nahli-48b2a734b/', hoverColor: '#0ea5e9' },
   { Icon: Globe, label: 'Website', href: 'https://amine-nahli.dev', hoverColor: '#00ffff' },
   { Icon: Mail, label: 'Email', href: 'mailto:nahliamine2@gmail.com', hoverColor: '#ff00ff' },
 ]
-
-const SKILLS = ['Python', 'Network Security', 'Machine Learning', 'React', 'CustomTkinter', 'Scapy', 'Cybersecurity', 'Full-Stack', 'Linux']
 
 function SocialButton({ s }) {
   const [hovered, setHovered] = useState(false)
@@ -46,8 +46,7 @@ function SocialButton({ s }) {
         color: hovered ? s.hoverColor : 'var(--text-secondary)',
         textDecoration: 'none',
         transition: 'color 0.2s, border-color 0.2s, background 0.2s',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
+        backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
       }}
     >
       <s.Icon size={17} />
@@ -59,10 +58,8 @@ function AuthorPhoto() {
   const [hovered, setHovered] = useState(false)
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
-      {/* Glow halo */}
       <div style={{
-        position: 'absolute', inset: '-8px',
-        borderRadius: '20px',
+        position: 'absolute', inset: '-8px', borderRadius: '20px',
         background: 'linear-gradient(135deg, rgba(0,255,255,0.2), rgba(124,58,237,0.15), rgba(255,0,255,0.2))',
         filter: 'blur(12px)',
         opacity: hovered ? 0.8 : 0.5,
@@ -76,10 +73,7 @@ function AuthorPhoto() {
         whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.3 }}
         style={{
-          position: 'relative',
-          width: '200px',
-          height: '260px',
-          objectFit: 'cover',
+          position: 'relative', width: '200px', height: '260px', objectFit: 'cover',
           borderRadius: '16px',
           border: hovered ? '2px solid rgba(0,255,255,0.55)' : '2px solid rgba(0,255,255,0.3)',
           boxShadow: hovered
@@ -96,6 +90,8 @@ function AuthorPhoto() {
 export default function Author() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
+  const { lang } = useLang()
+  const tx = t[lang].author
 
   return (
     <section id="author" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-primary)' }}>
@@ -105,7 +101,6 @@ export default function Author() {
       }} />
 
       <div style={{ maxWidth: '72rem', margin: '0 auto', position: 'relative', zIndex: 10 }} ref={ref}>
-        {/* Section label */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -119,10 +114,10 @@ export default function Author() {
             color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
             marginBottom: '1.5rem', letterSpacing: '0.12em',
           }}>
-            <Shield size={13} /> CORE ARCHITECT
+            <Shield size={13} /> {tx.label}
           </div>
           <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}>
-            Meet the <span className="gradient-text">Builder</span>
+            {tx.title} <span className="gradient-text">{tx.titleAccent}</span>
           </h2>
         </motion.div>
 
@@ -135,10 +130,8 @@ export default function Author() {
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}
           >
             <AuthorPhoto />
-
-            {/* Social links */}
             <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-              {SOCIALS.map((s) => <SocialButton key={s.label} s={s} />)}
+              {SOCIAL_META.map((s) => <SocialButton key={s.label} s={s} />)}
             </div>
           </motion.div>
 
@@ -156,24 +149,21 @@ export default function Author() {
               background: 'linear-gradient(135deg, var(--cyan), var(--magenta))',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
             }}>
-              Security Engineer × Full-Stack Builder
+              {tx.role}
             </p>
 
             <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: 1.75, marginBottom: '1.75rem' }}>
-              I am a Security Engineer and Full-Stack Developer who views every system as a puzzle.
-              Based in Fès, Morocco, I bridge the gap between aggressive security research and
-              high-performance product engineering.
+              {tx.bio}
             </p>
 
             {/* Info cards */}
             <div className="info-grid" style={{ marginBottom: '1.75rem' }}>
               {[
-                { Icon: MapPin, label: 'Location', value: 'Fès, Morocco', color: '#a78bfa' },
-                { Icon: GraduationCap, label: 'Education', value: 'UPF — Software Engineering, 3rd Year', color: 'var(--cyan)' },
+                { Icon: MapPin, label: lang === 'en' ? 'Location' : 'Localisation', value: tx.location, color: '#a78bfa' },
+                { Icon: GraduationCap, label: lang === 'en' ? 'Education' : 'Formation', value: tx.university, color: 'var(--cyan)' },
               ].map(({ Icon, label, value, color }) => (
                 <div key={label} style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
                   borderRadius: '0.875rem', padding: '1rem',
                   backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
                 }}>
@@ -191,12 +181,12 @@ export default function Author() {
               fontStyle: 'italic', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.7,
               borderLeft: '2px solid rgba(0,255,255,0.3)', paddingLeft: '1rem', marginBottom: '1.75rem',
             }}>
-              "Understand the vulnerability, master the architecture, and rebuild it with absolute integrity."
+              "{tx.quote}"
             </p>
 
             {/* Skills */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {SKILLS.map((skill) => (
+              {tx.skills.map((skill) => (
                 <span key={skill} style={{
                   padding: '0.25rem 0.75rem', fontSize: '0.75rem', fontWeight: 500,
                   borderRadius: '9999px', border: '1px solid rgba(0,255,255,0.2)',

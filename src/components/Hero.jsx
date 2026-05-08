@@ -1,8 +1,9 @@
-import { useRef, useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import * as THREE from 'three'
 import { ChevronDown } from 'lucide-react'
+import GlobeCanvas from './GlobeCanvas'
+import { useLang } from '../context/LanguageContext'
+import { t } from '../translations'
 
 function GithubIcon({ size = 18 }) {
   return (
@@ -12,107 +13,13 @@ function GithubIcon({ size = 18 }) {
   )
 }
 
-/* ─── Three.js Network Graph ─────────────────────────────────────── */
-function NetworkParticles() {
-  const meshRef = useRef()
-  const linesRef = useRef()
-  const mouse = useRef({ x: 0, y: 0 })
-  const NODE_COUNT = 80
-  const CONNECTION_DIST = 2.2
-
-  const { positions, velocities, linePositions } = useMemo(() => {
-    const positions = []
-    const velocities = []
-    for (let i = 0; i < NODE_COUNT; i++) {
-      positions.push((Math.random() - 0.5) * 16, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 6)
-      velocities.push((Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.005, (Math.random() - 0.5) * 0.003)
-    }
-    const linePositions = new Float32Array(NODE_COUNT * 4 * 6)
-    return { positions, velocities, linePositions }
-  }, [])
-
-  const posArr = useRef(new Float32Array(positions))
-  const velArr = useRef(new Float32Array(velocities))
-
-  useEffect(() => {
-    const handler = (e) => {
-      mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 12
-      mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 8
-    }
-    window.addEventListener('mousemove', handler)
-    return () => window.removeEventListener('mousemove', handler)
-  }, [])
-
-  useFrame(() => {
-    const pos = posArr.current
-    const vel = velArr.current
-    for (let i = 0; i < NODE_COUNT; i++) {
-      const xi = i * 3, yi = i * 3 + 1, zi = i * 3 + 2
-      const dx = pos[xi] - mouse.current.x * 0.3
-      const dy = pos[yi] - mouse.current.y * 0.3
-      const dist = Math.sqrt(dx * dx + dy * dy)
-      if (dist < 2.5) { vel[xi] += (dx / dist) * 0.0008; vel[yi] += (dy / dist) * 0.0008 }
-      pos[xi] += vel[xi]; pos[yi] += vel[yi]; pos[zi] += vel[zi]
-      if (Math.abs(pos[xi]) > 8) vel[xi] *= -1
-      if (Math.abs(pos[yi]) > 5) vel[yi] *= -1
-      if (Math.abs(pos[zi]) > 3) vel[zi] *= -1
-    }
-    if (meshRef.current) {
-      meshRef.current.geometry.attributes.position.array.set(pos)
-      meshRef.current.geometry.attributes.position.needsUpdate = true
-    }
-    let lineIdx = 0
-    const lp = linePositions
-    for (let i = 0; i < NODE_COUNT && lineIdx < lp.length - 6; i++) {
-      for (let j = i + 1; j < NODE_COUNT && lineIdx < lp.length - 6; j++) {
-        const dx = pos[i*3] - pos[j*3], dy = pos[i*3+1] - pos[j*3+1], dz = pos[i*3+2] - pos[j*3+2]
-        if (Math.sqrt(dx*dx + dy*dy + dz*dz) < CONNECTION_DIST) {
-          lp[lineIdx++] = pos[i*3]; lp[lineIdx++] = pos[i*3+1]; lp[lineIdx++] = pos[i*3+2]
-          lp[lineIdx++] = pos[j*3]; lp[lineIdx++] = pos[j*3+1]; lp[lineIdx++] = pos[j*3+2]
-        }
-      }
-    }
-    if (linesRef.current) {
-      linesRef.current.geometry.setDrawRange(0, lineIdx / 3)
-      linesRef.current.geometry.attributes.position.array.set(lp)
-      linesRef.current.geometry.attributes.position.needsUpdate = true
-    }
-  })
-
-  return (
-    <group>
-      <points ref={meshRef}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={NODE_COUNT} array={posArr.current} itemSize={3} />
-        </bufferGeometry>
-        <pointsMaterial size={0.09} color="#00ffff" sizeAttenuation transparent opacity={0.9} />
-      </points>
-      <lineSegments ref={linesRef}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={NODE_COUNT * 4 * 2} array={linePositions} itemSize={3} />
-        </bufferGeometry>
-        <lineBasicMaterial color="#00ffff" transparent opacity={0.1} />
-      </lineSegments>
-    </group>
-  )
-}
-
-/* ─── Typing Animation ─────────────────────────────────────────── */
-const PHRASES = [
-  'Scanning 192.168.1.0/24...',
-  'Detected 12 hosts online',
-  'Running AI vulnerability analysis...',
-  'Generating security report...',
-  'Multi-threaded port scan: 200 workers',
-]
-
-function TypingText() {
+function TypingText({ phrases }) {
   const [phraseIdx, setPhraseIdx] = useState(0)
   const [displayed, setDisplayed] = useState('')
   const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
-    const phrase = PHRASES[phraseIdx]
+    const phrase = phrases[phraseIdx]
     let timer
     if (!deleting && displayed.length < phrase.length) {
       timer = setTimeout(() => setDisplayed(phrase.slice(0, displayed.length + 1)), 45)
@@ -122,10 +29,10 @@ function TypingText() {
       timer = setTimeout(() => setDisplayed(phrase.slice(0, displayed.length - 1)), 22)
     } else if (deleting && displayed.length === 0) {
       setDeleting(false)
-      setPhraseIdx((i) => (i + 1) % PHRASES.length)
+      setPhraseIdx((i) => (i + 1) % phrases.length)
     }
     return () => clearTimeout(timer)
-  }, [displayed, deleting, phraseIdx])
+  }, [displayed, deleting, phraseIdx, phrases])
 
   return (
     <span style={{ color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>
@@ -135,14 +42,15 @@ function TypingText() {
   )
 }
 
-/* ─── Hero ─────────────────────────────────────────────────────── */
 const BADGES = ['Python 3.8+', 'AI / ML', 'Cybersecurity', 'Multi-threaded', 'Scapy']
 
 export default function Hero() {
+  const { lang } = useLang()
+  const tx = t[lang].hero
+
   return (
     <section
       id="hero"
-      className="grid-bg"
       style={{
         position: 'relative',
         minHeight: '100vh',
@@ -153,17 +61,13 @@ export default function Hero() {
         overflow: 'hidden',
       }}
     >
-      {/* Three.js canvas */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-        <Canvas camera={{ position: [0, 0, 8], fov: 60 }} gl={{ antialias: true, alpha: true }} style={{ background: 'transparent' }}>
-          <NetworkParticles />
-        </Canvas>
-      </div>
+      {/* 3D Globe */}
+      <GlobeCanvas />
 
-      {/* Radial glow */}
+      {/* Radial glow overlay */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,255,255,0.06) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse 55% 45% at 50% 50%, rgba(0,255,255,0.05) 0%, transparent 70%)',
       }} />
 
       {/* Content */}
@@ -180,15 +84,12 @@ export default function Hero() {
           style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
             padding: '0.375rem 1rem', borderRadius: '9999px',
-            border: '1px solid rgba(0,255,255,0.25)',
-            background: 'rgba(0,255,255,0.05)',
-            marginBottom: '2rem',
-            fontFamily: 'var(--font-mono)', fontSize: '0.75rem',
-            color: 'var(--cyan)',
+            border: '1px solid rgba(0,255,255,0.25)', background: 'rgba(0,255,255,0.05)',
+            marginBottom: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--cyan)',
           }}
         >
           <span className="animate-pulse-dot" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--cyan)', boxShadow: '0 0 6px var(--cyan)' }} />
-          v1.0 — Open Source Cybersecurity Tool
+          {tx.badge}
         </motion.div>
 
         {/* Title */}
@@ -197,16 +98,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
           className="font-orbitron"
-          style={{
-            fontWeight: 900,
-            fontSize: 'clamp(2.5rem, 8vw, 5.5rem)',
-            lineHeight: 1.05,
-            marginBottom: '1.5rem',
-          }}
+          style={{ fontWeight: 900, fontSize: 'clamp(2.5rem, 8vw, 5.5rem)', lineHeight: 1.05, marginBottom: '1.5rem' }}
         >
-          <span className="gradient-text">Smart Network</span>
+          <span className="gradient-text">{tx.title1}</span>
           <br />
-          <span style={{ color: 'var(--text-primary)' }}>Mapper</span>
+          <span style={{ color: 'var(--text-primary)' }}>{tx.title2}</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -215,15 +111,11 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
           style={{
-            color: 'var(--text-secondary)',
-            fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
-            marginBottom: '1.25rem',
-            maxWidth: '40rem',
-            margin: '0 auto 1.25rem',
-            lineHeight: 1.6,
+            color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
+            margin: '0 auto 1.25rem', lineHeight: 1.6, maxWidth: '40rem',
           }}
         >
-          Next-Generation Network Diagnostic &amp; AI-Powered Security Suite
+          {tx.subtitle}
         </motion.p>
 
         {/* Typing line */}
@@ -237,7 +129,7 @@ export default function Hero() {
           }}
         >
           <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.875rem' }}>$</span>
-          <TypingText />
+          <TypingText phrases={tx.terminal} />
         </motion.div>
 
         {/* Tech badges */}
@@ -248,19 +140,11 @@ export default function Hero() {
           style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '2.5rem' }}
         >
           {BADGES.map((b) => (
-            <span
-              key={b}
-              style={{
-                padding: '0.25rem 0.875rem',
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                borderRadius: '9999px',
-                border: '1px solid rgba(124,58,237,0.3)',
-                background: 'rgba(124,58,237,0.08)',
-                color: '#a78bfa',
-                fontFamily: 'var(--font-mono)',
-              }}
-            >
+            <span key={b} style={{
+              padding: '0.25rem 0.875rem', fontSize: '0.75rem', fontWeight: 500,
+              borderRadius: '9999px', border: '1px solid rgba(124,58,237,0.3)',
+              background: 'rgba(124,58,237,0.08)', color: '#a78bfa', fontFamily: 'var(--font-mono)',
+            }}>
               {b}
             </span>
           ))}
@@ -275,15 +159,13 @@ export default function Hero() {
         >
           <a
             href="https://github.com/Amine-NAHLI/smart-network-mapper"
-            target="_blank"
-            rel="noreferrer"
+            target="_blank" rel="noreferrer"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
               padding: '0.875rem 2rem', borderRadius: '9999px',
               fontWeight: 700, fontSize: '0.9rem',
               background: 'linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%)',
-              color: '#050508',
-              textDecoration: 'none',
+              color: '#050508', textDecoration: 'none',
               boxShadow: '0 0 30px rgba(0,255,255,0.25)',
               transition: 'box-shadow 0.3s, transform 0.2s',
               fontFamily: 'var(--font-heading)',
@@ -291,7 +173,7 @@ export default function Hero() {
             onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 50px rgba(0,255,255,0.45)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
             onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 30px rgba(0,255,255,0.25)'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
-            <GithubIcon size={16} /> GitHub →
+            <GithubIcon size={16} /> {tx.btnGithub} →
           </a>
           <button
             onClick={() => document.querySelector('#overview')?.scrollIntoView({ behavior: 'smooth' })}
@@ -299,17 +181,15 @@ export default function Hero() {
               display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
               padding: '0.875rem 2rem', borderRadius: '9999px',
               fontWeight: 600, fontSize: '0.9rem',
-              border: '1px solid rgba(0,255,255,0.35)',
-              color: 'var(--cyan)',
-              background: 'transparent',
-              cursor: 'pointer',
+              border: '1px solid rgba(0,255,255,0.35)', color: 'var(--cyan)',
+              background: 'transparent', cursor: 'pointer',
               transition: 'background 0.2s, border-color 0.2s, transform 0.2s',
               fontFamily: 'var(--font-heading)',
             }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,255,255,0.08)'; e.currentTarget.style.borderColor = 'var(--cyan)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(0,255,255,0.35)'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
-            Get Started ↓
+            {tx.btnStart} ↓
           </button>
         </motion.div>
       </div>
@@ -325,11 +205,8 @@ export default function Hero() {
           color: 'var(--text-muted)',
         }}
       >
-        <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>SCROLL</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-        >
+        <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.2em' }}>{tx.scroll}</span>
+        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}>
           <ChevronDown size={18} />
         </motion.div>
       </motion.div>
