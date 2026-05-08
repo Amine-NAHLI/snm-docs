@@ -9,7 +9,7 @@ import Footer from './components/Footer'
 
 export default function App() {
   return (
-    <div className="min-h-screen selection:bg-cyan-500/30 selection:text-cyan-200" style={{ background: '#0a0a0f', color: '#e2e8f0' }}>
+    <div style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)', minHeight: '100vh' }}>
       <Navbar />
       <main>
         <Hero />

@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { Download, Terminal, Settings, Shield, BookOpen } from 'lucide-react'
+import { Download, Terminal, BookOpen } from 'lucide-react'
 import Installation from './Installation'
 import Usage from './Usage'
 
@@ -15,35 +15,45 @@ export default function Documentation() {
   ]
 
   return (
-    <section id="docs" className="section-pad relative overflow-hidden" style={{ background: '#080810' }}>
-      {/* Background decoration */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(circle at 100% 50%, rgba(124,58,237,0.04) 0%, transparent 50%)' }}
-      />
-      
-      <div className="max-w-6xl mx-auto relative z-10" ref={ref}>
+    <section id="docs" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: '#080810' }}>
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(circle at 100% 50%, rgba(124,58,237,0.05) 0%, transparent 50%)',
+      }} />
+
+      <div style={{ maxWidth: '72rem', margin: '0 auto', position: 'relative', zIndex: 10 }} ref={ref}>
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          className="text-center mb-12"
+          style={{ textAlign: 'center', marginBottom: '3rem' }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/5 text-cyan-400 text-xs font-mono mb-6">
-            <BookOpen className="w-3.5 h-3.5" />
-            DOCUMENTATION
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.375rem 1rem', borderRadius: '9999px',
+            border: '1px solid rgba(0,255,255,0.2)', background: 'rgba(0,255,255,0.04)',
+            color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
+            marginBottom: '1.5rem', letterSpacing: '0.12em',
+          }}>
+            <BookOpen size={13} /> DOCUMENTATION
           </div>
-          <h2 className="font-orbitron font-bold text-3xl sm:text-5xl mb-4 text-white">
+          <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1rem', color: 'var(--text-primary)' }}>
             Get <span className="gradient-text">Started</span>
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto">
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '36rem', margin: '0 auto' }}>
             Everything you need to set up and master the Smart Network Mapper suite.
           </p>
         </motion.div>
 
         {/* Tab Switcher */}
-        <div className="flex justify-center mb-10">
-          <div className="inline-flex p-1 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.5rem' }}>
+          <div style={{
+            display: 'inline-flex', padding: '0.25rem',
+            borderRadius: '1rem', background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+          }}>
             {tabs.map((tab) => {
               const Icon = tab.icon
               const isActive = activeTab === tab.id
@@ -51,28 +61,38 @@ export default function Documentation() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`
-                    relative flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300
-                    ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'}
-                  `}
+                  style={{
+                    position: 'relative',
+                    display: 'flex', alignItems: 'center', gap: '0.5rem',
+                    padding: '0.75rem 1.75rem', borderRadius: '0.75rem',
+                    fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
+                    border: 'none', background: 'transparent',
+                    color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    transition: 'color 0.2s',
+                    fontFamily: 'var(--font-heading)',
+                  }}
                 >
                   {isActive && (
                     <motion.div
-                      layoutId="activeTab"
-                      className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30"
-                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                      layoutId="docTab"
+                      style={{
+                        position: 'absolute', inset: 0, borderRadius: '0.75rem',
+                        background: 'linear-gradient(135deg, rgba(0,255,255,0.12) 0%, rgba(124,58,237,0.12) 100%)',
+                        border: '1px solid rgba(0,255,255,0.25)',
+                      }}
+                      transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
                     />
                   )}
-                  <Icon className={`w-4 h-4 relative z-10 ${isActive ? 'text-cyan-400' : ''}`} />
-                  <span className="relative z-10">{tab.label}</span>
+                  <Icon size={15} style={{ position: 'relative', zIndex: 1, color: isActive ? 'var(--cyan)' : 'inherit' }} />
+                  <span style={{ position: 'relative', zIndex: 1 }}>{tab.label}</span>
                 </button>
               )
             })}
           </div>
         </div>
 
-        {/* Content Area */}
-        <div className="relative min-h-[600px]">
+        {/* Content */}
+        <div style={{ minHeight: '500px' }}>
           <AnimatePresence mode="wait">
             {activeTab === 'installation' ? (
               <motion.div
@@ -80,10 +100,8 @@ export default function Documentation() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.35 }}
               >
-                {/* We need to modify Installation to not have its own section wrapper if possible, 
-                    but for now we'll use it as is and adjust App.jsx */}
                 <Installation isEmbed />
               </motion.div>
             ) : (
@@ -92,7 +110,7 @@ export default function Documentation() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.35 }}
               >
                 <Usage isEmbed />
               </motion.div>

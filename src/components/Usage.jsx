@@ -22,27 +22,39 @@ const CLI_STEPS = [
 
 function StepList({ steps }) {
   return (
-    <div className="space-y-3 mt-6">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.5rem' }}>
       {steps.map((s, i) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: i * 0.07 }}
-          className="flex items-start gap-4 group"
+          style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}
         >
-          <div
-            className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-orbitron font-bold mt-0.5"
-            style={{ background: 'rgba(0,255,255,0.1)', border: '1px solid rgba(0,255,255,0.25)', color: '#00ffff' }}
-          >
+          <div className="font-orbitron" style={{
+            flexShrink: 0, width: '1.75rem', height: '1.75rem',
+            borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '0.7rem', fontWeight: 700, marginTop: '0.125rem',
+            background: 'rgba(0,255,255,0.08)',
+            border: '1px solid rgba(0,255,255,0.22)',
+            color: 'var(--cyan)',
+          }}>
             {i + 1}
           </div>
-          <div className="flex-1 glass rounded-xl p-3.5 transition-all duration-200 group-hover:border-cyan-400/25">
-            <div className="flex items-center gap-2 mb-1">
-              <ChevronRight className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
-              <code className="text-cyan-300 text-sm font-mono">{s.cmd}</code>
+          <div style={{
+            flex: 1,
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(0,255,255,0.08)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            borderRadius: '0.75rem',
+            padding: '0.875rem 1rem',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+              <ChevronRight size={13} style={{ color: 'var(--cyan)', flexShrink: 0 }} />
+              <code style={{ color: '#67e8f9', fontSize: '0.875rem', fontFamily: 'var(--font-mono)' }}>{s.cmd}</code>
             </div>
-            <p className="text-slate-400 text-sm pl-5">{s.desc}</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.825rem', paddingLeft: '1.25rem' }}>{s.desc}</p>
           </div>
         </motion.div>
       ))}
@@ -56,24 +68,27 @@ export default function Usage({ isEmbed = false }) {
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
   const content = (
-    <div className={`${isEmbed ? '' : 'max-w-4xl mx-auto relative z-10'}`} ref={ref}>
-      {/* Heading - only show if not embedded */}
+    <div ref={ref} style={isEmbed ? {} : { maxWidth: '52rem', margin: '0 auto', position: 'relative', zIndex: 10 }}>
       {!isEmbed && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          style={{ textAlign: 'center', marginBottom: '3rem' }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-magenta-400/20 bg-pink-500/5 text-pink-400 text-xs font-mono mb-6"
-            style={{ borderColor: 'rgba(255,0,255,0.2)', color: '#ff00ff' }}>
-            <Layers className="w-3.5 h-3.5" />
-            HOW TO USE
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.375rem 1rem', borderRadius: '9999px',
+            border: '1px solid rgba(255,0,255,0.2)', background: 'rgba(255,0,255,0.04)',
+            color: 'var(--magenta)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
+            marginBottom: '1.5rem', letterSpacing: '0.12em',
+          }}>
+            <Layers size={13} /> HOW TO USE
           </div>
-          <h2 className="font-orbitron font-bold text-3xl sm:text-5xl mb-4">
+          <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1rem' }}>
             <span className="gradient-text">Usage Guide</span>
           </h2>
-          <p className="text-slate-400">Two ways to run SNM — choose what fits your workflow.</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Two ways to run SNM — choose what fits your workflow.</p>
         </motion.div>
       )}
 
@@ -82,8 +97,11 @@ export default function Usage({ isEmbed = false }) {
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="flex rounded-xl p-1 mb-8 gap-1"
-        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(0,255,255,0.1)' }}
+        style={{
+          display: 'flex', gap: '0.25rem', padding: '0.25rem',
+          marginBottom: '2rem', borderRadius: '0.875rem',
+          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(0,255,255,0.1)',
+        }}
       >
         {[
           { id: 'gui', label: 'GUI Mode', icon: Monitor },
@@ -92,15 +110,18 @@ export default function Usage({ isEmbed = false }) {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-            style={
-              tab === id
-                ? { background: 'rgba(0,255,255,0.12)', color: '#00ffff', border: '1px solid rgba(0,255,255,0.25)' }
-                : { color: '#64748b' }
-            }
+            style={{
+              flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              gap: '0.5rem', padding: '0.75rem', borderRadius: '0.625rem',
+              fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
+              border: tab === id ? '1px solid rgba(0,255,255,0.25)' : '1px solid transparent',
+              background: tab === id ? 'rgba(0,255,255,0.1)' : 'transparent',
+              color: tab === id ? 'var(--cyan)' : 'var(--text-muted)',
+              transition: 'all 0.2s',
+              fontFamily: 'var(--font-heading)',
+            }}
           >
-            <Icon className="w-4 h-4" />
-            {label}
+            <Icon size={15} /> {label}
           </button>
         ))}
       </motion.div>
@@ -110,20 +131,29 @@ export default function Usage({ isEmbed = false }) {
         {tab === 'gui' ? (
           <motion.div
             key="gui"
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
+            exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Monitor className="w-5 h-5 text-cyan-400" />
-                <h3 className="font-semibold text-white">Cyberpunk GUI Mode</h3>
-                <span className="ml-auto text-xs font-mono px-2 py-0.5 rounded-full bg-cyan-400/10 text-cyan-400 border border-cyan-400/20">
-                  Recommended
-                </span>
+            <div style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(0,255,255,0.12)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              borderRadius: '1rem', padding: '1.5rem',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <Monitor size={18} style={{ color: 'var(--cyan)' }} />
+                <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>Cyberpunk GUI Mode</h3>
+                <span style={{
+                  marginLeft: 'auto', fontSize: '0.7rem', fontFamily: 'var(--font-mono)',
+                  padding: '0.2rem 0.625rem', borderRadius: '9999px',
+                  background: 'rgba(0,255,255,0.08)', color: 'var(--cyan)',
+                  border: '1px solid rgba(0,255,255,0.2)',
+                }}>Recommended</span>
               </div>
-              <p className="text-slate-500 text-sm">
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>
                 Full-featured graphical interface with real-time dashboard, animated scan results, and one-click export. Ideal for interactive use and visual analysis.
               </p>
               <StepList steps={GUI_STEPS} />
@@ -132,20 +162,29 @@ export default function Usage({ isEmbed = false }) {
         ) : (
           <motion.div
             key="cli"
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
+            exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Terminal className="w-5 h-5" style={{ color: '#ff00ff' }} />
-                <h3 className="font-semibold text-white">CLI / Headless Mode</h3>
-                <span className="ml-auto text-xs font-mono px-2 py-0.5 rounded-full border" style={{ background: 'rgba(255,0,255,0.08)', color: '#ff00ff', borderColor: 'rgba(255,0,255,0.2)' }}>
-                  Server-friendly
-                </span>
+            <div style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,0,255,0.12)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              borderRadius: '1rem', padding: '1.5rem',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <Terminal size={18} style={{ color: 'var(--magenta)' }} />
+                <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>CLI / Headless Mode</h3>
+                <span style={{
+                  marginLeft: 'auto', fontSize: '0.7rem', fontFamily: 'var(--font-mono)',
+                  padding: '0.2rem 0.625rem', borderRadius: '9999px',
+                  background: 'rgba(255,0,255,0.07)', color: 'var(--magenta)',
+                  border: '1px solid rgba(255,0,255,0.2)',
+                }}>Server-friendly</span>
               </div>
-              <p className="text-slate-500 text-sm">
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65 }}>
                 Interactive menu-driven CLI — perfect for remote servers, scripting, and headless environments. All features available without a display.
               </p>
               <StepList steps={CLI_STEPS} />
@@ -159,11 +198,11 @@ export default function Usage({ isEmbed = false }) {
   if (isEmbed) return content
 
   return (
-    <section id="usage" className="section-pad relative overflow-hidden" style={{ background: '#0a0a0f' }}>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 60% 50% at 100% 50%, rgba(255,0,255,0.04) 0%, transparent 60%)' }}
-      />
+    <section id="usage" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-primary)' }}>
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 60% 50% at 100% 50%, rgba(255,0,255,0.04) 0%, transparent 60%)',
+      }} />
       {content}
     </section>
   )

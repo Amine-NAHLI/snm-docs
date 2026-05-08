@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "PowerShell(New-Item *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(npx vite *)",
+      "Bash(node -e \"const fs = require\\('fs'\\); const css = fs.readFileSync\\('dist/assets/index-URj3jFqW.css', 'utf8'\\); console.log\\('CSS length:', css.length\\); console.log\\('Has --cyan:', css.includes\\('--cyan'\\)\\); console.log\\('Has font-orbitron:', css.includes\\('font-orbitron'\\)\\); console.log\\('Has gradient-text:', css.includes\\('gradient-text'\\)\\); console.log\\('Has glass:', css.includes\\('.glass'\\)\\); console.log\\('Has grid-bg:', css.includes\\('grid-bg'\\)\\); console.log\\('Has Orbitron:', css.includes\\('Orbitron'\\)\\); console.log\\('Has Space Grotesk:', css.includes\\('Space Grotesk'\\)\\); console.log\\('First 500 chars:', css.slice\\(0, 500\\)\\);\")",
+      "Bash(dir \"D:\\\\PFA_3\\\\snm-docs\\\\nahli.png\")",
+      "Bash(dir \"D:\\\\PFA_3\\\\snm-docs\\\\public\\\\nahli.png\")"
     ]
   }
 }

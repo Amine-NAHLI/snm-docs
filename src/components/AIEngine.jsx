@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Brain, ChevronRight, ExternalLink, Database } from 'lucide-react'
 
@@ -18,117 +18,173 @@ const MODELS = [
 ]
 
 const THREATS = [
-  { level: 'Critical', color: '#ef4444', bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)', score: '9–10' },
-  { level: 'High', color: '#f97316', bg: 'rgba(249,115,22,0.12)', border: 'rgba(249,115,22,0.3)', score: '7–8.9' },
-  { level: 'Medium', color: '#eab308', bg: 'rgba(234,179,8,0.12)', border: 'rgba(234,179,8,0.3)', score: '4–6.9' },
-  { level: 'Low', color: '#22c55e', bg: 'rgba(34,197,94,0.12)', border: 'rgba(34,197,94,0.3)', score: '0–3.9' },
+  { level: 'Critical', color: '#ef4444', bg: 'rgba(239,68,68,0.08)', border: 'rgba(239,68,68,0.25)', score: '9–10', pct: 100 },
+  { level: 'High', color: '#f97316', bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.25)', score: '7–8.9', pct: 78 },
+  { level: 'Medium', color: '#eab308', bg: 'rgba(234,179,8,0.08)', border: 'rgba(234,179,8,0.25)', score: '4–6.9', pct: 55 },
+  { level: 'Low', color: '#22c55e', bg: 'rgba(34,197,94,0.08)', border: 'rgba(34,197,94,0.25)', score: '0–3.9', pct: 30 },
 ]
+
+function PipelineStep({ step, i, inView }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={inView ? { opacity: 1, scale: 1 } : {}}
+      transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: 'rgba(255,255,255,0.03)',
+        border: `1px solid ${hovered ? step.color + '50' : step.color + '28'}`,
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderRadius: '0.875rem',
+        padding: '1rem 1.25rem',
+        textAlign: 'center',
+        minWidth: '130px',
+        transition: 'border-color 0.3s, box-shadow 0.3s',
+        boxShadow: hovered ? `0 0 20px ${step.color}18` : 'none',
+      }}
+    >
+      <div style={{
+        width: '10px', height: '10px', borderRadius: '50%',
+        margin: '0 auto 0.5rem',
+        background: step.color,
+        boxShadow: `0 0 10px ${step.color}`,
+      }} />
+      <p style={{ color: 'var(--text-primary)', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.2rem' }}>{step.label}</p>
+      <p style={{ color: step.color, fontSize: '0.65rem', opacity: 0.75, fontFamily: 'var(--font-mono)' }}>{step.sub}</p>
+    </motion.div>
+  )
+}
+
+function ModelRow({ m, i, inView }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.4, delay: 0.2 + i * 0.07 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        padding: '1rem 1.5rem',
+        display: 'flex', alignItems: 'center', gap: '1rem',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        background: hovered ? 'rgba(255,255,255,0.03)' : 'transparent',
+        transition: 'background 0.2s',
+      }}
+    >
+      <div style={{ width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0, background: m.color, boxShadow: `0 0 6px ${m.color}` }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.file}</p>
+        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{m.role}</p>
+      </div>
+      <span style={{
+        fontSize: '0.7rem', fontFamily: 'var(--font-mono)',
+        padding: '0.2rem 0.625rem', borderRadius: '0.375rem', flexShrink: 0,
+        background: `${m.color}12`, color: m.color, border: `1px solid ${m.color}22`,
+      }}>{m.size}</span>
+    </motion.div>
+  )
+}
 
 export default function AIEngine() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
   return (
-    <section id="ai-engine" className="section-pad relative overflow-hidden grid-bg" style={{ background: '#080810' }}>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(124,58,237,0.06) 0%, transparent 65%)' }}
-      />
+    <section id="ai-engine" className="section-pad grid-bg" style={{ position: 'relative', overflow: 'hidden', background: '#080810' }}>
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(124,58,237,0.06) 0%, transparent 65%)',
+      }} />
 
-      <div className="max-w-6xl mx-auto relative z-10" ref={ref}>
+      <div style={{ maxWidth: '72rem', margin: '0 auto', position: 'relative', zIndex: 10 }} ref={ref}>
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          style={{ textAlign: 'center', marginBottom: '4rem' }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/20 bg-purple-500/5 text-purple-400 text-xs font-mono mb-6">
-            <Brain className="w-3.5 h-3.5" />
-            MACHINE LEARNING
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.375rem 1rem', borderRadius: '9999px',
+            border: '1px solid rgba(124,58,237,0.25)', background: 'rgba(124,58,237,0.06)',
+            color: '#a78bfa', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
+            marginBottom: '1.5rem', letterSpacing: '0.12em',
+          }}>
+            <Brain size={13} /> MACHINE LEARNING
           </div>
-          <h2 className="font-orbitron font-bold text-3xl sm:text-5xl mb-4">
+          <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1rem' }}>
             AI <span className="gradient-text">Engine</span>
           </h2>
-          <p className="text-slate-400 max-w-xl mx-auto">
+          <p style={{ color: 'var(--text-secondary)', maxWidth: '40rem', margin: '0 auto', lineHeight: 1.7 }}>
             A 5.1 GB Random Forest model trained on thousands of CVE records predicts vulnerability severity from detected services in real-time.
           </p>
         </motion.div>
 
-        {/* Pipeline diagram */}
+        {/* Pipeline */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-16"
+          style={{ marginBottom: '4rem' }}
         >
-          <h3 className="font-semibold text-slate-300 text-sm text-center mb-8 font-mono uppercase tracking-widest">
-            Inference Pipeline
-          </h3>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 flex-wrap">
+          <p style={{
+            fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.15em',
+            color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '2rem', textTransform: 'uppercase',
+          }}>Inference Pipeline</p>
+          <div className="pipeline-flow">
             {PIPELINE.map((step, i) => (
-              <div key={step.label} className="flex items-center gap-2">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
-                  className="glass rounded-xl p-4 text-center min-w-[130px]"
-                  style={{ borderColor: `${step.color}30` }}
-                >
-                  <div
-                    className="w-3 h-3 rounded-full mx-auto mb-2"
-                    style={{ background: step.color, boxShadow: `0 0 8px ${step.color}` }}
-                  />
-                  <p className="text-white text-sm font-semibold">{step.label}</p>
-                  <p className="text-xs mt-0.5" style={{ color: step.color, opacity: 0.7 }}>{step.sub}</p>
-                </motion.div>
+              <div key={step.label} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <PipelineStep step={step} i={i} inView={inView} />
                 {i < PIPELINE.length - 1 && (
-                  <ChevronRight className="w-5 h-5 text-slate-600 flex-shrink-0 hidden sm:block" />
+                  <ChevronRight size={18} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
                 )}
               </div>
             ))}
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Model files table */}
+        {/* Bottom grid */}
+        <div className="ai-grid">
+          {/* Model files */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="glass rounded-2xl overflow-hidden"
+            style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(0,255,255,0.1)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              borderRadius: '1rem', overflow: 'hidden',
+            }}
           >
-            <div className="flex items-center gap-2 px-6 py-4 border-b border-white/5">
-              <Database className="w-4 h-4 text-cyan-400" />
-              <h3 className="font-semibold text-white text-sm">Model Files</h3>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '0.625rem',
+              padding: '1rem 1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)',
+            }}>
+              <Database size={15} style={{ color: 'var(--cyan)' }} />
+              <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.875rem' }}>Model Files</h3>
               <a
                 href="https://huggingface.co/aminenahli/smart-network-mapper-models"
-                target="_blank"
-                rel="noreferrer"
-                className="ml-auto flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+                target="_blank" rel="noreferrer"
+                style={{
+                  marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '0.25rem',
+                  fontSize: '0.75rem', color: 'var(--cyan)', textDecoration: 'none',
+                  transition: 'opacity 0.2s',
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
               >
-                Hugging Face <ExternalLink className="w-3 h-3" />
+                Hugging Face <ExternalLink size={11} />
               </a>
             </div>
-            <div className="divide-y divide-white/5">
-              {MODELS.map((m) => (
-                <div key={m.file} className="px-6 py-4 flex items-center gap-4">
-                  <div
-                    className="w-2 h-2 rounded-full flex-shrink-0"
-                    style={{ background: m.color, boxShadow: `0 0 6px ${m.color}` }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-mono text-sm text-slate-200 truncate">{m.file}</p>
-                    <p className="text-xs text-slate-500">{m.role}</p>
-                  </div>
-                  <span
-                    className="text-xs font-mono px-2 py-1 rounded-md flex-shrink-0"
-                    style={{ background: `${m.color}12`, color: m.color, border: `1px solid ${m.color}25` }}
-                  >
-                    {m.size}
-                  </span>
-                </div>
-              ))}
+            <div>
+              {MODELS.map((m, i) => <ModelRow key={m.file} m={m} i={i} inView={inView} />)}
             </div>
           </motion.div>
 
@@ -138,29 +194,37 @@ export default function AIEngine() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <h3 className="font-semibold text-slate-300 text-sm font-mono uppercase tracking-widest mb-4">
-              Threat Level Scale
-            </h3>
-            <div className="space-y-3">
+            <p style={{
+              fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.15em',
+              color: 'var(--text-secondary)', marginBottom: '1.25rem', textTransform: 'uppercase',
+            }}>Threat Level Scale</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {THREATS.map((t) => (
                 <div
                   key={t.level}
-                  className="rounded-xl p-4 flex items-center gap-4 transition-all duration-200 hover:translate-x-1"
-                  style={{ background: t.bg, border: `1px solid ${t.border}` }}
+                  style={{
+                    borderRadius: '0.875rem', padding: '1rem 1.25rem',
+                    display: 'flex', alignItems: 'center', gap: '1rem',
+                    background: t.bg, border: `1px solid ${t.border}`,
+                    transition: 'transform 0.2s',
+                    cursor: 'default',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(4px)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
                 >
-                  <div
-                    className="w-3 h-10 rounded-full flex-shrink-0"
-                    style={{ background: t.color, boxShadow: `0 0 10px ${t.color}` }}
-                  />
-                  <div className="flex-1">
-                    <p className="font-bold text-sm" style={{ color: t.color }}>{t.level}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">CVSS Score: {t.score}</p>
+                  <div style={{ width: '4px', height: '2.5rem', borderRadius: '9999px', flexShrink: 0, background: t.color, boxShadow: `0 0 10px ${t.color}` }} />
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: 700, fontSize: '0.875rem', color: t.color, marginBottom: '0.1rem' }}>{t.level}</p>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>CVSS Score: {t.score}</p>
                   </div>
-                  <div
-                    className="text-xs font-mono px-3 py-1.5 rounded-full font-bold"
-                    style={{ background: `${t.color}20`, color: t.color }}
-                  >
-                    {t.level.toUpperCase()}
+                  {/* Bar */}
+                  <div style={{ width: '80px', height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden', flexShrink: 0 }}>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={inView ? { width: `${t.pct}%` } : { width: 0 }}
+                      transition={{ duration: 0.8, delay: 0.4 + THREATS.indexOf(t) * 0.1 }}
+                      style={{ height: '100%', background: t.color, borderRadius: '3px', boxShadow: `0 0 6px ${t.color}` }}
+                    />
                   </div>
                 </div>
               ))}

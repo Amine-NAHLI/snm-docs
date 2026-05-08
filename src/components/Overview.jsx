@@ -1,40 +1,26 @@
-import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { Brain, Zap, BarChart3, Network } from 'lucide-react'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
-  show: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, delay: i * 0.15, ease: 'easeOut' },
-  }),
+  show: (i) => ({ opacity: 1, y: 0, transition: { duration: 0.6, delay: i * 0.15, ease: 'easeOut' } }),
 }
 
 const CARDS = [
   {
-    icon: Brain,
-    color: '#ff00ff',
-    glow: 'rgba(255,0,255,0.2)',
-    title: 'AI-Powered',
-    titleFr: 'Intelligence Artificielle',
+    icon: Brain, color: '#ff00ff', glow: 'rgba(255,0,255,0.12)',
+    title: 'AI-Powered', sub: 'Intelligence Artificielle',
     desc: 'Random Forest model with 5.1GB of training data predicts vulnerability severity with high accuracy across thousands of CVEs.',
   },
   {
-    icon: Zap,
-    color: '#00ffff',
-    glow: 'rgba(0,255,255,0.2)',
-    title: 'Multi-threaded',
-    titleFr: 'Hautement Parallèle',
+    icon: Zap, color: '#00ffff', glow: 'rgba(0,255,255,0.12)',
+    title: 'Multi-threaded', sub: 'Hautement Parallèle',
     desc: 'Up to 200 concurrent scanning workers deliver blazing-fast port enumeration across all 65535 ports in seconds.',
   },
   {
-    icon: BarChart3,
-    color: '#7c3aed',
-    glow: 'rgba(124,58,237,0.2)',
-    title: 'Professional Reports',
-    titleFr: 'Rapports Professionnels',
+    icon: BarChart3, color: '#7c3aed', glow: 'rgba(124,58,237,0.12)',
+    title: 'Professional Reports', sub: 'Rapports Professionnels',
     desc: 'Export detailed HTML and JSON reports with threat levels, service fingerprints, and actionable remediation suggestions.',
   },
 ]
@@ -42,20 +28,49 @@ const CARDS = [
 const STATS = [
   { value: '200', label: 'Scan Threads', sub: 'Concurrent workers' },
   { value: '5.1GB', label: 'AI Model', sub: 'Random Forest classifier' },
-  { value: '65535', label: 'Ports', sub: 'Full port coverage' },
+  { value: '65535', label: 'Ports Covered', sub: 'Full port range' },
   { value: '4+', label: 'Export Formats', sub: 'HTML, JSON & more' },
 ]
 
-function Section({ children, id }) {
-  const ref = useRef(null)
+function FeatureCard({ c, i, inView }) {
+  const [hovered, setHovered] = useState(false)
   return (
-    <section id={id} ref={ref} className="section-pad grid-bg relative overflow-hidden">
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 80% 40% at 50% 100%, rgba(0,255,255,0.04) 0%, transparent 70%)' }}
-      />
-      <div className="max-w-7xl mx-auto relative z-10">{children}</div>
-    </section>
+    <motion.div
+      variants={fadeUp}
+      custom={i + 1}
+      initial="hidden"
+      animate={inView ? 'show' : 'hidden'}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: 'rgba(255,255,255,0.03)',
+        border: `1px solid ${hovered ? c.color + '50' : c.color + '20'}`,
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderRadius: '1rem',
+        padding: '2rem',
+        transition: 'border-color 0.3s, box-shadow 0.3s, transform 0.3s',
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        boxShadow: hovered ? `0 0 30px ${c.color}18` : 'none',
+        cursor: 'default',
+      }}
+    >
+      <div style={{
+        width: '3.5rem', height: '3.5rem', borderRadius: '0.875rem',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: c.glow, border: `1px solid ${c.color}30`,
+        marginBottom: '1.5rem',
+        transition: 'transform 0.3s',
+        transform: hovered ? 'scale(1.1)' : 'scale(1)',
+      }}>
+        <c.icon size={24} style={{ color: c.color }} />
+      </div>
+      <h3 className="font-orbitron" style={{ color: c.color, fontWeight: 700, fontSize: '1rem', marginBottom: '0.25rem' }}>
+        {c.title}
+      </h3>
+      <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem', marginBottom: '0.875rem' }}>{c.sub}</p>
+      <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.65 }}>{c.desc}</p>
+    </motion.div>
   )
 }
 
@@ -64,86 +79,66 @@ export default function Overview() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <Section id="overview">
-      <div ref={ref}>
+    <section
+      id="overview"
+      className="section-pad grid-bg"
+      style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}
+    >
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 80% 40% at 50% 100%, rgba(0,255,255,0.04) 0%, transparent 70%)',
+      }} />
+
+      <div style={{ maxWidth: '80rem', margin: '0 auto', position: 'relative', zIndex: 10 }} ref={ref}>
         {/* Heading */}
         <motion.div
-          variants={fadeUp}
-          custom={0}
-          initial="hidden"
-          animate={inView ? 'show' : 'hidden'}
-          className="text-center mb-16"
+          variants={fadeUp} custom={0} initial="hidden" animate={inView ? 'show' : 'hidden'}
+          style={{ textAlign: 'center', marginBottom: '4rem' }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/5 text-cyan-400 text-xs font-mono mb-6">
-            <Network className="w-3.5 h-3.5" />
-            WHAT IS SNM
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.375rem 1rem', borderRadius: '9999px',
+            border: '1px solid rgba(0,255,255,0.2)', background: 'rgba(0,255,255,0.04)',
+            color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
+            marginBottom: '1.5rem', letterSpacing: '0.12em',
+          }}>
+            <Network size={13} /> WHAT IS SNM
           </div>
-          <h2 className="font-orbitron font-bold text-3xl sm:text-5xl mb-6">
+          <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1.25rem' }}>
             <span className="gradient-text">Overview</span>
           </h2>
-          <p className="text-slate-400 text-lg max-w-3xl mx-auto leading-relaxed">
-            Smart Network Mapper is a comprehensive cybersecurity suite that combines
-            real-time network scanning, OS fingerprinting, and a machine-learning vulnerability
-            predictor into a single premium tool — available in both a Cyberpunk GUI and CLI.
-          </p>
-          <p className="text-slate-500 text-sm mt-3 max-w-2xl mx-auto italic">
-            Un outil de diagnostic réseau de nouvelle génération, alimenté par l'IA.
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', maxWidth: '42rem', margin: '0 auto', lineHeight: 1.7 }}>
+            Smart Network Mapper is a comprehensive cybersecurity suite combining real-time network scanning,
+            OS fingerprinting, and machine-learning vulnerability prediction — available in both a Cyberpunk GUI and CLI.
           </p>
         </motion.div>
 
-        {/* 3 highlight cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
-          {CARDS.map((c, i) => (
-            <motion.div
-              key={c.title}
-              variants={fadeUp}
-              custom={i + 1}
-              initial="hidden"
-              animate={inView ? 'show' : 'hidden'}
-              className="glass rounded-2xl p-8 group box-glow-cyan-hover transition-all duration-300 cursor-default"
-              style={{ borderColor: `${c.color}22` }}
-            >
-              <div
-                className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
-                style={{ background: c.glow, border: `1px solid ${c.color}33` }}
-              >
-                <c.icon className="w-7 h-7" style={{ color: c.color }} />
-              </div>
-              <h3 className="font-orbitron font-bold text-lg mb-1" style={{ color: c.color }}>
-                {c.title}
-              </h3>
-              <p className="text-xs text-slate-500 font-mono mb-3">{c.titleFr}</p>
-              <p className="text-slate-400 text-sm leading-relaxed">{c.desc}</p>
-            </motion.div>
-          ))}
+        {/* 3 feature cards */}
+        <div className="grid-auto-3" style={{ marginBottom: '5rem' }}>
+          {CARDS.map((c, i) => <FeatureCard key={c.title} c={c} i={i} inView={inView} />)}
         </div>
 
         {/* Stats */}
         <motion.div
-          variants={fadeUp}
-          custom={4}
-          initial="hidden"
-          animate={inView ? 'show' : 'hidden'}
-          className="grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden"
-          style={{ border: '1px solid rgba(0,255,255,0.1)', background: 'rgba(0,255,255,0.05)' }}
+          variants={fadeUp} custom={4} initial="hidden" animate={inView ? 'show' : 'hidden'}
+          className="grid-stats"
+          style={{ borderRadius: '1rem', overflow: 'hidden', border: '1px solid rgba(0,255,255,0.1)', background: 'rgba(0,255,255,0.03)' }}
         >
-          {STATS.map((s, i) => (
-            <div
-              key={s.label}
-              className="flex flex-col items-center justify-center py-8 px-4 text-center"
-              style={{ background: 'rgba(10,10,15,0.8)' }}
-            >
-              <span
-                className="font-orbitron font-black text-3xl sm:text-4xl mb-2 gradient-text"
-              >
+          {STATS.map((s) => (
+            <div key={s.label} style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              justifyContent: 'center', padding: '2rem 1rem', textAlign: 'center',
+              background: 'rgba(5,5,8,0.85)',
+            }}>
+              <span className="font-orbitron gradient-text" style={{ fontWeight: 900, fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', marginBottom: '0.375rem' }}>
                 {s.value}
               </span>
-              <span className="text-white font-semibold text-sm mb-1">{s.label}</span>
-              <span className="text-slate-500 text-xs">{s.sub}</span>
+              <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.875rem', marginBottom: '0.25rem' }}>{s.label}</span>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{s.sub}</span>
             </div>
           ))}
         </motion.div>
       </div>
-    </Section>
+    </section>
   )
 }

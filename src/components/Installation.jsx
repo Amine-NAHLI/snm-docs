@@ -5,38 +5,56 @@ import { Copy, Check, AlertTriangle, Shield, Download, Terminal } from 'lucide-r
 function CopyButton({ text }) {
   const [copied, setCopied] = useState(false)
   const copy = () => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(text).catch(() => {})
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
   return (
     <button
       onClick={copy}
-      className="absolute top-3 right-3 p-1.5 rounded-md transition-all duration-200 text-slate-500 hover:text-cyan-400 hover:bg-cyan-400/10"
+      style={{
+        position: 'absolute', top: '0.625rem', right: '0.625rem',
+        padding: '0.375rem 0.625rem',
+        display: 'flex', alignItems: 'center', gap: '0.3rem',
+        borderRadius: '0.375rem',
+        border: '1px solid rgba(0,255,255,0.15)',
+        background: copied ? 'rgba(16,185,129,0.12)' : 'rgba(0,255,255,0.06)',
+        color: copied ? '#10b981' : 'var(--text-secondary)',
+        cursor: 'pointer', fontSize: '0.7rem',
+        fontFamily: 'var(--font-mono)',
+        transition: 'all 0.2s',
+      }}
+      onMouseEnter={(e) => { if (!copied) { e.currentTarget.style.color = 'var(--cyan)'; e.currentTarget.style.borderColor = 'rgba(0,255,255,0.35)' } }}
+      onMouseLeave={(e) => { if (!copied) { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'rgba(0,255,255,0.15)' } }}
     >
-      {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+      {copied ? <Check size={12} /> : <Copy size={12} />}
+      {copied ? 'Copied!' : 'Copy'}
     </button>
   )
 }
 
-function CodeBlock({ code, lang = 'bash' }) {
+function CodeBlock({ code }) {
   return (
-    <div className="code-block rounded-xl p-4 pr-12 relative mt-3">
+    <div className="code-block" style={{ padding: '1rem', paddingRight: '6rem', marginTop: '0.75rem', position: 'relative' }}>
       <CopyButton text={code} />
-      <pre className="text-sm leading-relaxed overflow-x-auto">
+      <pre style={{ margin: 0, lineHeight: 1.7, overflowX: 'auto' }}>
         {code.split('\n').map((line, i) => (
-          <div key={i} className="flex gap-3">
-            <span className="select-none text-slate-600 w-4 text-right flex-shrink-0">{i + 1}</span>
+          <div key={i} style={{ display: 'flex', gap: '1rem' }}>
+            <span style={{ userSelect: 'none', color: 'var(--text-muted)', width: '1.25rem', textAlign: 'right', flexShrink: 0, fontSize: '0.8rem' }}>{i + 1}</span>
             <span>
               {line.startsWith('#') ? (
-                <span className="text-slate-500">{line}</span>
-              ) : line.startsWith('python') || line.startsWith('pip') || line.startsWith('cd') || line.startsWith('git') ? (
-                <>
-                  <span className="text-cyan-400">{line.split(' ')[0]}</span>
-                  <span className="text-slate-300">{' ' + line.split(' ').slice(1).join(' ')}</span>
-                </>
+                <span style={{ color: 'var(--text-muted)' }}>{line}</span>
               ) : (
-                <span className="text-slate-300">{line}</span>
+                (() => {
+                  const first = line.split(' ')[0]
+                  const rest = ' ' + line.split(' ').slice(1).join(' ')
+                  const cmdColor = ['git'].includes(first) ? 'var(--cyan)' : ['python', 'pip'].includes(first) ? 'var(--magenta)' : ['cd', 'sudo'].includes(first) ? '#f59e0b' : null
+                  return cmdColor ? (
+                    <><span style={{ color: cmdColor }}>{first}</span><span style={{ color: '#c9d1d9' }}>{rest}</span></>
+                  ) : (
+                    <span style={{ color: '#c9d1d9' }}>{line}</span>
+                  )
+                })()
               )}
             </span>
           </div>
@@ -46,83 +64,61 @@ function CodeBlock({ code, lang = 'bash' }) {
   )
 }
 
-function WarningBox({ type = 'warning', children }) {
+function AlertBox({ type = 'warning', children }) {
   const isInfo = type === 'info'
-  const color = isInfo ? '#00ffff' : '#f59e0b'
+  const color = isInfo ? 'var(--cyan)' : 'var(--amber)'
   const Icon = isInfo ? Shield : AlertTriangle
   return (
-    <div
-      className="flex items-start gap-3 rounded-xl p-4 mt-4"
-      style={{ background: `${color}08`, border: `1px solid ${color}25` }}
-    >
-      <Icon className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color }} />
-      <p className="text-sm leading-relaxed" style={{ color: `${color}cc` }}>{children}</p>
+    <div style={{
+      display: 'flex', alignItems: 'flex-start', gap: '0.75rem',
+      borderRadius: '0.75rem', padding: '0.875rem 1rem', marginTop: '0.875rem',
+      background: isInfo ? 'rgba(0,255,255,0.04)' : 'rgba(245,158,11,0.05)',
+      border: `1px solid ${color}22`,
+    }}>
+      <Icon size={16} style={{ color, flexShrink: 0, marginTop: '0.1rem' }} />
+      <p style={{ fontSize: '0.825rem', lineHeight: 1.65, color: `${color}cc` }}>{children}</p>
     </div>
   )
 }
 
 const STEPS = [
   {
-    num: '01',
-    title: 'Prerequisites',
-    icon: Shield,
+    num: '01', title: 'Prerequisites', icon: Shield,
     content: (
-      <div className="space-y-2">
-        <ul className="space-y-2 text-sm text-slate-400 list-none">
+      <div>
+        <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {['Python 3.8 or higher', 'Administrator / root privileges', 'Git (to clone the repository)', 'Npcap (Windows only) — required for raw packet capture'].map((item) => (
-            <li key={item} className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
+            <li key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--cyan)', flexShrink: 0 }} />
               {item}
             </li>
           ))}
         </ul>
-        <WarningBox type="warning">
-          <strong>Windows users:</strong> Install Npcap from npcap.com before running SNM. Without it, ARP-based host discovery will not function.
-        </WarningBox>
-        <WarningBox type="info">
-          <strong>Admin rights required:</strong> Raw socket operations for ARP scanning and OS fingerprinting require elevated privileges on all platforms.
-        </WarningBox>
+        <AlertBox type="warning"><strong>Windows users:</strong> Install Npcap from npcap.com before running SNM. Without it, ARP-based host discovery will not function.</AlertBox>
+        <AlertBox type="info"><strong>Admin rights required:</strong> Raw socket operations for ARP scanning and OS fingerprinting require elevated privileges on all platforms.</AlertBox>
       </div>
     ),
   },
+  { num: '02', title: 'Clone the Repository', icon: Download, content: <CodeBlock code={`git clone https://github.com/Amine-NAHLI/smart-network-mapper.git\ncd smart-network-mapper`} /> },
   {
-    num: '02',
-    title: 'Clone the Repository',
-    icon: Download,
-    content: (
-      <CodeBlock code={`git clone https://github.com/Amine-NAHLI/smart-network-mapper.git\ncd smart-network-mapper`} />
-    ),
-  },
-  {
-    num: '03',
-    title: 'Install Python Dependencies',
-    icon: Terminal,
+    num: '03', title: 'Install Python Dependencies', icon: Terminal,
     content: (
       <>
-        <p className="text-sm text-slate-400 mb-1">Install all required packages from the requirements file:</p>
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Install all required packages from the requirements file:</p>
         <CodeBlock code={`pip install -r requirements.txt`} />
-        <p className="text-xs text-slate-500 mt-2 font-mono">Includes: scapy, psutil, scikit-learn, joblib, pandas, customtkinter, matplotlib</p>
+        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem', fontFamily: 'var(--font-mono)' }}>Includes: scapy, psutil, scikit-learn, joblib, pandas, customtkinter, matplotlib</p>
       </>
     ),
   },
   {
-    num: '04',
-    title: 'Download AI Models (~5.1 GB)',
-    icon: Download,
+    num: '04', title: 'Download AI Models (~5.1 GB)', icon: Download,
     content: (
       <>
-        <p className="text-sm text-slate-400 mb-1">
-          Fetch the Random Forest model and preprocessing artifacts from Hugging Face:
-        </p>
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Fetch the Random Forest model and preprocessing artifacts from Hugging Face:</p>
         <CodeBlock code={`python download_models.py`} />
-        <p className="text-xs text-slate-500 mt-2">
-          Models hosted at:{' '}
-          <a
-            href="https://huggingface.co/aminenahli/smart-network-mapper-models"
-            target="_blank"
-            rel="noreferrer"
-            className="text-cyan-400 hover:underline"
-          >
+        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+          Models at:{' '}
+          <a href="https://huggingface.co/aminenahli/smart-network-mapper-models" target="_blank" rel="noreferrer" style={{ color: 'var(--cyan)' }}>
             huggingface.co/aminenahli/smart-network-mapper-models
           </a>
         </p>
@@ -130,14 +126,12 @@ const STEPS = [
     ),
   },
   {
-    num: '05',
-    title: 'Launch SNM',
-    icon: Terminal,
+    num: '05', title: 'Launch SNM', icon: Terminal,
     content: (
       <>
-        <p className="text-sm text-slate-400 mb-1">Start the Cyberpunk GUI application:</p>
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Start the Cyberpunk GUI application:</p>
         <CodeBlock code={`python app.py`} />
-        <p className="text-sm text-slate-400 mt-4 mb-1">Or use the interactive CLI mode:</p>
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '1rem', marginBottom: '0.25rem' }}>Or use the interactive CLI mode:</p>
         <CodeBlock code={`python main.py`} />
       </>
     ),
@@ -149,63 +143,75 @@ export default function Installation({ isEmbed = false }) {
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
   const content = (
-    <div className={`${isEmbed ? '' : 'max-w-4xl mx-auto relative z-10'}`} ref={ref}>
-      {/* Heading - only show if not embedded */}
+    <div ref={ref} style={isEmbed ? {} : { maxWidth: '52rem', margin: '0 auto', position: 'relative', zIndex: 10 }}>
       {!isEmbed && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          style={{ textAlign: 'center', marginBottom: '4rem' }}
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/5 text-cyan-400 text-xs font-mono mb-6">
-            <Download className="w-3.5 h-3.5" />
-            SETUP GUIDE
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.375rem 1rem', borderRadius: '9999px',
+            border: '1px solid rgba(0,255,255,0.2)', background: 'rgba(0,255,255,0.04)',
+            color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
+            marginBottom: '1.5rem', letterSpacing: '0.12em',
+          }}>
+            <Download size={13} /> SETUP GUIDE
           </div>
-          <h2 className="font-orbitron font-bold text-3xl sm:text-5xl mb-4">
+          <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1rem' }}>
             <span className="gradient-text">Installation</span>
           </h2>
-          <p className="text-slate-400">Get SNM running in 5 steps.</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Get SNM running in 5 steps.</p>
         </motion.div>
       )}
 
-      {/* Steps */}
-      <div className="relative">
-        {/* Vertical line */}
-        <div
-          className="absolute left-7 top-8 bottom-8 w-px hidden sm:block"
-          style={{ background: 'linear-gradient(to bottom, rgba(0,255,255,0.3), rgba(124,58,237,0.3), rgba(255,0,255,0.1))' }}
-        />
+      <div style={{ position: 'relative' }}>
+        {/* Timeline vertical line */}
+        <div style={{
+          position: 'absolute', left: '1.75rem', top: '2rem', bottom: '2rem',
+          width: '1px', background: 'linear-gradient(to bottom, rgba(0,255,255,0.3), rgba(124,58,237,0.3), rgba(255,0,255,0.1))',
+        }} />
 
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {STEPS.map((step, i) => (
             <motion.div
               key={step.num}
               initial={{ opacity: 0, x: -30 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="flex gap-6"
+              style={{ display: 'flex', gap: '1.5rem' }}
             >
-              {/* Step number circle */}
-              <div className="flex-shrink-0 relative z-10">
-                <div
-                  className="w-14 h-14 rounded-full flex items-center justify-center font-orbitron font-bold text-sm"
-                  style={{
-                    background: 'rgba(10,10,15,0.9)',
-                    border: '1px solid rgba(0,255,255,0.3)',
-                    boxShadow: '0 0 15px rgba(0,255,255,0.1)',
-                    color: '#00ffff',
-                  }}
-                >
+              {/* Circle */}
+              <div style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
+                <div className="font-orbitron" style={{
+                  width: '3.5rem', height: '3.5rem', borderRadius: '50%',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontWeight: 700, fontSize: '0.75rem',
+                  background: 'rgba(5,5,8,0.95)',
+                  border: '1px solid rgba(0,255,255,0.3)',
+                  boxShadow: '0 0 15px rgba(0,255,255,0.1)',
+                  color: 'var(--cyan)',
+                }}>
                   {step.num}
                 </div>
               </div>
 
               {/* Content */}
-              <div className="flex-1 glass rounded-2xl p-6 pb-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <step.icon className="w-4 h-4 text-cyan-400" />
-                  <h3 className="font-semibold text-white">{step.title}</h3>
+              <div style={{
+                flex: 1,
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(0,255,255,0.1)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                borderRadius: '1rem',
+                padding: '1.5rem',
+                paddingBottom: '2rem',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                  <step.icon size={15} style={{ color: 'var(--cyan)' }} />
+                  <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>{step.title}</h3>
                 </div>
                 {step.content}
               </div>
@@ -219,11 +225,11 @@ export default function Installation({ isEmbed = false }) {
   if (isEmbed) return content
 
   return (
-    <section id="installation" className="section-pad relative overflow-hidden grid-bg" style={{ background: '#080810' }}>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 50% 60% at 0% 50%, rgba(0,255,255,0.04) 0%, transparent 60%)' }}
-      />
+    <section id="installation" className="section-pad grid-bg" style={{ position: 'relative', overflow: 'hidden', background: '#080810' }}>
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 50% 60% at 0% 50%, rgba(0,255,255,0.04) 0%, transparent 60%)',
+      }} />
       {content}
     </section>
   )
