@@ -144,19 +144,14 @@ const STEPS = [
   },
 ]
 
-export default function Installation() {
+export default function Installation({ isEmbed = false }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
-  return (
-    <section id="installation" className="section-pad relative overflow-hidden grid-bg" style={{ background: '#080810' }}>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 50% 60% at 0% 50%, rgba(0,255,255,0.04) 0%, transparent 60%)' }}
-      />
-
-      <div className="max-w-4xl mx-auto relative z-10" ref={ref}>
-        {/* Heading */}
+  const content = (
+    <div className={`${isEmbed ? '' : 'max-w-4xl mx-auto relative z-10'}`} ref={ref}>
+      {/* Heading - only show if not embedded */}
+      {!isEmbed && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -172,52 +167,64 @@ export default function Installation() {
           </h2>
           <p className="text-slate-400">Get SNM running in 5 steps.</p>
         </motion.div>
+      )}
 
-        {/* Steps */}
-        <div className="relative">
-          {/* Vertical line */}
-          <div
-            className="absolute left-7 top-8 bottom-8 w-px hidden sm:block"
-            style={{ background: 'linear-gradient(to bottom, rgba(0,255,255,0.3), rgba(124,58,237,0.3), rgba(255,0,255,0.1))' }}
-          />
+      {/* Steps */}
+      <div className="relative">
+        {/* Vertical line */}
+        <div
+          className="absolute left-7 top-8 bottom-8 w-px hidden sm:block"
+          style={{ background: 'linear-gradient(to bottom, rgba(0,255,255,0.3), rgba(124,58,237,0.3), rgba(255,0,255,0.1))' }}
+        />
 
-          <div className="space-y-6">
-            {STEPS.map((step, i) => (
-              <motion.div
-                key={step.num}
-                initial={{ opacity: 0, x: -30 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="flex gap-6"
-              >
-                {/* Step number circle */}
-                <div className="flex-shrink-0 relative z-10">
-                  <div
-                    className="w-14 h-14 rounded-full flex items-center justify-center font-orbitron font-bold text-sm"
-                    style={{
-                      background: 'rgba(10,10,15,0.9)',
-                      border: '1px solid rgba(0,255,255,0.3)',
-                      boxShadow: '0 0 15px rgba(0,255,255,0.1)',
-                      color: '#00ffff',
-                    }}
-                  >
-                    {step.num}
-                  </div>
+        <div className="space-y-6">
+          {STEPS.map((step, i) => (
+            <motion.div
+              key={step.num}
+              initial={{ opacity: 0, x: -30 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="flex gap-6"
+            >
+              {/* Step number circle */}
+              <div className="flex-shrink-0 relative z-10">
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center font-orbitron font-bold text-sm"
+                  style={{
+                    background: 'rgba(10,10,15,0.9)',
+                    border: '1px solid rgba(0,255,255,0.3)',
+                    boxShadow: '0 0 15px rgba(0,255,255,0.1)',
+                    color: '#00ffff',
+                  }}
+                >
+                  {step.num}
                 </div>
+              </div>
 
-                {/* Content */}
-                <div className="flex-1 glass rounded-2xl p-6 pb-8">
-                  <div className="flex items-center gap-2 mb-4">
-                    <step.icon className="w-4 h-4 text-cyan-400" />
-                    <h3 className="font-semibold text-white">{step.title}</h3>
-                  </div>
-                  {step.content}
+              {/* Content */}
+              <div className="flex-1 glass rounded-2xl p-6 pb-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <step.icon className="w-4 h-4 text-cyan-400" />
+                  <h3 className="font-semibold text-white">{step.title}</h3>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+                {step.content}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
+    </div>
+  )
+
+  if (isEmbed) return content
+
+  return (
+    <section id="installation" className="section-pad relative overflow-hidden grid-bg" style={{ background: '#080810' }}>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 50% 60% at 0% 50%, rgba(0,255,255,0.04) 0%, transparent 60%)' }}
+      />
+      {content}
     </section>
   )
 }

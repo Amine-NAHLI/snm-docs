@@ -5,8 +5,7 @@ import { Menu, X, Radio } from 'lucide-react'
 const links = [
   { label: 'Overview', href: '#overview' },
   { label: 'Features', href: '#features' },
-  { label: 'Installation', href: '#installation' },
-  { label: 'Usage', href: '#usage' },
+  { label: 'Docs', href: '#docs' },
   { label: 'AI Engine', href: '#ai-engine' },
   { label: 'Author', href: '#author' },
 ]

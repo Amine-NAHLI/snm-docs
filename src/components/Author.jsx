@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Globe, Mail, MapPin, GraduationCap, User } from 'lucide-react'
+import { Globe, Mail, MapPin, GraduationCap, User, Shield } from 'lucide-react'
 
 function GithubIcon({ className }) {
   return (
@@ -53,114 +53,104 @@ export default function Author() {
     <section id="author" className="section-pad relative overflow-hidden" style={{ background: '#0a0a0f' }}>
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(124,58,237,0.05) 0%, transparent 65%)' }}
+        style={{ background: 'radial-gradient(circle at 50% 100%, rgba(0,255,255,0.03) 0%, transparent 60%)' }}
       />
 
-      <div className="max-w-4xl mx-auto relative z-10" ref={ref}>
-        {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/5 text-cyan-400 text-xs font-mono mb-6">
-            <User className="w-3.5 h-3.5" />
-            ABOUT THE AUTHOR
-          </div>
-          <h2 className="font-orbitron font-bold text-3xl sm:text-5xl mb-4">
-            Meet the <span className="gradient-text">Builder</span>
-          </h2>
-        </motion.div>
-
-        {/* Profile card */}
-        <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.97 }}
-          animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="relative rounded-3xl p-0.5 animated-border"
-          style={{
-            background: 'linear-gradient(135deg, rgba(0,255,255,0.2), rgba(124,58,237,0.2), rgba(255,0,255,0.2))',
-          }}
-        >
-          <div className="rounded-3xl p-8 sm:p-12" style={{ background: 'rgba(10,10,20,0.95)' }}>
-            <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center">
-              {/* Avatar */}
+      <div className="max-w-6xl mx-auto relative z-10" ref={ref}>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Column: Avatar & Socials */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="lg:col-span-5 flex flex-col items-center lg:items-end"
+          >
+            <div className="relative mb-8">
               <motion.div
-                animate={{ boxShadow: ['0 0 20px rgba(0,255,255,0.2)', '0 0 40px rgba(124,58,237,0.3)', '0 0 20px rgba(255,0,255,0.2)', '0 0 20px rgba(0,255,255,0.2)'] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl font-orbitron font-black gradient-text border border-cyan-400/20"
-                style={{ background: 'rgba(0,255,255,0.05)' }}
+                animate={{ 
+                  rotate: [0, 360],
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-4 rounded-3xl opacity-20 blur-2xl bg-gradient-to-tr from-cyan-400 via-purple-500 to-magenta-400"
+              />
+              <div 
+                className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-3xl flex items-center justify-center text-6xl sm:text-7xl font-orbitron font-black gradient-text border border-white/10 glass shadow-2xl"
               >
                 AN
-              </motion.div>
-
-              {/* Info */}
-              <div className="flex-1">
-                <h3 className="font-orbitron font-bold text-2xl sm:text-3xl text-white mb-1">
-                  Amine Nahli
-                </h3>
-                <p className="text-sm font-mono mb-4" style={{ color: '#00ffff' }}>
-                  Security Engineer × Full-Stack Builder
-                </p>
-
-                <div className="flex flex-wrap gap-4 text-sm text-slate-400 mb-6">
-                  <span className="flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4 text-purple-400" />
-                    Fès, Morocco
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <GraduationCap className="w-4 h-4 text-cyan-400" />
-                    UPF — Software Engineering, 3rd Year
-                  </span>
-                </div>
-
-                <p className="text-slate-400 text-sm leading-relaxed max-w-2xl">
-                  I am a Security Engineer and Full-Stack Developer who views every system as a puzzle.
-                  My approach is simple: understand the vulnerability, master the architecture, and rebuild
-                  it with absolute integrity. Based in Fès, I bridge the gap between aggressive security
-                  research and high-performance product engineering.
-                </p>
+              </div>
+              <div className="absolute -bottom-4 -right-4 w-16 h-16 rounded-2xl glass border border-cyan-400/30 flex items-center justify-center animate-bounce shadow-lg shadow-cyan-500/20">
+                <User className="w-8 h-8 text-cyan-400" />
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="my-8 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(0,255,255,0.2), transparent)' }} />
-
-            {/* Socials */}
-            <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
+            <div className="flex flex-wrap gap-3 justify-center lg:justify-end max-w-sm">
               {SOCIALS.map((s) => (
                 <motion.a
                   key={s.label}
                   href={s.href}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
-                  style={{
-                    background: `${s.color}0d`,
-                    border: `1px solid ${s.color}25`,
-                    color: s.color,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = `${s.color}18`
-                    e.currentTarget.style.borderColor = `${s.color}50`
-                    e.currentTarget.style.boxShadow = `0 0 15px ${s.color}20`
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = `${s.color}0d`
-                    e.currentTarget.style.borderColor = `${s.color}25`
-                    e.currentTarget.style.boxShadow = 'none'
-                  }}
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  className="w-10 h-10 rounded-xl glass border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+                  title={s.label}
+                  onMouseEnter={(e) => e.currentTarget.style.borderColor = s.color}
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
                 >
-                  <s.icon className="w-4 h-4" />
-                  {s.label}
+                  <s.icon className="w-5 h-5" />
                 </motion.a>
               ))}
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+
+          {/* Right Column: Bio & Info */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="lg:col-span-7"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-400/20 bg-cyan-400/5 text-cyan-400 text-xs font-mono mb-6">
+              <Shield className="w-3.5 h-3.5" />
+              CORE ARCHITECT
+            </div>
+            
+            <h2 className="font-orbitron font-bold text-4xl sm:text-6xl text-white mb-2">
+              Amine <span className="gradient-text">Nahli</span>
+            </h2>
+            <p className="text-xl font-mono mb-8" style={{ color: '#00ffff' }}>
+              Security Engineer × Full-Stack Builder
+            </p>
+
+            <div className="space-y-6 text-slate-400 text-lg leading-relaxed">
+              <p>
+                I am a Security Engineer and Full-Stack Developer who views every system as a puzzle. 
+                Based in Fès, Morocco, I bridge the gap between aggressive security research and high-performance product engineering.
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4">
+                <div className="glass p-4 rounded-2xl border-white/5">
+                  <div className="flex items-center gap-3 mb-2">
+                    <MapPin className="w-4 h-4 text-purple-400" />
+                    <span className="text-white font-semibold">Location</span>
+                  </div>
+                  <p className="text-sm">Fès, Morocco</p>
+                </div>
+                <div className="glass p-4 rounded-2xl border-white/5">
+                  <div className="flex items-center gap-3 mb-2">
+                    <GraduationCap className="w-4 h-4 text-cyan-400" />
+                    <span className="text-white font-semibold">Education</span>
+                  </div>
+                  <p className="text-sm">UPF — Software Engineering, 3rd Year</p>
+                </div>
+              </div>
+
+              <p className="text-sm italic border-l-2 border-cyan-400/30 pl-4">
+                "Understand the vulnerability, master the architecture, and rebuild it with absolute integrity."
+              </p>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   )

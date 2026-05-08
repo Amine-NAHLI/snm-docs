@@ -50,20 +50,15 @@ function StepList({ steps }) {
   )
 }
 
-export default function Usage() {
+export default function Usage({ isEmbed = false }) {
   const [tab, setTab] = useState('gui')
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
 
-  return (
-    <section id="usage" className="section-pad relative overflow-hidden" style={{ background: '#0a0a0f' }}>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 60% 50% at 100% 50%, rgba(255,0,255,0.04) 0%, transparent 60%)' }}
-      />
-
-      <div className="max-w-4xl mx-auto relative z-10" ref={ref}>
-        {/* Heading */}
+  const content = (
+    <div className={`${isEmbed ? '' : 'max-w-4xl mx-auto relative z-10'}`} ref={ref}>
+      {/* Heading - only show if not embedded */}
+      {!isEmbed && (
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -80,84 +75,96 @@ export default function Usage() {
           </h2>
           <p className="text-slate-400">Two ways to run SNM — choose what fits your workflow.</p>
         </motion.div>
+      )}
 
-        {/* Tab switcher */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex rounded-xl p-1 mb-8 gap-1"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(0,255,255,0.1)' }}
-        >
-          {[
-            { id: 'gui', label: 'GUI Mode', icon: Monitor },
-            { id: 'cli', label: 'CLI Mode', icon: Terminal },
-          ].map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setTab(id)}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
-              style={
-                tab === id
-                  ? { background: 'rgba(0,255,255,0.12)', color: '#00ffff', border: '1px solid rgba(0,255,255,0.25)' }
-                  : { color: '#64748b' }
-              }
-            >
-              <Icon className="w-4 h-4" />
-              {label}
-            </button>
-          ))}
-        </motion.div>
+      {/* Tab switcher */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="flex rounded-xl p-1 mb-8 gap-1"
+        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(0,255,255,0.1)' }}
+      >
+        {[
+          { id: 'gui', label: 'GUI Mode', icon: Monitor },
+          { id: 'cli', label: 'CLI Mode', icon: Terminal },
+        ].map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            onClick={() => setTab(id)}
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold transition-all duration-300"
+            style={
+              tab === id
+                ? { background: 'rgba(0,255,255,0.12)', color: '#00ffff', border: '1px solid rgba(0,255,255,0.25)' }
+                : { color: '#64748b' }
+            }
+          >
+            <Icon className="w-4 h-4" />
+            {label}
+          </button>
+        ))}
+      </motion.div>
 
-        {/* Content */}
-        <AnimatePresence mode="wait">
-          {tab === 'gui' ? (
-            <motion.div
-              key="gui"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="glass rounded-2xl p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Monitor className="w-5 h-5 text-cyan-400" />
-                  <h3 className="font-semibold text-white">Cyberpunk GUI Mode</h3>
-                  <span className="ml-auto text-xs font-mono px-2 py-0.5 rounded-full bg-cyan-400/10 text-cyan-400 border border-cyan-400/20">
-                    Recommended
-                  </span>
-                </div>
-                <p className="text-slate-500 text-sm">
-                  Full-featured graphical interface with real-time dashboard, animated scan results, and one-click export. Ideal for interactive use and visual analysis.
-                </p>
-                <StepList steps={GUI_STEPS} />
+      {/* Content */}
+      <AnimatePresence mode="wait">
+        {tab === 'gui' ? (
+          <motion.div
+            key="gui"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="glass rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <Monitor className="w-5 h-5 text-cyan-400" />
+                <h3 className="font-semibold text-white">Cyberpunk GUI Mode</h3>
+                <span className="ml-auto text-xs font-mono px-2 py-0.5 rounded-full bg-cyan-400/10 text-cyan-400 border border-cyan-400/20">
+                  Recommended
+                </span>
               </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="cli"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="glass rounded-2xl p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Terminal className="w-5 h-5" style={{ color: '#ff00ff' }} />
-                  <h3 className="font-semibold text-white">CLI / Headless Mode</h3>
-                  <span className="ml-auto text-xs font-mono px-2 py-0.5 rounded-full border" style={{ background: 'rgba(255,0,255,0.08)', color: '#ff00ff', borderColor: 'rgba(255,0,255,0.2)' }}>
-                    Server-friendly
-                  </span>
-                </div>
-                <p className="text-slate-500 text-sm">
-                  Interactive menu-driven CLI — perfect for remote servers, scripting, and headless environments. All features available without a display.
-                </p>
-                <StepList steps={CLI_STEPS} />
+              <p className="text-slate-500 text-sm">
+                Full-featured graphical interface with real-time dashboard, animated scan results, and one-click export. Ideal for interactive use and visual analysis.
+              </p>
+              <StepList steps={GUI_STEPS} />
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="cli"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="glass rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <Terminal className="w-5 h-5" style={{ color: '#ff00ff' }} />
+                <h3 className="font-semibold text-white">CLI / Headless Mode</h3>
+                <span className="ml-auto text-xs font-mono px-2 py-0.5 rounded-full border" style={{ background: 'rgba(255,0,255,0.08)', color: '#ff00ff', borderColor: 'rgba(255,0,255,0.2)' }}>
+                  Server-friendly
+                </span>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              <p className="text-slate-500 text-sm">
+                Interactive menu-driven CLI — perfect for remote servers, scripting, and headless environments. All features available without a display.
+              </p>
+              <StepList steps={CLI_STEPS} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+
+  if (isEmbed) return content
+
+  return (
+    <section id="usage" className="section-pad relative overflow-hidden" style={{ background: '#0a0a0f' }}>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 60% 50% at 100% 50%, rgba(255,0,255,0.04) 0%, transparent 60%)' }}
+      />
+      {content}
     </section>
   )
 }
