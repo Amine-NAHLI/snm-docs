@@ -14,8 +14,8 @@ const NAV_LINKS = [
   { label: 'Overview', href: '#overview' },
   { label: 'Features', href: '#features' },
   { label: 'Installation', href: '#docs' },
-  { label: 'Usage Guide', href: '#docs' },
   { label: 'AI Engine', href: '#ai-engine' },
+  { label: 'Dataset', href: '#dataset' },
   { label: 'Author', href: '#author' },
 ]
 

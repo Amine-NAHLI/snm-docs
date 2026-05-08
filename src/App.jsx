@@ -4,6 +4,7 @@ import Overview from './components/Overview'
 import Features from './components/Features'
 import Documentation from './components/Documentation'
 import AIEngine from './components/AIEngine'
+import CVEDataset from './components/CVEDataset'
 import Author from './components/Author'
 import Footer from './components/Footer'
 
@@ -17,6 +18,7 @@ export default function App() {
         <Features />
         <Documentation />
         <AIEngine />
+        <CVEDataset />
         <Author />
       </main>
       <Footer />

@@ -34,15 +34,15 @@ function SocialButton({ s }) {
       href={s.href}
       target={s.href.startsWith('mailto') ? undefined : '_blank'}
       rel="noreferrer"
-      whileHover={{ scale: 1.12, y: -2 }}
+      whileHover={{ scale: 1.12, y: -3 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       title={s.label}
       style={{
         width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'rgba(255,255,255,0.03)',
-        border: `1px solid ${hovered ? s.hoverColor + '60' : 'rgba(255,255,255,0.08)'}`,
+        background: hovered ? `${s.hoverColor}10` : 'rgba(255,255,255,0.03)',
+        border: `1px solid ${hovered ? s.hoverColor + '55' : 'rgba(255,255,255,0.08)'}`,
         color: hovered ? s.hoverColor : 'var(--text-secondary)',
         textDecoration: 'none',
         transition: 'color 0.2s, border-color 0.2s, background 0.2s',
@@ -52,6 +52,44 @@ function SocialButton({ s }) {
     >
       <s.Icon size={17} />
     </motion.a>
+  )
+}
+
+function AuthorPhoto() {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      {/* Glow halo */}
+      <div style={{
+        position: 'absolute', inset: '-8px',
+        borderRadius: '20px',
+        background: 'linear-gradient(135deg, rgba(0,255,255,0.2), rgba(124,58,237,0.15), rgba(255,0,255,0.2))',
+        filter: 'blur(12px)',
+        opacity: hovered ? 0.8 : 0.5,
+        transition: 'opacity 0.3s',
+      }} />
+      <motion.img
+        src="/nahli.png"
+        alt="Amine Nahli"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.3 }}
+        style={{
+          position: 'relative',
+          width: '200px',
+          height: '260px',
+          objectFit: 'cover',
+          borderRadius: '16px',
+          border: hovered ? '2px solid rgba(0,255,255,0.55)' : '2px solid rgba(0,255,255,0.3)',
+          boxShadow: hovered
+            ? '0 0 40px rgba(0,255,255,0.3), 0 0 80px rgba(124,58,237,0.15)'
+            : '0 0 30px rgba(0,255,255,0.2), 0 0 60px rgba(124,58,237,0.1)',
+          transition: 'border-color 0.3s, box-shadow 0.3s',
+          display: 'block',
+        }}
+      />
+    </div>
   )
 }
 
@@ -89,43 +127,14 @@ export default function Author() {
         </motion.div>
 
         <div className="author-grid">
-          {/* Left: Avatar */}
+          {/* Left: Photo + Social */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}
           >
-            {/* Avatar container with animated border */}
-            <div style={{ position: 'relative' }}>
-              <motion.div
-                className="animate-spin-slow"
-                style={{
-                  position: 'absolute', inset: '-12px',
-                  borderRadius: '1.75rem',
-                  background: 'linear-gradient(135deg, rgba(0,255,255,0.3), rgba(124,58,237,0.2), rgba(255,0,255,0.3))',
-                  filter: 'blur(8px)',
-                  opacity: 0.6,
-                }}
-              />
-              <div
-                className="font-orbitron gradient-text animate-border-glow"
-                style={{
-                  position: 'relative',
-                  width: '180px', height: '180px',
-                  borderRadius: '1.5rem',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '3.5rem', fontWeight: 900,
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(0,255,255,0.25)',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  boxShadow: '0 0 40px rgba(0,255,255,0.1), 0 20px 60px rgba(0,0,0,0.5)',
-                }}
-              >
-                AN
-              </div>
-            </div>
+            <AuthorPhoto />
 
             {/* Social links */}
             <div style={{ display: 'flex', gap: '0.625rem', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -139,7 +148,7 @@ export default function Author() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
-            <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(2rem, 5vw, 3.5rem)', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+            <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(2rem, 5vw, 3.25rem)', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
               Amine <span className="gradient-text">Nahli</span>
             </h2>
             <p style={{
@@ -166,8 +175,7 @@ export default function Author() {
                   background: 'rgba(255,255,255,0.03)',
                   border: '1px solid rgba(255,255,255,0.06)',
                   borderRadius: '0.875rem', padding: '1rem',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
+                  backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.375rem' }}>
                     <Icon size={14} style={{ color }} />
@@ -180,12 +188,8 @@ export default function Author() {
 
             {/* Quote */}
             <p style={{
-              fontStyle: 'italic',
-              color: 'var(--text-secondary)',
-              fontSize: '0.9rem', lineHeight: 1.7,
-              borderLeft: '2px solid rgba(0,255,255,0.3)',
-              paddingLeft: '1rem',
-              marginBottom: '1.75rem',
+              fontStyle: 'italic', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.7,
+              borderLeft: '2px solid rgba(0,255,255,0.3)', paddingLeft: '1rem', marginBottom: '1.75rem',
             }}>
               "Understand the vulnerability, master the architecture, and rebuild it with absolute integrity."
             </p>
@@ -194,12 +198,9 @@ export default function Author() {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
               {SKILLS.map((skill) => (
                 <span key={skill} style={{
-                  padding: '0.25rem 0.75rem',
-                  fontSize: '0.75rem', fontWeight: 500,
-                  borderRadius: '9999px',
-                  border: '1px solid rgba(0,255,255,0.2)',
-                  background: 'rgba(0,255,255,0.04)',
-                  color: 'var(--text-secondary)',
+                  padding: '0.25rem 0.75rem', fontSize: '0.75rem', fontWeight: 500,
+                  borderRadius: '9999px', border: '1px solid rgba(0,255,255,0.2)',
+                  background: 'rgba(0,255,255,0.04)', color: 'var(--text-secondary)',
                   fontFamily: 'var(--font-mono)',
                 }}>
                   {skill}
