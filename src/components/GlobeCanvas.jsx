@@ -3,14 +3,15 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
 const RADIUS = 3
-const N = 2000
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+const N = isMobile ? 800 : 2000
+const PING_INTERVAL = isMobile ? 5 : 3
 
 function Globe() {
   const groupRef = useRef()
   const mouse = useRef({ x: 0, y: 0 })
   const pingTimer = useRef(0)
   const ringsRef = useRef([])
-  const { scene } = useThree()
 
   // Fibonacci sphere point cloud
   const fibPoints = useMemo(() => {
@@ -30,7 +31,9 @@ function Globe() {
   // Wireframe: latitude + longitude lines
   const wireGeo = useMemo(() => {
     const pts = []
-    const LAT = 18, LON = 24, SEG = 64
+    const LAT = isMobile ? 12 : 18
+    const LON = isMobile ? 16 : 24
+    const SEG = isMobile ? 48 : 64
     for (let i = 0; i <= LAT; i++) {
       const phi = (i / LAT) * Math.PI
       const cy = Math.cos(phi) * RADIUS
@@ -56,8 +59,8 @@ function Globe() {
     return geo
   }, [])
 
-  // 3 satellite positions (orbit in XZ plane at different inclinations)
-  const satellites = useMemo(() => [
+  // 3 satellite positions
+  const satellites = useMemo(() => isMobile ? [] : [
     { radius: RADIUS + 0.5, speed: 0.6, phase: 0, incline: 0.3 },
     { radius: RADIUS + 0.7, speed: -0.4, phase: 2.1, incline: -0.5 },
     { radius: RADIUS + 0.4, speed: 0.8, phase: 4.2, incline: 0.7 },
@@ -66,6 +69,7 @@ function Globe() {
   const satMeshes = useRef([])
 
   useEffect(() => {
+    if (isMobile) return
     const handler = (e) => {
       mouse.current.x = (e.clientX / window.innerWidth - 0.5) * 2
       mouse.current.y = -(e.clientY / window.innerHeight - 0.5) * 2
@@ -77,9 +81,10 @@ function Globe() {
   useFrame((state, delta) => {
     if (!groupRef.current) return
 
-    // Slow Y rotation + mouse parallax tilt
     groupRef.current.rotation.y += 0.0008
-    groupRef.current.rotation.x += (mouse.current.y * 0.12 - groupRef.current.rotation.x) * 0.04
+    if (!isMobile) {
+      groupRef.current.rotation.x += (mouse.current.y * 0.12 - groupRef.current.rotation.x) * 0.04
+    }
 
     // Satellites orbit
     satellites.forEach((sat, i) => {
@@ -92,9 +97,9 @@ function Globe() {
       }
     })
 
-    // Ping rings every 3 s
+    // Ping rings
     pingTimer.current += delta
-    if (pingTimer.current > 3) {
+    if (pingTimer.current > PING_INTERVAL) {
       pingTimer.current = 0
       const phi = Math.random() * Math.PI
       const theta = Math.random() * Math.PI * 2
@@ -112,7 +117,6 @@ function Globe() {
       ringsRef.current.push(ring)
     }
 
-    // Animate + cleanup rings
     ringsRef.current = ringsRef.current.filter((ring) => {
       const age = state.clock.elapsedTime - ring.userData.born
       if (age > 1.5) { groupRef.current.remove(ring); ring.geometry.dispose(); ring.material.dispose(); return false }
@@ -124,26 +128,24 @@ function Globe() {
 
   return (
     <group ref={groupRef}>
-      {/* Dot sphere */}
       <points>
         <bufferGeometry>
           <bufferAttribute attach="attributes-position" count={N} array={fibPoints} itemSize={3} />
         </bufferGeometry>
-        <pointsMaterial size={0.03} color="#00ffff" sizeAttenuation transparent opacity={0.55} />
+        <pointsMaterial size={isMobile ? 0.045 : 0.03} color="#00ffff" sizeAttenuation transparent opacity={0.55} />
       </points>
 
-      {/* Wireframe grid */}
       <lineSegments geometry={wireGeo}>
         <lineBasicMaterial color="#00ffff" transparent opacity={0.055} />
       </lineSegments>
 
-      {/* Scanning beam (thin plane rotating) */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[RADIUS * 2, 0.04]} />
-        <meshBasicMaterial color="#00ffff" transparent opacity={0.18} side={THREE.DoubleSide} />
-      </mesh>
+      {!isMobile && (
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[RADIUS * 2, 0.04]} />
+          <meshBasicMaterial color="#00ffff" transparent opacity={0.18} side={THREE.DoubleSide} />
+        </mesh>
+      )}
 
-      {/* Satellites */}
       {satellites.map((sat, i) => (
         <mesh key={i} ref={(el) => (satMeshes.current[i] = el)}>
           <sphereGeometry args={[0.045, 6, 6]} />
@@ -158,8 +160,8 @@ export default function GlobeCanvas() {
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
       <Canvas
-        camera={{ position: [0, 0, 7], fov: 55 }}
-        gl={{ antialias: true, alpha: true }}
+        camera={{ position: [0, 0, isMobile ? 8.5 : 7], fov: isMobile ? 50 : 55 }}
+        gl={{ antialias: !isMobile, alpha: true }}
         style={{ background: 'transparent' }}
       >
         <Globe />

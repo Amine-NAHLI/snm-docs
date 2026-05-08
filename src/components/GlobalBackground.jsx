@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
 
+const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768
+
 export default function GlobalBackground() {
   const canvasRef = useRef(null)
 
@@ -19,7 +21,7 @@ export default function GlobalBackground() {
     resize()
     window.addEventListener('resize', resize)
 
-    const STAR_COUNT = 180
+    const STAR_COUNT = isMobileDevice ? 60 : 180
     const stars = Array.from({ length: STAR_COUNT }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
@@ -29,7 +31,7 @@ export default function GlobalBackground() {
       phase: Math.random() * Math.PI * 2,
     }))
 
-    const aurora = [
+    const aurora = isMobileDevice ? [] : [
       { y: 0.18, amp: 45, freq: 0.0018, phase: 0, speed: 0.0007, color: 'rgba(0,255,255,0.035)' },
       { y: 0.72, amp: 32, freq: 0.0022, phase: Math.PI, speed: 0.0005, color: 'rgba(124,58,237,0.03)' },
     ]
@@ -50,7 +52,7 @@ export default function GlobalBackground() {
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke()
       }
 
-      // Aurora bands
+      // Aurora bands (desktop only)
       for (const a of aurora) {
         a.phase += a.speed
         const baseY = canvas.height * a.y

@@ -38,7 +38,7 @@ function CodeBlock({ code }) {
   return (
     <div className="code-block" style={{ padding: '1rem', paddingRight: '6rem', marginTop: '0.75rem', position: 'relative' }}>
       <CopyButton text={code} />
-      <pre style={{ margin: 0, lineHeight: 1.7, overflowX: 'auto' }}>
+      <pre style={{ margin: 0, lineHeight: 1.7, width: 'max-content', minWidth: '100%' }}>
         {code.split('\n').map((line, i) => (
           <div key={i} style={{ display: 'flex', gap: '1rem' }}>
             <span style={{ userSelect: 'none', color: 'var(--text-muted)', width: '1.25rem', textAlign: 'right', flexShrink: 0, fontSize: '0.8rem' }}>{i + 1}</span>
@@ -186,10 +186,11 @@ export default function Installation({ isEmbed = false }) {
               initial={{ opacity: 0, x: -30 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="timeline-row"
               style={{ display: 'flex', gap: '1.5rem' }}
             >
               <div style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
-                <div className="font-orbitron" style={{
+                <div className="font-orbitron timeline-num" style={{
                   width: '3.5rem', height: '3.5rem', borderRadius: '50%',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontWeight: 700, fontSize: '0.75rem',

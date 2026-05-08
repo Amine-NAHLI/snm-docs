@@ -25,6 +25,7 @@ function PipelineStep({ label, sub, color, i, inView }) {
       onMouseEnter={() => setHovered(true)}
       onMouseMove={spotlight.onMouseMove}
       onMouseLeave={(e) => { setHovered(false); spotlight.onMouseLeave(e) }}
+      className="pipeline-step"
       style={{
         background: 'rgba(255,255,255,0.03)',
         border: `1px solid ${hovered ? color + '50' : color + '28'}`,
@@ -61,7 +62,7 @@ function ModelRow({ m, color, i, inView }) {
       <div style={{ width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0, background: color, boxShadow: `0 0 6px ${color}` }} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.name}</p>
-        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{m.role}</p>
+        <p className="model-role" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{m.role}</p>
       </div>
       <span style={{
         fontSize: '0.7rem', fontFamily: 'var(--font-mono)',
@@ -126,7 +127,9 @@ export default function AIEngine() {
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <PipelineStep label={label} sub={tx.pipelineSubs[i]} color={PIPELINE_COLORS[i]} i={i} inView={inView} />
                 {i < tx.pipeline.length - 1 && (
-                  <ChevronRight size={18} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                  <span className="pipeline-arrow">
+                    <ChevronRight size={18} style={{ color: 'var(--text-muted)' }} />
+                  </span>
                 )}
               </div>
             ))}

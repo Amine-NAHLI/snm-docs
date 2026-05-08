@@ -26,6 +26,7 @@ function PipelineStep({ step, color, i, inView }) {
       onMouseEnter={() => setHovered(true)}
       onMouseMove={spotlight.onMouseMove}
       onMouseLeave={(e) => { setHovered(false); spotlight.onMouseLeave(e) }}
+      className="pipeline-step"
       style={{
         background: 'rgba(255,255,255,0.03)',
         border: `1px solid ${hovered ? color + '55' : color + '25'}`,
@@ -185,7 +186,9 @@ export default function CVEDataset() {
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
                 <PipelineStep step={step} color={PIPELINE_COLORS[i]} i={i} inView={inView} />
                 {i < PIPELINE_STEPS.length - 1 && (
-                  <ChevronRight size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                  <span className="pipeline-arrow">
+                    <ChevronRight size={16} style={{ color: 'var(--text-muted)' }} />
+                  </span>
                 )}
               </div>
             ))}
@@ -208,32 +211,36 @@ export default function CVEDataset() {
             borderRadius: '1rem', overflow: 'hidden', marginBottom: '3rem',
           }}
         >
-          <div style={{
-            display: 'grid', gridTemplateColumns: '1fr 1fr 2fr',
-            padding: '0.875rem 1.5rem', borderBottom: '1px solid rgba(0,255,255,0.1)',
-            background: 'rgba(0,255,255,0.04)',
-          }}>
-            {tx.cols.map((h) => (
-              <span key={h} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 600, color: 'var(--cyan)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{h}</span>
-            ))}
-          </div>
-          {tx.rows.map((row, i) => (
-            <div
-              key={i}
-              style={{
+          <div className="table-scroll-x">
+            <div className="table-inner">
+              <div style={{
                 display: 'grid', gridTemplateColumns: '1fr 1fr 2fr',
-                padding: '0.875rem 1.5rem',
-                borderBottom: i < tx.rows.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
-                transition: 'background 0.2s',
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,255,255,0.03)'}
-              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-            >
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.825rem', color: 'var(--cyan)' }}>{row[0]}</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.825rem', color: '#a78bfa' }}>{row[1]}</span>
-              <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>{row[2]}</span>
+                padding: '0.875rem 1.5rem', borderBottom: '1px solid rgba(0,255,255,0.1)',
+                background: 'rgba(0,255,255,0.04)',
+              }}>
+                {tx.cols.map((h) => (
+                  <span key={h} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 600, color: 'var(--cyan)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{h}</span>
+                ))}
+              </div>
+              {tx.rows.map((row, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'grid', gridTemplateColumns: '1fr 1fr 2fr',
+                    padding: '0.875rem 1.5rem',
+                    borderBottom: i < tx.rows.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                    transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,255,255,0.03)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                >
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.825rem', color: 'var(--cyan)' }}>{row[0]}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.825rem', color: '#a78bfa' }}>{row[1]}</span>
+                  <span style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>{row[2]}</span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </motion.div>
 
         {/* Feature info cards */}

@@ -125,11 +125,7 @@ export default function Footer() {
         <div className="divider-h" />
 
         <div className="bottom-bar" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-            {tx.copyright.split('❤️')[0]}
-            <span style={{ color: '#f472b6' }}>❤</span>
-            {tx.copyright.split('❤️')[1]}
-          </div>
+          <div />
           <div style={{ fontFamily: 'var(--font-mono)' }}>
             © 2025 SNM — {tx.rights}
           </div>

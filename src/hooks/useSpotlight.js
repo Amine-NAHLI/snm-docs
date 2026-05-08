@@ -1,4 +1,8 @@
+const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
+
 export function useSpotlight() {
+  if (isTouch) return { onMouseMove: undefined, onMouseLeave: undefined }
+
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left

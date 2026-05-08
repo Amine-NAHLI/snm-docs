@@ -39,6 +39,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  overflow-x: hidden;
+}
+
+img, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-primary); }
@@ -88,7 +97,8 @@ body {
   font-family: var(--font-mono);
   font-size: 0.875rem;
   position: relative;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .code-block::before {
   content: '';
@@ -108,7 +118,10 @@ body {
 
 /* Section padding */
 .section-pad {
-  padding: 7rem 1.5rem;
+  padding: 4rem 1rem;
+}
+@media (min-width: 640px) {
+  .section-pad { padding: 6rem 1.5rem; }
 }
 @media (min-width: 768px) {
   .section-pad { padding: 9rem 2rem; }
@@ -267,3 +280,90 @@ body {
 #ai-engine { background-image: radial-gradient(ellipse 40% 40% at 80% 50%, rgba(124,58,237,0.04) 0%, transparent 55%); }
 #dataset { background-image: radial-gradient(ellipse 50% 30% at 20% 30%, rgba(0,255,255,0.03) 0%, transparent 55%); }
 #author { background-image: radial-gradient(ellipse 40% 30% at 80% 80%, rgba(255,0,255,0.025) 0%, transparent 55%); }
+
+/* ══════════════════════════════════════════
+   MOBILE RESPONSIVE FIXES
+   ══════════════════════════════════════════ */
+
+/* Pipeline arrows — hide when steps stack vertically */
+.pipeline-arrow { display: flex; align-items: center; flex-shrink: 0; }
+@media (max-width: 639px) {
+  .pipeline-arrow { display: none; }
+  .pipeline-step { min-width: 0 !important; width: 100%; }
+  .pipeline-flow { gap: 0.75rem; }
+}
+
+/* Hero CTA buttons — stack on small phones */
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+@media (max-width: 520px) {
+  .hero-buttons { flex-direction: column; width: 100%; }
+  .hero-btn { width: 100% !important; justify-content: center !important; text-align: center !important; box-sizing: border-box !important; }
+}
+
+/* Schema / data tables — horizontal scroll on mobile */
+.table-scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-scroll-x .table-inner { min-width: 480px; }
+
+/* Code blocks — smaller font + pre min-width on mobile */
+@media (max-width: 640px) {
+  .code-block { font-size: 0.75rem; }
+  .code-block pre { width: max-content; min-width: 100%; }
+}
+
+/* Timeline circles — smaller on mobile */
+@media (max-width: 640px) {
+  .timeline-row { gap: 0.875rem !important; }
+  .timeline-num {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    font-size: 0.6rem !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+/* Author photo — smaller on mobile */
+@media (max-width: 640px) {
+  .author-photo-img {
+    width: 160px !important;
+    height: 210px !important;
+  }
+}
+
+/* AI Engine / Dataset model file rows — hide description sub-text on very small screens */
+@media (max-width: 400px) {
+  .model-role { display: none; }
+}
+
+/* Mobile hamburger nav menu link touch targets */
+.mobile-nav-link {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Reduce grid gap on mobile */
+@media (max-width: 640px) {
+  .grid-auto-3 { gap: 1rem; }
+  .grid-auto-2 { gap: 1rem; }
+}
+
+/* Tablet: 2-column grid for features */
+@media (min-width: 640px) and (max-width: 900px) {
+  .grid-auto-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Prevent badge overflow in hero */
+@media (max-width: 480px) {
+  .hero-badge { font-size: 0.65rem !important; padding: 0.25rem 0.625rem !important; }
+}

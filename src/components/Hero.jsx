@@ -126,6 +126,7 @@ export default function Hero() {
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             gap: '0.5rem', marginBottom: '2.5rem', height: '2rem',
+            maxWidth: '100%', overflow: 'hidden',
           }}
         >
           <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.875rem' }}>$</span>
@@ -155,13 +156,14 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}
+          className="hero-buttons"
         >
           <a
             href="https://github.com/Amine-NAHLI/smart-network-mapper"
             target="_blank" rel="noreferrer"
+            className="hero-btn"
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
               padding: '0.875rem 2rem', borderRadius: '9999px',
               fontWeight: 700, fontSize: '0.9rem',
               background: 'linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%)',
@@ -169,6 +171,7 @@ export default function Hero() {
               boxShadow: '0 0 30px rgba(0,255,255,0.25)',
               transition: 'box-shadow 0.3s, transform 0.2s',
               fontFamily: 'var(--font-heading)',
+              minHeight: '52px',
             }}
             onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 50px rgba(0,255,255,0.45)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
             onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 30px rgba(0,255,255,0.25)'; e.currentTarget.style.transform = 'translateY(0)' }}
@@ -177,14 +180,16 @@ export default function Hero() {
           </a>
           <button
             onClick={() => document.querySelector('#overview')?.scrollIntoView({ behavior: 'smooth' })}
+            className="hero-btn"
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
               padding: '0.875rem 2rem', borderRadius: '9999px',
               fontWeight: 600, fontSize: '0.9rem',
               border: '1px solid rgba(0,255,255,0.35)', color: 'var(--cyan)',
               background: 'transparent', cursor: 'pointer',
               transition: 'background 0.2s, border-color 0.2s, transform 0.2s',
               fontFamily: 'var(--font-heading)',
+              minHeight: '52px',
             }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,255,255,0.08)'; e.currentTarget.style.borderColor = 'var(--cyan)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(0,255,255,0.35)'; e.currentTarget.style.transform = 'translateY(0)' }}

@@ -72,6 +72,7 @@ function AuthorPhoto() {
         onMouseLeave={() => setHovered(false)}
         whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.3 }}
+        className="author-photo-img"
         style={{
           position: 'relative', width: '200px', height: '260px', objectFit: 'cover',
           borderRadius: '16px',
