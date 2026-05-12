@@ -4,6 +4,14 @@ import { Copy, Check, AlertTriangle, Shield, Download, Terminal, ChevronDown, Ex
 import { useLang } from '../context/LanguageContext'
 import { t } from '../translations'
 
+function GithubIcon({ size = 16, style = {} }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={style}>
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+    </svg>
+  )
+}
+
 function CopyButton({ text }) {
   const [copied, setCopied] = useState(false)
   const { lang } = useLang()
@@ -86,6 +94,7 @@ function AlertBox({ type = 'warning', children }) {
 
 export default function Installation({ isEmbed = false }) {
   const [showNpcap, setShowNpcap] = useState(false)
+  const [tab, setTab] = useState('exe')
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
   const { lang } = useLang()
@@ -160,8 +169,76 @@ export default function Installation({ isEmbed = false }) {
       ),
     },
     {
-      num: '02', title: tx.s2t, icon: Download,
-      content: <CodeBlock code={`git clone https://github.com/Amine-NAHLI/smart-network-mapper.git\ncd smart-network-mapper`} />,
+      num: '02', title: tx.s2t, icon: GithubIcon,
+      content: (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {/* GitHub Premium Card */}
+          <div style={{ 
+            position: 'relative',
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%)', 
+            border: '1px solid rgba(255,255,255,0.08)', 
+            borderRadius: '1.25rem', padding: '1.5rem',
+            overflow: 'hidden'
+          }}>
+            {/* Decorative Background Icon */}
+            <GithubIcon size={120} style={{ 
+              position: 'absolute', right: '-20px', bottom: '-20px', 
+              opacity: 0.03, transform: 'rotate(-15deg)', pointerEvents: 'none' 
+            }} />
+
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem', position: 'relative', zIndex: 1 }}>
+              <div style={{
+                width: '3rem', height: '3rem', borderRadius: '0.875rem',
+                background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000',
+                boxShadow: '0 0 20px rgba(255,255,255,0.1)'
+              }}>
+                <GithubIcon size={24} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <h4 style={{ color: '#fff', fontSize: '1rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+                  Amine-NAHLI / smart-network-mapper
+                </h4>
+                <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
+                  {tx.s2desc}
+                </p>
+                
+                <a 
+                  href="https://github.com/Amine-NAHLI/smart-network-mapper" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '0.625rem',
+                    padding: '0.625rem 1.25rem', borderRadius: '0.75rem',
+                    background: 'var(--cyan)', color: '#000', textDecoration: 'none', 
+                    fontSize: '0.8rem', fontWeight: 800, transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                    boxShadow: '0 4px 15px rgba(0,255,255,0.2)'
+                  }}
+                  onMouseEnter={(e) => { 
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,255,255,0.3)';
+                  }}
+                  onMouseLeave={(e) => { 
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,255,255,0.2)';
+                  }}
+                >
+                  {tx.s2btn} <ExternalLink size={14} />
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Terminal size={12} style={{ color: 'var(--cyan)' }} />
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                Clone Command
+              </p>
+            </div>
+            <CodeBlock code={`git clone <REPO_URL>\ncd smart-network-mapper`} />
+          </div>
+        </div>
+      ),
     },
     {
       num: '03', title: tx.s3t, icon: Terminal,
@@ -202,6 +279,8 @@ export default function Installation({ isEmbed = false }) {
     },
   ]
 
+  // Note: Tab switcher logic follows below.
+
   const content = (
     <div ref={ref} style={isEmbed ? {} : { maxWidth: '52rem', margin: '0 auto', position: 'relative', zIndex: 10 }}>
       {!isEmbed && (
@@ -209,7 +288,7 @@ export default function Installation({ isEmbed = false }) {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          style={{ textAlign: 'center', marginBottom: '4rem' }}
+          style={{ textAlign: 'center', marginBottom: '3rem' }}
         >
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
@@ -227,50 +306,165 @@ export default function Installation({ isEmbed = false }) {
         </motion.div>
       )}
 
-      <div style={{ position: 'relative' }}>
-        <div style={{
-          position: 'absolute', left: '1.75rem', top: '2rem', bottom: '2rem',
-          width: '1px', background: 'linear-gradient(to bottom, rgba(0,255,255,0.3), rgba(124,58,237,0.3), rgba(255,0,255,0.1))',
-        }} />
+      {/* Tab Switcher */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        style={{
+          display: 'flex', gap: '0.25rem', padding: '0.25rem',
+          marginBottom: '2.5rem', borderRadius: '0.875rem',
+          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(0,255,255,0.1)',
+        }}
+      >
+        {[
+          { id: 'exe', label: tx.tabExecutable, icon: Download },
+          { id: 'source', label: tx.tabSource, icon: Terminal },
+        ].map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            onClick={() => setTab(id)}
+            style={{
+              flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              gap: '0.5rem', padding: '0.75rem', borderRadius: '0.625rem',
+              fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
+              border: tab === id ? '1px solid rgba(0,255,255,0.25)' : '1px solid transparent',
+              background: tab === id ? 'rgba(0,255,255,0.1)' : 'transparent',
+              color: tab === id ? 'var(--cyan)' : 'var(--text-muted)',
+              transition: 'all 0.2s', fontFamily: 'var(--font-heading)',
+            }}
+          >
+            <Icon size={15} /> {label}
+          </button>
+        ))}
+      </motion.div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {steps.map((step, i) => (
-            <motion.div
-              key={step.num}
-              initial={{ opacity: 0, x: -30 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="timeline-row"
-              style={{ display: 'flex', gap: '1.5rem' }}
-            >
-              <div style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
-                <div className="font-orbitron timeline-num" style={{
-                  width: '3.5rem', height: '3.5rem', borderRadius: '50%',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontWeight: 700, fontSize: '0.75rem',
-                  background: 'rgba(5,5,8,0.95)', border: '1px solid rgba(0,255,255,0.3)',
-                  boxShadow: '0 0 15px rgba(0,255,255,0.1)', color: 'var(--cyan)',
-                }}>
-                  {step.num}
-                </div>
-              </div>
-
+      <AnimatePresence mode="wait">
+        {tab === 'exe' ? (
+          <motion.div
+            key="exe-tab"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.4 }}
+          >
+            {/* Standalone Executables Section */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(0,255,255,0.05) 0%, rgba(124,58,237,0.05) 100%)',
+              border: '1px solid rgba(0,255,255,0.2)',
+              borderRadius: '1.25rem',
+              padding: '2.5rem',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
               <div style={{
-                flex: 1, minWidth: 0, overflow: 'hidden',
-                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(0,255,255,0.1)',
-                backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
-                borderRadius: '1rem', padding: '1.5rem', paddingBottom: '2rem',
+                position: 'absolute', top: '1.5rem', right: '1.5rem',
+                padding: '0.35rem 0.85rem', borderRadius: '999px',
+                background: 'rgba(0,255,255,0.1)', border: '1px solid rgba(0,255,255,0.2)',
+                color: 'var(--cyan)', fontSize: '0.7rem', fontWeight: 700,
+                letterSpacing: '0.05em', textTransform: 'uppercase'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                  <step.icon size={15} style={{ color: 'var(--cyan)' }} />
-                  <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>{step.title}</h3>
-                </div>
-                {step.content}
+                {tx.standaloneBadge}
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div style={{
+                  width: '3.5rem', height: '3.5rem', borderRadius: '1rem',
+                  background: 'rgba(0,255,255,0.1)', border: '1px solid rgba(0,255,255,0.2)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--cyan)'
+                }}>
+                  <Download size={24} />
+                </div>
+                <div>
+                  <h3 className="font-orbitron" style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                    {tx.standaloneTitle}
+                  </h3>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{tx.standaloneDesc}</p>
+                </div>
+              </div>
+
+              <div style={{ 
+                background: 'rgba(0,0,0,0.3)', borderRadius: '1rem', padding: '1.25rem', 
+                border: '1px dashed rgba(0,255,255,0.2)', marginBottom: '2rem' 
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--cyan)', marginBottom: '0.75rem' }}>
+                  <AlertTriangle size={16} />
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase' }}>In Development</span>
+                </div>
+                <p style={{ fontSize: '0.9375rem', color: 'var(--text-muted)', lineHeight: 1.7 }}>
+                  {tx.standaloneDev}
+                </p>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+                {tx.standalonePlatforms.map((platform, i) => (
+                  <div key={i} style={{
+                    padding: '1rem', borderRadius: '1rem', 
+                    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)',
+                    display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: 0.6
+                  }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--text-muted)' }} />
+                    <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{platform}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="source-tab"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div style={{ position: 'relative' }}>
+              <div style={{
+                position: 'absolute', left: '1.75rem', top: '2rem', bottom: '2rem',
+                width: '1px', background: 'linear-gradient(to bottom, rgba(0,255,255,0.3), rgba(124,58,237,0.3), rgba(255,0,255,0.1))',
+              }} />
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {steps.map((step, i) => (
+                  <motion.div
+                    key={step.num}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    className="timeline-row"
+                    style={{ display: 'flex', gap: '1.5rem' }}
+                  >
+                    <div style={{ flexShrink: 0, position: 'relative', zIndex: 10 }}>
+                      <div className="font-orbitron timeline-num" style={{
+                        width: '3.5rem', height: '3.5rem', borderRadius: '50%',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontWeight: 700, fontSize: '0.75rem',
+                        background: 'rgba(5,5,8,0.95)', border: '1px solid rgba(0,255,255,0.3)',
+                        boxShadow: '0 0 15px rgba(0,255,255,0.1)', color: 'var(--cyan)',
+                      }}>
+                        {step.num}
+                      </div>
+                    </div>
+
+                    <div style={{
+                      flex: 1, minWidth: 0, overflow: 'hidden',
+                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(0,255,255,0.1)',
+                      backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+                      borderRadius: '1rem', padding: '1.5rem', paddingBottom: '2rem',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                        <step.icon size={15} style={{ color: 'var(--cyan)' }} />
+                        <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>{step.title}</h3>
+                      </div>
+                      {step.content}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 
