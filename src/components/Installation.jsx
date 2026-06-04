@@ -431,17 +431,45 @@ export default function Installation({ isEmbed = false }) {
                       <span style={{ fontSize: '0.75rem', color: 'var(--cyan)', fontWeight: 600 }}>{tx.standaloneDownload} · {platform.size}</span>
                     </a>
                   ) : (
-                    <div key={platform.id} style={{
-                      padding: '1.25rem 1rem', borderRadius: '1rem',
-                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)',
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', opacity: 0.45,
-                    }}>
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--text-muted)' }} />
-                      <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{platform.label}</span>
+                    <button
+                      key={platform.id}
+                      onClick={() => setTab('source')}
+                      style={{
+                        padding: '1.25rem 1rem', borderRadius: '1rem',
+                        background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.15)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
+                        color: 'var(--text-secondary)', cursor: 'pointer', transition: 'all 0.25s',
+                        textAlign: 'center', width: '100%',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(0,255,255,0.03)'
+                        e.currentTarget.style.borderColor = 'rgba(0,255,255,0.3)'
+                        e.currentTarget.style.transform = 'translateY(-2px)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.02)'
+                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'
+                        e.currentTarget.style.transform = 'none'
+                      }}
+                    >
+                      <Terminal size={22} style={{ color: 'var(--magenta)', opacity: 0.8 }} />
+                      <span style={{ fontSize: '0.9375rem', color: 'var(--text-primary)', fontWeight: 700 }}>{platform.label}</span>
                       <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{tx.standaloneComingSoon}</span>
-                    </div>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--cyan)', marginTop: '0.25rem', fontWeight: 600, textDecoration: 'underline' }}>{tx.standaloneClickToInstall}</span>
+                    </button>
                   )
                 ))}
+              </div>
+
+              <div style={{
+                marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem',
+                background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)',
+                borderRadius: '0.75rem', padding: '1rem'
+              }}>
+                <AlertTriangle size={16} style={{ color: 'var(--cyan)', flexShrink: 0 }} />
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0, textAlign: 'left' }}>
+                  {tx.standaloneNotAvailable}
+                </p>
               </div>
             </div>
           </motion.div>
