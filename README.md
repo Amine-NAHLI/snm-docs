@@ -1,16 +1,187 @@
-# React + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 📚 SNM Docs — Smart Network Mapper Documentation Site
 
-Currently, two official plugins are available:
+### _Interactive Documentation & Download Portal_
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+<p>
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React"/>
+  <img src="https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
+  <img src="https://img.shields.io/badge/TailwindCSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="TailwindCSS"/>
+  <img src="https://img.shields.io/badge/Three.js-Globe-000000?style=for-the-badge&logo=threedotjs&logoColor=white" alt="Three.js"/>
+  <img src="https://img.shields.io/badge/Deploy-GitHub_Pages-222222?style=for-the-badge&logo=github&logoColor=white" alt="Deploy"/>
+</p>
 
-## React Compiler
+<br/>
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**The official documentation website for Smart Network Mapper, featuring a 3D interactive globe, animated backgrounds, multi-language support, and a one-click download portal.**
 
-## Expanding the ESLint configuration
+<br/>
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🌐 **Live Site:** [https://amine-nahli.github.io/snm-docs/](https://amine-nahli.github.io/snm-docs/)
+
+</div>
+
+---
+
+## ✨ Site Features
+
+| Feature | Description |
+|---|---|
+| 🌍 **3D Interactive Globe** | React Three Fiber / Drei globe with animated network nodes |
+| 🎨 **Cyberpunk Design** | Custom CSS design system with animated canvas backgrounds |
+| 🌐 **Multi-Language** | Full English / French translations |
+| 📥 **Download Portal** | One-click download of the Windows portable executable |
+| 📖 **Full Documentation** | Installation guide, usage, AI engine details, CVE dataset info |
+| 🎬 **Framer Motion** | Smooth scroll-triggered animations on all sections |
+| 📱 **Responsive** | Fully responsive design for all screen sizes |
+
+---
+
+## 🏗️ Project Structure
+
+```
+snm-docs/
+│
+├── 📄 index.html                      # HTML entry point
+├── 📄 vite.config.js                  # Vite config (base: /snm-docs/)
+├── 📄 package.json                    # Dependencies & scripts
+├── 📄 Dockerfile                      # Docker containerization
+│
+├── 📁 src/                            # 🔧 Source Code
+│   ├── main.jsx                       # ├─ React entry point
+│   ├── App.jsx                        # ├─ Root component (language context)
+│   ├── App.css                        # ├─ App-level styles
+│   ├── index.css                      # ├─ Global design system (CSS variables)
+│   │
+│   ├── 📁 components/                 # ├─ 🧩 UI Components
+│   │   ├── Hero.jsx                   # │   ├─ Hero section with animated title
+│   │   ├── Navbar.jsx                 # │   ├─ Fixed top navigation bar
+│   │   ├── Features.jsx               # │   ├─ Feature cards grid
+│   │   ├── Overview.jsx               # │   ├─ Project overview section
+│   │   ├── Installation.jsx           # │   ├─ Multi-tab install guide + download
+│   │   ├── Usage.jsx                  # │   ├─ Usage guide with code blocks
+│   │   ├── AIEngine.jsx               # │   ├─ AI engine technical details
+│   │   ├── CVEDataset.jsx             # │   ├─ CVE dataset documentation
+│   │   ├── Documentation.jsx          # │   ├─ Documentation hub wrapper
+│   │   ├── Author.jsx                 # │   ├─ Author profile section
+│   │   ├── Footer.jsx                 # │   ├─ Footer with links
+│   │   ├── GlobeCanvas.jsx            # │   ├─ 3D globe (React Three Fiber)
+│   │   ├── BackgroundCanvas.jsx       # │   ├─ Animated cyberpunk background
+│   │   └── GlobalBackground.jsx       # │   └─ Global background wrapper
+│   │
+│   ├── 📁 config/                     # ├─ ⚙️ Configuration
+│   │   └── downloads.js               # │   └─ Download URLs (Hugging Face links)
+│   │
+│   ├── 📁 translations/               # ├─ 🌐 Internationalization
+│   │   └── index.js                   # │   └─ EN/FR translation strings
+│   │
+│   ├── 📁 context/                    # ├─ 🔄 React Context
+│   │   └── LanguageContext.jsx        # │   └─ Language state provider
+│   │
+│   └── 📁 hooks/                      # └─ 🪝 Custom Hooks
+│       └── useScrollAnimation.js      #     └─ Intersection Observer hook
+│
+├── 📁 design-system/                  # 🎨 Design System Reference
+│   └── demo.html                      # └─ Standalone design system demo
+│
+├── 📁 public/                         # 📁 Static Assets
+│   └── (favicon, images, etc.)
+│
+└── 📁 dist/                           # 📦 Production Build Output
+    └── (auto-generated by `npm run build`)
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** 18+ and **npm** 9+
+
+### Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start dev server with HMR
+npm run dev
+```
+
+The site will be available at `http://localhost:5173/snm-docs/`.
+
+### Production Build
+
+```bash
+# Build for production
+npm run build
+
+# Preview the production build
+npm run preview
+```
+
+### Deploy to GitHub Pages
+
+```bash
+npm run deploy
+```
+
+This uses `gh-pages` to push the `dist/` folder to the `gh-pages` branch.
+
+---
+
+## ⚙️ Configuration
+
+### Download URLs
+
+The Windows portable download link is configured in `src/config/downloads.js`:
+
+```js
+export const WINDOWS_DOWNLOAD = {
+  fileName: 'SNM_Windows_Portable_Complet.zip',
+  size: '~5.5 GB',
+  url: 'https://huggingface.co/aminenahli/snm-windows-portable/resolve/main/SNM_Windows_Portable_Complet.zip',
+}
+```
+
+### Base Path
+
+The Vite base path is set to `/snm-docs/` in `vite.config.js` for GitHub Pages compatibility.
+
+---
+
+## 🐳 Docker
+
+```bash
+# Build the image
+docker build -t snm-docs .
+
+# Run the container
+docker run -p 8080:80 snm-docs
+```
+
+---
+
+## 📦 Tech Stack
+
+| Technology | Role |
+|---|---|
+| ⚛️ **React 19** | UI framework |
+| ⚡ **Vite 8** | Build tool & dev server |
+| 🎨 **Tailwind CSS 4** | Utility-first styling |
+| 🌍 **React Three Fiber** | 3D globe visualization |
+| 🎬 **Framer Motion** | Scroll animations |
+| 🔷 **Lucide React** | Icon library |
+| 📄 **gh-pages** | GitHub Pages deployment |
+
+---
+
+<div align="center">
+
+**Made with ❤️ by Amine Nahli**
+
+_June 2026 — SNM Documentation Site_
+
+</div>
