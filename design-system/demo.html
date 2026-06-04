@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNM – Smart Network Mapper | Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="snm-light-theme.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="navbar-brand">SNM – Smart Network Mapper</div>
+      <div style="margin-left: auto; display: flex; gap: 1.5rem;">
+        <a href="#" style="font-size: 0.9rem; font-weight: 500;">Documentation</a>
+        <a href="#" style="font-size: 0.9rem; font-weight: 500;">API Reference</a>
+        <a href="#" style="font-size: 0.9rem; font-weight: 500;">GitHub</a>
+      </div>
+    </header>
+
+    <div class="main-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <nav>
+          <div style="text-transform: uppercase; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin-bottom: 1rem; letter-spacing: 0.05em;">Getting Started</div>
+          <ul>
+            <li><a href="#" class="active">Introduction</a></li>
+            <li><a href="#">Installation</a></li>
+            <li><a href="#">Quick Start</a></li>
+          </ul>
+
+          <div style="text-transform: uppercase; font-size: 0.75rem; font-weight: 700; color: var(--color-text-secondary); margin: 2rem 0 1rem; letter-spacing: 0.05em;">Security Tooling</div>
+          <ul>
+            <li><a href="#">Network Scanning</a></li>
+            <li><a href="#">Vulnerability Analysis</a></li>
+            <li><a href="#">Report Generation</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="content-area">
+        <h1>Introduction</h1>
+        <p>
+          Welcome to the official documentation for <strong>Smart Network Mapper (SNM)</strong>. 
+          SNM is a professional security suite designed to provide high-fidelity network 
+          diagnostics and automated vulnerability mapping.
+        </p>
+
+        <div class="callout callout-info">
+          <div>
+            <h3>Project Status</h3>
+            <p>SNM is currently in version 1.0. Direct executable downloads for Windows, Linux, and Mac are under development.</p>
+          </div>
+        </div>
+
+        <h2>Installation</h2>
+        <p>To get started, clone the repository and install the necessary Python dependencies.</p>
+        
+        <pre><code><span class="token-comment"># Clone the repository</span>
+<span class="token-keyword">git clone</span> <span class="token-string">https://github.com/Amine-NAHLI/smart-network-mapper.git</span>
+
+<span class="token-comment"># Install dependencies</span>
+<span class="token-keyword">pip install</span> -r requirements.txt</code></pre>
+
+        <h3>Prerequisites</h3>
+        <p>Before running the tool, ensure you have <code>Python 3.8+</code> and <code>Npcap</code> installed on Windows systems.</p>
+
+        <div class="callout callout-warning">
+          <div>
+            <h3>Administrator Privileges</h3>
+            <p>Network scanning requires raw socket access. Please run the tool as an Administrator or with <code>sudo</code>.</p>
+          </div>
+        </div>
+
+        <h2>Feature Overview</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Description</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Auto LAN Detection</td>
+              <td>Automatically detects active network interfaces.</td>
+              <td><span class="badge badge-success">Stable</span></td>
+            </tr>
+            <tr>
+              <td>OS Fingerprinting</td>
+              <td>Identifies operating systems via TTL analysis.</td>
+              <td><span class="badge badge-success">Stable</span></td>
+            </tr>
+            <tr>
+              <td>AI Predictor</td>
+              <td>Predicts CVE severity using Random Forest models.</td>
+              <td><span class="badge badge-success">Stable</span></td>
+            </tr>
+            <tr>
+              <td>Native Binaries</td>
+              <td>Stand-alone executables for all platforms.</td>
+              <td><span class="badge badge-danger">WIP</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-danger">
+          <div>
+            <h3>Security Warning</h3>
+            <p>Only use this tool on networks you are authorized to test. Unauthorized scanning may be illegal.</p>
+          </div>
+        </div>
+
+        <h3>Example API Response</h3>
+        <p>The tool generates JSON reports with the following structure:</p>
+        <pre><code>{
+  <span class="token-string">"host"</span>: <span class="token-string">"192.168.1.1"</span>,
+  <span class="token-string">"status"</span>: <span class="token-string">"online"</span>,
+  <span class="token-string">"ports"</span>: [
+    { <span class="token-string">"port"</span>: <span class="token-number">80</span>, <span class="token-string">"service"</span>: <span class="token-string">"http"</span>, <span class="token-string">"severity"</span>: <span class="token-number">0.45</span> },
+    { <span class="token-string">"port"</span>: <span class="token-number">22</span>, <span class="token-string">"service"</span>: <span class="token-string">"ssh"</span>, <span class="token-string">"severity"</span>: <span class="token-number">0.12</span> }
+  ]
+}</code></pre>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

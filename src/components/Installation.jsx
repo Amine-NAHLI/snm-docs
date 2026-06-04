@@ -3,6 +3,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Copy, Check, AlertTriangle, Shield, Download, Terminal, ChevronDown, ExternalLink } from 'lucide-react'
 import { useLang } from '../context/LanguageContext'
 import { t } from '../translations'
+import { PLATFORMS } from '../config/downloads'
 
 function GithubIcon({ size = 16, style = {} }) {
   return (
@@ -383,29 +384,63 @@ export default function Installation({ isEmbed = false }) {
                 </div>
               </div>
 
-              <div style={{ 
-                background: 'rgba(0,0,0,0.3)', borderRadius: '1rem', padding: '1.25rem', 
-                border: '1px dashed rgba(0,255,255,0.2)', marginBottom: '2rem' 
+              <div style={{
+                background: 'rgba(0,0,0,0.3)', borderRadius: '1rem', padding: '1.25rem',
+                border: '1px dashed rgba(0,255,255,0.2)', marginBottom: '2rem'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--cyan)', marginBottom: '0.75rem' }}>
-                  <AlertTriangle size={16} />
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase' }}>In Development</span>
+                  <Shield size={16} />
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase' }}>{tx.standaloneWindowsNote}</span>
                 </div>
-                <p style={{ fontSize: '0.9375rem', color: 'var(--text-muted)', lineHeight: 1.7 }}>
+                <p style={{ fontSize: '0.9375rem', color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: '0.75rem' }}>
                   {tx.standaloneDev}
+                </p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                  {tx.standaloneAfterDownload}
                 </p>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-                {tx.standalonePlatforms.map((platform, i) => (
-                  <div key={i} style={{
-                    padding: '1rem', borderRadius: '1rem', 
-                    background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)',
-                    display: 'flex', alignItems: 'center', gap: '0.75rem', opacity: 0.6
-                  }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--text-muted)' }} />
-                    <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{platform}</span>
-                  </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                {PLATFORMS.map((platform) => (
+                  platform.available ? (
+                    <a
+                      key={platform.id}
+                      href={platform.url}
+                      download={platform.fileName}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        padding: '1.25rem 1rem', borderRadius: '1rem', textDecoration: 'none',
+                        background: 'rgba(0,255,255,0.08)', border: '1px solid rgba(0,255,255,0.35)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem',
+                        transition: 'all 0.25s', cursor: 'pointer',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(0,255,255,0.15)'
+                        e.currentTarget.style.transform = 'translateY(-2px)'
+                        e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,255,255,0.15)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(0,255,255,0.08)'
+                        e.currentTarget.style.transform = 'none'
+                        e.currentTarget.style.boxShadow = 'none'
+                      }}
+                    >
+                      <Download size={22} style={{ color: 'var(--cyan)' }} />
+                      <span style={{ fontSize: '0.9375rem', color: 'var(--text-primary)', fontWeight: 700 }}>{platform.label}</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--cyan)', fontWeight: 600 }}>{tx.standaloneDownload} · {platform.size}</span>
+                    </a>
+                  ) : (
+                    <div key={platform.id} style={{
+                      padding: '1.25rem 1rem', borderRadius: '1rem',
+                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)',
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', opacity: 0.45,
+                    }}>
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--text-muted)' }} />
+                      <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>{platform.label}</span>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{tx.standaloneComingSoon}</span>
+                    </div>
+                  )
                 ))}
               </div>
             </div>

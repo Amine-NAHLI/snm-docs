@@ -1,0 +1,247 @@
+/* 
+  SNM – Smart Network Mapper 
+  Light Theme Color System
+  Professional, Technical, and Trustworthy
+*/
+
+:root {
+  /* PRIMARY / BRAND */
+  --color-primary:        #185FA5;   /* blue 600 — main brand, links, CTAs */
+  --color-primary-light:  #E6F1FB;   /* blue 50 — tinted backgrounds */
+  --color-primary-hover:  #0C447C;   /* blue 800 — hover states */
+
+  /* BACKGROUND */
+  --color-bg-page:        #F8F9FA;   /* near-white page background */
+  --color-bg-surface:     #FFFFFF;   /* cards, sidebars, code blocks */
+  --color-bg-subtle:      #F1F3F5;   /* table rows, input fields */
+
+  /* TEXT */
+  --color-text-primary:   #1A1A1A;   /* headings, body */
+  --color-text-secondary: #5F5E5A;   /* muted labels, captions */
+  --color-text-link:      #185FA5;   /* inline links */
+
+  /* BORDERS */
+  --color-border:         #D3D1C7;   /* default dividers */
+  --color-border-strong:  #B4B2A9;   /* table borders, inputs */
+
+  /* SEMANTIC — SECURITY SPECIFIC */
+  --color-success:        #3B6D11;   /* green — safe / no threat */
+  --color-success-bg:     #EAF3DE;
+  --color-warning:        #854F0B;   /* amber — suspicious / caution */
+  --color-warning-bg:     #FAEEDA;
+  --color-danger:         #A32D2D;   /* red — critical / attack */
+  --color-danger-bg:      #FCEBEB;
+  --color-info:           #185FA5;   /* blue — informational */
+  --color-info-bg:        #E6F1FB;
+  --color-neutral:        #5F5E5A;   /* gray — unknown / inactive */
+  --color-neutral-bg:     #F1EFE8;
+
+  /* CODE BLOCKS */
+  --color-code-bg:        #1E2330;   /* dark navy background for code */
+  --color-code-text:      #E2E8F0;   /* light gray text in code */
+  --color-code-keyword:   #7F77DD;   /* purple — keywords */
+  --color-code-string:    #5DCAA5;   /* teal — strings / values */
+  --color-code-comment:   #888780;   /* gray — comments */
+  --color-code-number:    #EF9F27;   /* amber — numbers / ports */
+
+  /* TYPOGRAPHY */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace;
+  --base-size: 16px;
+  --line-height: 1.7;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--base-size);
+  line-height: var(--line-height);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.25rem; margin-top: 2rem; }
+h2 { font-size: 1.75rem; margin-top: 1.5rem; border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; }
+h3 { font-size: 1.25rem; margin-top: 1.25rem; }
+h4 { font-size: 1rem; margin-top: 1rem; }
+
+p { margin-bottom: 1rem; }
+
+a {
+  color: var(--color-text-link);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  height: 64px;
+  background-color: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--color-primary);
+}
+
+.main-layout {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar {
+  width: 280px;
+  background-color: var(--color-bg-surface);
+  border-right: 1px solid var(--color-border);
+  padding: 2rem 1.5rem;
+  overflow-y: auto;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+}
+
+.sidebar nav ul {
+  list-style: none;
+}
+
+.sidebar nav li {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar nav a {
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+}
+
+.sidebar nav a.active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.content-area {
+  flex: 1;
+  padding: 3rem 4rem;
+  max-width: 900px;
+}
+
+/* Callout Boxes */
+.callout {
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  margin: 1.5rem 0;
+  display: flex;
+  gap: 1rem;
+  border-left: 4px solid transparent;
+}
+
+.callout p:last-child { margin-bottom: 0; }
+
+.callout-info { background-color: var(--color-info-bg); border-left-color: var(--color-info); }
+.callout-warning { background-color: var(--color-warning-bg); border-left-color: var(--color-warning); }
+.callout-danger { background-color: var(--color-danger-bg); border-left-color: var(--color-danger); }
+.callout-success { background-color: var(--color-success-bg); border-left-color: var(--color-success); }
+
+/* Code Styles */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background-color: var(--color-bg-subtle);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  color: var(--color-danger); /* Inline code often stands out */
+}
+
+pre {
+  background-color: var(--color-code-bg);
+  color: var(--color-code-text);
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Syntax Highlighting */
+.token-keyword { color: var(--color-code-keyword); }
+.token-string { color: var(--color-code-string); }
+.token-comment { color: var(--color-code-comment); font-style: italic; }
+.token-number { color: var(--color-code-number); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9375rem;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+th {
+  background-color: var(--color-bg-subtle);
+  font-weight: 600;
+  border-top: 1px solid var(--color-border);
+}
+
+tr:hover {
+  background-color: var(--color-bg-page);
+}
+
+/* Utils */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-success { background-color: var(--color-success-bg); color: var(--color-success); }
+.badge-danger { background-color: var(--color-danger-bg); color: var(--color-danger); }
