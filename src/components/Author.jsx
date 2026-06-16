@@ -23,7 +23,12 @@ function LinkedinIcon({ size = 18 }) {
 const SOCIAL_META = [
   { Icon: GithubIcon, label: 'GitHub', href: 'https://github.com/Amine-NAHLI', hoverColor: '#e2e8f0' },
   { Icon: LinkedinIcon, label: 'LinkedIn', href: 'https://linkedin.com/in/amine-nahli-48b2a734b/', hoverColor: '#0ea5e9' },
-  { Icon: Globe, label: 'Website', href: 'https://amine-nahli.dev', hoverColor: '#00ffff' },
+  {
+  Icon: Globe,
+  label: 'TryHackMe',
+  href: 'https://tryhackme.com/p/nahliami',
+  hoverColor: '#00ffff'
+},
   { Icon: Mail, label: 'Email', href: 'mailto:nahliamine2@gmail.com', hoverColor: '#ff00ff' },
 ]
 
