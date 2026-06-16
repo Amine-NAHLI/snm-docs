@@ -144,13 +144,15 @@ img, canvas {
 
 /* Responsive grid helpers */
 .grid-auto-3 {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1.5rem;
 }
 .grid-auto-2 {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1.5rem;
 }
 .grid-stats {
@@ -368,13 +370,22 @@ section {
 
 /* Grids: reduce gap and force single column below min thresholds */
 @media (max-width: 640px) {
-  .grid-auto-3 { gap: 1rem; grid-template-columns: 1fr; }
-  .grid-auto-2 { gap: 1rem; grid-template-columns: 1fr; }
+  .grid-auto-3 { gap: 1rem; }
+  .grid-auto-2 { gap: 1rem; }
+  .grid-auto-3 > * { flex: 1 1 100%; max-width: 100%; }
+  .grid-auto-2 > * { flex: 1 1 100%; max-width: 100%; }
 }
 
-/* Tablet: 2-column grid for 3-col grids */
-@media (min-width: 640px) and (max-width: 900px) {
-  .grid-auto-3 { grid-template-columns: repeat(2, 1fr); }
+/* Tablet: 2-column layout centered */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .grid-auto-3 > * { flex: 1 1 calc(50% - 0.75rem); min-width: 250px; }
+  .grid-auto-2 > * { flex: 1 1 calc(50% - 0.75rem); min-width: 300px; }
+}
+
+/* Desktop: 3-column layout for auto-3, 2-column for auto-2 */
+@media (min-width: 1024px) {
+  .grid-auto-3 > * { flex: 1 1 calc(33.333% - 1rem); min-width: 280px; }
+  .grid-auto-2 > * { flex: 1 1 calc(50% - 0.75rem); min-width: 340px; }
 }
 
 /* Prevent badge overflow in hero */

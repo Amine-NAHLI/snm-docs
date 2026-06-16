@@ -3,6 +3,9 @@ import { motion, useInView } from 'framer-motion'
 import { Globe, Mail, MapPin, GraduationCap, Shield } from 'lucide-react'
 import { useLang } from '../context/LanguageContext'
 import { t } from '../translations'
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { SiTryhackme } from "react-icons/si";
+import { MdEmail } from "react-icons/md";
 
 function GithubIcon({ size = 18 }) {
   return (
@@ -21,16 +24,31 @@ function LinkedinIcon({ size = 18 }) {
 }
 
 const SOCIAL_META = [
-  { Icon: GithubIcon, label: 'GitHub', href: 'https://github.com/Amine-NAHLI', hoverColor: '#e2e8f0' },
-  { Icon: LinkedinIcon, label: 'LinkedIn', href: 'https://linkedin.com/in/amine-nahli-48b2a734b/', hoverColor: '#0ea5e9' },
   {
-  Icon: Globe,
-  label: 'TryHackMe',
-  href: 'https://tryhackme.com/p/nahliami',
-  hoverColor: '#00ffff'
-},
-  { Icon: Mail, label: 'Email', href: 'mailto:nahliamine2@gmail.com', hoverColor: '#ff00ff' },
-]
+    Icon: FaGithub,
+    label: 'GitHub',
+    href: 'https://github.com/Amine-NAHLI',
+    hoverColor: '#e2e8f0'
+  },
+  {
+    Icon: FaLinkedin,
+    label: 'LinkedIn',
+    href: 'https://linkedin.com/in/amine-nahli-48b2a734b/',
+    hoverColor: '#0ea5e9'
+  },
+  {
+    Icon: SiTryhackme,
+    label: 'TryHackMe',
+    href: 'https://tryhackme.com/p/nahliami',
+    hoverColor: '#00ffff'
+  },
+  {
+    Icon: MdEmail,
+    label: 'Email',
+    href: 'mailto:nahliamine2@gmail.com',
+    hoverColor: '#ff00ff'
+  },
+];
 
 function SocialButton({ s }) {
   const [hovered, setHovered] = useState(false)
