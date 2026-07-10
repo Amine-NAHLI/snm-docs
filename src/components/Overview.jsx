@@ -80,7 +80,7 @@ export default function Overview() {
     <section
       id="overview"
       className="section-pad grid-bg"
-      style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}
+      style={{ position: 'relative', overflow: 'hidden', background: 'transparent' }}
     >
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -124,7 +124,7 @@ export default function Overview() {
             <div key={s.label} style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center',
               justifyContent: 'center', padding: '2rem 1rem', textAlign: 'center',
-              background: 'rgba(5,5,8,0.85)',
+              background: 'rgba(5,5,8,0.35)',
             }}>
               <span className="font-orbitron gradient-text" style={{ fontWeight: 900, fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', marginBottom: '0.375rem' }}>
                 {s.value}

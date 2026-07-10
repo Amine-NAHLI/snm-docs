@@ -111,7 +111,7 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-          background: scrolled || open ? 'rgba(5,5,8,0.95)' : 'transparent',
+          background: scrolled || open ? 'rgba(5,5,8,0.35)' : 'transparent',
           backdropFilter: scrolled || open ? 'blur(20px)' : 'none',
           WebkitBackdropFilter: scrolled || open ? 'blur(20px)' : 'none',
           borderBottom: scrolled ? '1px solid rgba(0,255,255,0.08)' : 'none',
@@ -142,7 +142,7 @@ export default function Navbar() {
             {LINKS.map((l) => <NavLink key={l.href} label={l.label} href={l.href} onClick={scrollTo} />)}
             <LangToggle />
             <a
-              href="https://github.com/Amine-NAHLI/smart-network-mapper"
+              href="https://github.com/Amine-NAHLI"
               target="_blank" rel="noreferrer"
               style={{
                 marginLeft: '0.75rem', padding: '0.375rem 1rem', fontSize: '0.85rem', fontWeight: 600,
@@ -193,7 +193,7 @@ export default function Navbar() {
             style={{
               position: 'fixed',
               top: '4rem', left: 0, right: 0, bottom: 0,
-              background: 'rgba(5,5,8,0.98)',
+              background: 'rgba(5,5,8,0.45)',
               backdropFilter: 'blur(24px)',
               WebkitBackdropFilter: 'blur(24px)',
               zIndex: 999,

@@ -69,7 +69,7 @@ export default function Features() {
     <section
       id="features"
       className="section-pad"
-      style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-primary)' }}
+      style={{ position: 'relative', overflow: 'hidden', background: 'transparent' }}
     >
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',

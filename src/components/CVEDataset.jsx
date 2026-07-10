@@ -119,7 +119,7 @@ export default function CVEDataset() {
 
   const PIPELINE_STEPS = tx.pipeline.map((label, i) => ({
     label,
-    sub: ['NIST source', 'Vulnerability fetch', 'Port & banner match', 'OS & protocol', '20K balanced rows'][i],
+    sub: tx.pipelineSubs[i],
   }))
 
   const STATS = [
@@ -138,7 +138,7 @@ export default function CVEDataset() {
     <section
       id="dataset"
       className="section-pad grid-bg"
-      style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}
+      style={{ position: 'relative', overflow: 'hidden', background: 'transparent' }}
     >
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -248,7 +248,78 @@ export default function CVEDataset() {
           {FEATURE_CARDS.map((f, i) => (
             <FeatureInfoCard key={i} title={f.title} desc={f.desc} icon={f.icon} color={f.color} i={i} inView={inView} />
           ))}
+          <FeatureInfoCard
+            key={2}
+            title={tx.c3t || 'Feature Engineering'}
+            desc={tx.c3d || 'Comprehensive feature extraction'}
+            icon={Database}
+            color="#10b981"
+            i={2}
+            inView={inView}
+          />
         </div>
+
+        {/* Detailed Pipeline Steps */}
+        {tx.pipelineStepsDetail && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.7 }}
+            style={{ marginBottom: '3.5rem' }}
+          >
+            <h3 style={{
+              fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.15em',
+              color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '2rem',
+              textTransform: 'uppercase',
+            }}>DETAILED PIPELINE BREAKDOWN</h3>
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              {tx.pipelineStepsDetail.map((item, i) => {
+                const [hovered, setHovered] = useState(false)
+                const colors = ['#00ffff', '#7c3aed', '#ff00ff', '#f59e0b', '#10b981', '#00ffff', '#7c3aed', '#ff00ff']
+                const color = colors[i]
+                return (
+                  <div
+                    key={i}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
+                    style={{
+                      background: 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${hovered ? color + '35' : 'rgba(0,255,255,0.08)'}`,
+                      backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+                      borderRadius: '0.875rem', padding: '1.5rem',
+                      display: 'flex', gap: '1.25rem', alignItems: 'flex-start',
+                      transition: 'border-color 0.3s, transform 0.2s',
+                      transform: hovered ? 'translateX(4px)' : 'translateX(0)',
+                    }}
+                  >
+                    <div style={{
+                      minWidth: '2.5rem', height: '2.5rem', borderRadius: '50%',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      background: `${color}15`, border: `2px solid ${color}40`,
+                      fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.9rem',
+                      color, flexShrink: 0,
+                    }}>
+                      {item.step}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <h4 style={{
+                        color: 'var(--text-primary)', fontSize: '0.95rem', fontWeight: 700,
+                        marginBottom: '0.5rem',
+                      }}>
+                        {item.title}
+                      </h4>
+                      <p style={{
+                        color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.65,
+                      }}>
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </motion.div>
+        )}
 
         {/* GitHub repo card */}
         <motion.div

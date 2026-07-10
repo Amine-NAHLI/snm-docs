@@ -80,7 +80,7 @@ export default function AIEngine() {
   const tx = t[lang].aiEngine
 
   return (
-    <section id="ai-engine" className="section-pad grid-bg" style={{ position: 'relative', overflow: 'hidden', background: '#080810' }}>
+    <section id="ai-engine" className="section-pad grid-bg" style={{ position: 'relative', overflow: 'hidden', background: 'transparent' }}>
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(124,58,237,0.06) 0%, transparent 65%)',
@@ -173,7 +173,7 @@ export default function AIEngine() {
             </div>
           </motion.div>
 
-          {/* Threat levels */}
+          {/* Threat levels with descriptions */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -186,37 +186,127 @@ export default function AIEngine() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {tx.threats.map((threat, i) => {
                 const meta = THREAT_META[i]
+                const [hovered, setHovered] = useState(false)
                 return (
                   <div
                     key={i}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
                     style={{
                       borderRadius: '0.875rem', padding: '1rem 1.25rem',
-                      display: 'flex', alignItems: 'center', gap: '1rem',
                       background: meta.bg, border: `1px solid ${meta.border}`,
-                      transition: 'transform 0.2s', cursor: 'default',
+                      transition: 'transform 0.2s, border-color 0.2s', cursor: 'default',
+                      transform: hovered ? 'translateX(4px)' : 'translateX(0)',
+                      borderColor: hovered ? meta.border.replace('0.25', '0.4') : meta.border,
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(4px)'}
-                    onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
                   >
-                    <div style={{ width: '4px', height: '2.5rem', borderRadius: '9999px', flexShrink: 0, background: meta.color, boxShadow: `0 0 10px ${meta.color}` }} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontWeight: 700, fontSize: '0.875rem', color: meta.color, marginBottom: '0.1rem' }}>{threat.level}</p>
-                      <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{threat.score}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+                      <div style={{ width: '4px', height: '2.5rem', borderRadius: '9999px', flexShrink: 0, background: meta.color, boxShadow: `0 0 10px ${meta.color}` }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontWeight: 700, fontSize: '0.875rem', color: meta.color, marginBottom: '0.1rem' }}>{threat.level}</p>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{threat.score}</p>
+                      </div>
+                      <div style={{ width: '80px', height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden', flexShrink: 0 }}>
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={inView ? { width: `${meta.pct}%` } : { width: 0 }}
+                          transition={{ duration: 0.8, delay: 0.4 + i * 0.1 }}
+                          style={{ height: '100%', background: meta.color, borderRadius: '3px', boxShadow: `0 0 6px ${meta.color}` }}
+                        />
+                      </div>
                     </div>
-                    <div style={{ width: '80px', height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden', flexShrink: 0 }}>
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={inView ? { width: `${meta.pct}%` } : { width: 0 }}
-                        transition={{ duration: 0.8, delay: 0.4 + i * 0.1 }}
-                        style={{ height: '100%', background: meta.color, borderRadius: '3px', boxShadow: `0 0 6px ${meta.color}` }}
-                      />
-                    </div>
+                    {threat.desc && (
+                      <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', paddingLeft: '1.5rem', lineHeight: 1.5 }}>
+                        {threat.desc}
+                      </p>
+                    )}
                   </div>
                 )
               })}
             </div>
           </motion.div>
         </div>
+
+        {/* Wisdom Layer Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          style={{ marginTop: '4rem' }}
+        >
+          <p style={{
+            fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.15em',
+            color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '1.5rem', textTransform: 'uppercase',
+          }}>{tx.wisdomLabel}</p>
+          <div style={{
+            background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(124,58,237,0.15)',
+            backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+            borderRadius: '1rem', padding: '2rem', textAlign: 'center',
+          }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: '50rem', margin: '0 auto 1.5rem' }}>
+              {tx.wisdomDesc}
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
+              {tx.wisdomRules.map((rule, i) => (
+                <div key={i} style={{
+                  background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)',
+                  borderRadius: '0.75rem', padding: '1rem', textAlign: 'left',
+                }}>
+                  <span style={{ color: '#a78bfa', fontSize: '1.25rem', marginRight: '0.5rem' }}>✓</span>
+                  <span style={{ color: 'var(--text-primary)', fontSize: '0.8rem' }}>{rule}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Hyperparameters Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          style={{ marginTop: '3rem' }}
+        >
+          <p style={{
+            fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.15em',
+            color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '1.5rem', textTransform: 'uppercase',
+          }}>{tx.hyperLabel}</p>
+          <div style={{
+            background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(0,255,255,0.1)',
+            backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+            borderRadius: '1rem', overflow: 'hidden',
+          }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
+              {tx.hyperParams.map((param, i) => {
+                const [hovered, setHovered] = useState(false)
+                return (
+                  <div
+                    key={i}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
+                    style={{
+                      padding: '1.25rem 1.5rem',
+                      borderBottom: i < tx.hyperParams.length - 2 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                      borderRight: (i % 2 === 0 && i < tx.hyperParams.length - 1) ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                      background: hovered ? 'rgba(0,255,255,0.03)' : 'transparent',
+                      transition: 'background 0.2s',
+                    }}
+                  >
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--cyan)', marginBottom: '0.375rem', fontWeight: 600 }}>
+                      {param.name}
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', color: 'var(--text-primary)', fontWeight: 700, marginBottom: '0.375rem' }}>
+                      {param.value}
+                    </p>
+                    <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                      {param.desc}
+                    </p>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   )

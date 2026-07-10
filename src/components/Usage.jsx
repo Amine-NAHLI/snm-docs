@@ -167,7 +167,7 @@ export default function Usage({ isEmbed = false }) {
   if (isEmbed) return content
 
   return (
-    <section id="usage" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-primary)' }}>
+    <section id="usage" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: 'transparent' }}>
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'radial-gradient(ellipse 60% 50% at 100% 50%, rgba(255,0,255,0.04) 0%, transparent 60%)',

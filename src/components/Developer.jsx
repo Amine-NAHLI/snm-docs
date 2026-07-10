@@ -73,20 +73,76 @@ export default function Developer({ isEmbed = false }) {
             <Terminal size={18} style={{ color: '#10b981' }} />
             <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>{tx.apiTitle}</h3>
           </div>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65, marginBottom: '1rem' }}>{tx.apiDesc}</p>
-          <pre style={{
-            background: 'rgba(0,0,0,0.4)', padding: '1rem', borderRadius: '0.5rem',
-            border: '1px solid rgba(255,255,255,0.05)', overflowX: 'auto',
-            color: '#e2e8f0', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', lineHeight: 1.5
-          }}>
-<span style={{color: '#c678dd'}}>from</span> scanner.port_scanner <span style={{color: '#c678dd'}}>import</span> scan_ports{'\n'}
-<span style={{color: '#c678dd'}}>from</span> scanner.host_discovery <span style={{color: '#c678dd'}}>import</span> tcp_ping{'\n\n'}
-<span style={{color: '#5c6370'}}># Scan specific ports</span>{'\n'}
-results = scan_ports(<span style={{color: '#98c379'}}>"192.168.1.10"</span>, ports=[<span style={{color: '#d19a66'}}>80</span>, <span style={{color: '#d19a66'}}>443</span>]){'\n'}
-<span style={{color: '#56b6c2'}}>print</span>(results)
-          </pre>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65, marginBottom: '1.5rem' }}>{tx.apiDesc}</p>
+          
+          {/* Code Examples */}
+          {tx.examples && tx.examples.map((example, i) => (
+            <div key={i} style={{ marginBottom: i < tx.examples.length - 1 ? '1.5rem' : 0 }}>
+              <div style={{ marginBottom: '0.75rem' }}>
+                <h4 style={{ color: '#10b981', fontSize: '0.8rem', fontWeight: 700, marginBottom: '0.25rem' }}>{example.title}</h4>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', lineHeight: 1.5 }}>{example.desc}</p>
+              </div>
+              <pre style={{
+                background: 'rgba(0,0,0,0.4)', padding: '1rem', borderRadius: '0.5rem',
+                border: '1px solid rgba(255,255,255,0.05)', overflowX: 'auto',
+                color: '#e2e8f0', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', lineHeight: 1.6
+              }}>
+                {example.code}
+              </pre>
+            </div>
+          ))}
         </div>
       </motion.div>
+
+      {/* Testing Section */}
+      {tx.testingTitle && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          style={{ marginBottom: '2rem' }}
+        >
+          <div style={{
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(124,58,237,0.12)',
+            backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+            borderRadius: '1rem', padding: '1.5rem',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <Code size={18} style={{ color: '#a78bfa' }} />
+              <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9375rem' }}>{tx.testingTitle}</h3>
+            </div>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>{tx.testingDesc}</p>
+            
+            <div style={{ display: 'grid', gap: '0.75rem', marginBottom: '1rem' }}>
+              {tx.testCommands && tx.testCommands.map((cmd, i) => (
+                <div key={i} style={{
+                  background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)',
+                  borderRadius: '0.5rem', padding: '0.875rem', display: 'flex', gap: '1rem', alignItems: 'center'
+                }}>
+                  <code style={{ 
+                    fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: '#a78bfa',
+                    flex: '0 0 auto', minWidth: '200px'
+                  }}>
+                    $ {cmd.cmd}
+                  </code>
+                  <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', flex: 1 }}>
+                    {cmd.desc}
+                  </span>
+                </div>
+              ))}
+            </div>
+            
+            <div style={{
+              background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.15)',
+              borderRadius: '0.5rem', padding: '0.875rem', textAlign: 'center'
+            }}>
+              <span style={{ color: '#10b981', fontSize: '0.8rem', fontWeight: 600 }}>
+                ✓ {tx.testCoverage}
+              </span>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 12 }}
@@ -104,7 +160,13 @@ results = scan_ports(<span style={{color: '#98c379'}}>"192.168.1.10"</span>, por
           </div>
           
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {[[tx.c1, tx.cd1], [tx.c2, tx.cd2], [tx.c3, tx.cd3]].map(([title, desc], i) => (
+            {[
+              [tx.c1, tx.cd1],
+              [tx.c2, tx.cd2],
+              [tx.c3, tx.cd3],
+              [tx.c4, tx.cd4],
+              [tx.c5, tx.cd5]
+            ].map(([title, desc], i) => (
               <div key={i} style={{ display: 'flex', gap: '1rem' }}>
                 <div className="font-orbitron" style={{
                   flexShrink: 0, width: '1.75rem', height: '1.75rem',
@@ -130,7 +192,7 @@ results = scan_ports(<span style={{color: '#98c379'}}>"192.168.1.10"</span>, por
   if (isEmbed) return content
 
   return (
-    <section id="developer" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-primary)' }}>
+    <section id="developer" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: 'transparent' }}>
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'radial-gradient(ellipse 60% 50% at 100% 50%, rgba(16,185,129,0.04) 0%, transparent 60%)',

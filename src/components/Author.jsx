@@ -118,7 +118,7 @@ export default function Author() {
   const tx = t[lang].author
 
   return (
-    <section id="author" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-primary)' }}>
+    <section id="author" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: 'transparent' }}>
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'radial-gradient(circle at 50% 80%, rgba(0,255,255,0.03) 0%, transparent 60%)',

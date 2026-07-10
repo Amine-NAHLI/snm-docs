@@ -173,7 +173,7 @@ export default function Gallery({ isEmbed = false }) {
   if (isEmbed) return content
 
   return (
-    <section id="gallery" className="section-pad grid-bg" style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}>
+    <section id="gallery" className="section-pad grid-bg" style={{ position: 'relative', overflow: 'hidden', background: 'transparent' }}>
       {content}
     </section>
   )
