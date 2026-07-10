@@ -11,7 +11,7 @@ import GlobalBackground from './components/GlobalBackground'
 
 export default function App() {
   return (
-    <div style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)', minHeight: '100vh' }}>
+    <div style={{ background: 'transparent', color: 'var(--text-primary)', minHeight: '100vh' }}>
       <GlobalBackground />
       <Navbar />
       <main>

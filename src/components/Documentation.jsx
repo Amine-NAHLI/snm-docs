@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { Download, Terminal, BookOpen, Send, Layers, HelpCircle, Code, Map, Image as ImageIcon, ChevronRight } from 'lucide-react'
+import { Download, Terminal, BookOpen, Send, Layers, HelpCircle, Code, Map, Image as ImageIcon, ChevronRight, Workflow, TestTube, Database, Package, FileCode2 } from 'lucide-react'
 import Installation from './Installation'
 import Usage from './Usage'
 import Telegram from './Telegram'
@@ -9,6 +9,11 @@ import FAQ from './FAQ'
 import Developer from './Developer'
 import Roadmap from './Roadmap'
 import Gallery from './Gallery'
+import N8NWorkflow from './N8NWorkflow'
+import TestingQuality from './TestingQuality'
+import IANAOsint from './IANAOsint'
+import Packaging from './Packaging'
+import UMLDiagrams from './UMLDiagrams'
 import { useLang } from '../context/LanguageContext'
 import { t } from '../translations'
 
@@ -31,7 +36,17 @@ export default function Documentation() {
       title: lang === 'en' ? 'Reference' : 'Technique',
       items: [
         { id: 'architecture', label: t[lang].architecture.title, icon: Layers },
+        { id: 'uml', label: lang === 'en' ? 'UML Diagrams' : 'Diagrammes UML', icon: FileCode2 },
         { id: 'developer', label: t[lang].developer.title, icon: Code },
+        { id: 'testing', label: lang === 'en' ? 'Tests & Quality' : 'Tests & Qualité', icon: TestTube },
+        { id: 'n8n', label: lang === 'en' ? 'n8n Workflow' : 'Workflow n8n', icon: Workflow },
+      ]
+    },
+    {
+      title: lang === 'en' ? 'Data & Build' : 'Données & Build',
+      items: [
+        { id: 'osint', label: 'IANA & OSINT', icon: Database },
+        { id: 'packaging', label: lang === 'en' ? 'Build & Release' : 'Build & Release', icon: Package },
       ]
     },
     {
@@ -45,7 +60,7 @@ export default function Documentation() {
   ]
 
   return (
-    <section id="docs" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: '#080810' }}>
+    <section id="docs" className="section-pad" style={{ position: 'relative', overflow: 'hidden', background: 'transparent' }}>
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'radial-gradient(circle at 100% 50%, rgba(124,58,237,0.05) 0%, transparent 50%)',
@@ -164,6 +179,11 @@ export default function Documentation() {
                   <Architecture isEmbed />
                 </motion.div>
               )}
+              {activeTab === 'uml' && (
+                <motion.div key="uml" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
+                  <UMLDiagrams isEmbed />
+                </motion.div>
+              )}
               {activeTab === 'gallery' && (
                 <motion.div key="gallery" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
                   <Gallery isEmbed />
@@ -182,6 +202,26 @@ export default function Documentation() {
               {activeTab === 'faq' && (
                 <motion.div key="faq" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
                   <FAQ isEmbed />
+                </motion.div>
+              )}
+              {activeTab === 'n8n' && (
+                <motion.div key="n8n" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
+                  <N8NWorkflow isEmbed />
+                </motion.div>
+              )}
+              {activeTab === 'testing' && (
+                <motion.div key="testing" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
+                  <TestingQuality isEmbed />
+                </motion.div>
+              )}
+              {activeTab === 'osint' && (
+                <motion.div key="osint" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
+                  <IANAOsint isEmbed />
+                </motion.div>
+              )}
+              {activeTab === 'packaging' && (
+                <motion.div key="packaging" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
+                  <Packaging isEmbed />
                 </motion.div>
               )}
             </AnimatePresence>
