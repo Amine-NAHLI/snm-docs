@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FileCode2, ZoomIn, Download, X } from 'lucide-react'
 import { useLang } from '../context/LanguageContext'
@@ -6,24 +6,6 @@ import { useLang } from '../context/LanguageContext'
 export default function UMLDiagrams({ isEmbed = false }) {
   const { lang } = useLang()
   const [selectedImage, setSelectedImage] = useState(null)
-  const [imageUrls, setImageUrls] = useState({})
-
-  // Import images using Vite's import.meta.glob
-  useEffect(() => {
-    const loadImages = async () => {
-      const images = import.meta.glob('/public/docs/*.png', { eager: true, as: 'url' })
-      const urls = {}
-      
-      Object.entries(images).forEach(([path, url]) => {
-        const filename = path.split('/').pop()
-        urls[filename] = url
-      })
-      
-      setImageUrls(urls)
-    }
-    
-    loadImages()
-  }, [])
 
   const diagrams = [
     {
@@ -85,7 +67,7 @@ export default function UMLDiagrams({ isEmbed = false }) {
   const getImageUrl = (file) => {
     const baseUrl = import.meta.env.BASE_URL || '/';
     const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-    return imageUrls[file] || `${cleanBaseUrl}docs/${file}`;
+    return `${cleanBaseUrl}docs/${encodeURIComponent(file)}`;
   }
 
   const handleDownload = (file, title) => {
@@ -180,8 +162,7 @@ export default function UMLDiagrams({ isEmbed = false }) {
                   border: '1px solid rgba(255,255,255,0.05)'
                 }}
               >
-                {getImageUrl(diagram.file) ? (
-                  <>
+                <>
                     <img
                       src={getImageUrl(diagram.file)}
                       alt={diagram.title}
@@ -215,20 +196,6 @@ export default function UMLDiagrams({ isEmbed = false }) {
                       <ZoomIn size={20} color="white" />
                     </div>
                   </>
-                ) : (
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%',
-                    color: 'var(--text-muted)',
-                    fontSize: '0.85rem',
-                    padding: '1rem',
-                    textAlign: 'center'
-                  }}>
-                    Loading...
-                  </div>
-                )}
               </div>
 
               {/* Title */}
