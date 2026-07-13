@@ -82,18 +82,20 @@ export default function UMLDiagrams({ isEmbed = false }) {
     }
   ]
 
+  const getImageUrl = (file) => {
+    const baseUrl = import.meta.env.BASE_URL || '/';
+    const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    return imageUrls[file] || `${cleanBaseUrl}docs/${file}`;
+  }
+
   const handleDownload = (file, title) => {
-    const url = imageUrls[file] || `/docs/${file}`
+    const url = getImageUrl(file)
     const link = document.createElement('a')
     link.href = url
     link.download = file
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-  }
-
-  const getImageUrl = (file) => {
-    return imageUrls[file] || `/docs/${file}`
   }
 
   return (
