@@ -458,6 +458,10 @@ generate_html_report(
       standaloneClickToInstall: 'Voir les étapes du code source',
       tabExecutable: 'Exécutables Directs',
       tabSource: 'Code Source (Git/Python)',
+    },
+    usage: {
+      label: 'COMMENT UTILISER', title: 'Guide d\'Utilisation',
+      subtitle: 'Deux façons de lancer SNM — choisissez celle qui correspond à votre workflow.',
       tabGui: 'Mode GUI', tabCli: 'Mode CLI',
       guiTitle: 'Mode Interface Cyberpunk', guiRec: 'Recommandé',
       guiDesc: 'Interface graphique complète avec dashboard temps réel et export en un clic.',
