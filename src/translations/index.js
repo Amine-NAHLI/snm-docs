@@ -139,8 +139,8 @@ export const t = {
       ],
       hyperLabel: 'HYPERPARAMETERS',
       hyperParams: [
-        { name: 'n_estimators', value: '100', desc: 'Number of decision trees' },
-        { name: 'max_depth', value: 'None', desc: 'Unlimited tree depth' },
+        { name: 'n_estimators', value: '500', desc: 'Number of decision trees' },
+        { name: 'max_depth', value: '25', desc: 'Maximum depth of trees' },
         { name: 'min_samples_split', value: '2', desc: 'Min samples to split node' },
         { name: 'min_samples_leaf', value: '1', desc: 'Min samples per leaf' },
         { name: 'max_features', value: 'sqrt', desc: 'Features per split' },
@@ -511,8 +511,8 @@ generate_html_report(
       ],
       hyperLabel: 'HYPERPARAMÈTRES',
       hyperParams: [
-        { name: 'n_estimators', value: '100', desc: 'Nombre d\'arbres de décision' },
-        { name: 'max_depth', value: 'None', desc: 'Profondeur illimitée' },
+        { name: 'n_estimators', value: '500', desc: 'Nombre d\'arbres de décision' },
+        { name: 'max_depth', value: '25', desc: 'Profondeur maximale des arbres' },
         { name: 'min_samples_split', value: '2', desc: 'Échantillons min pour split' },
         { name: 'min_samples_leaf', value: '1', desc: 'Échantillons min par feuille' },
         { name: 'max_features', value: 'sqrt', desc: 'Features par split' },
