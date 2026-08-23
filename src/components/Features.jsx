@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Globe, Radio, Monitor, Zap, Target, Brain, Palette, LayoutDashboard, FileText, Cpu } from 'lucide-react'
+import { Globe, Radio, Monitor, Zap, Target, Brain, Palette, LayoutDashboard, FileText, Cpu, MapPin, PieChart } from 'lucide-react'
 import { useLang } from '../context/LanguageContext'
 import { t } from '../translations'
 import { useSpotlight } from '../hooks/useSpotlight'
@@ -10,10 +10,12 @@ const ICON_META = [
   { icon: Radio, color: '#ff00ff' },
   { icon: Monitor, color: '#7c3aed' },
   { icon: Zap, color: '#f59e0b' },
+  { icon: MapPin, color: '#ef4444' }, // 5. Geolocation
   { icon: Target, color: '#10b981' },
   { icon: Brain, color: '#ff00ff' },
   { icon: Palette, color: '#00ffff' },
   { icon: LayoutDashboard, color: '#7c3aed' },
+  { icon: PieChart, color: '#3b82f6' }, // 10. Dashboard
   { icon: FileText, color: '#f59e0b' },
 ]
 
