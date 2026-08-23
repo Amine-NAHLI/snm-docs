@@ -1,23 +1,20 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { Download, Terminal, BookOpen, Send, Layers, HelpCircle, Code, Map, Image as ImageIcon, ChevronRight, Workflow, TestTube, Database, Package, FileCode2 } from 'lucide-react'
+import { Download, Terminal, BookOpen, Send, Layers, HelpCircle, Code, Map, Image as ImageIcon, ChevronRight, ChevronDown, Workflow, TestTube, Database, Package, FileCode2 } from 'lucide-react'
 import Installation from './Installation'
 import Usage from './Usage'
 import Telegram from './Telegram'
 import Architecture from './Architecture'
 import FAQ from './FAQ'
 import Developer from './Developer'
-import Roadmap from './Roadmap'
-import Gallery from './Gallery'
 import N8NWorkflow from './N8NWorkflow'
-import TestingQuality from './TestingQuality'
-import IANAOsint from './IANAOsint'
 import Packaging from './Packaging'
 import UMLDiagrams from './UMLDiagrams'
 import { useLang } from '../context/LanguageContext'
 import { t } from '../translations'
 
 export default function Documentation() {
+  const [activeCatIdx, setActiveCatIdx] = useState(0)
   const [activeTab, setActiveTab] = useState('installation')
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
@@ -38,23 +35,13 @@ export default function Documentation() {
         { id: 'architecture', label: t[lang].architecture.title, icon: Layers },
         { id: 'uml', label: lang === 'en' ? 'UML Diagrams' : 'Diagrammes UML', icon: FileCode2 },
         { id: 'developer', label: t[lang].developer.title, icon: Code },
-        { id: 'testing', label: lang === 'en' ? 'Tests & Quality' : 'Tests & Qualité', icon: TestTube },
         { id: 'n8n', label: lang === 'en' ? 'n8n Workflow' : 'Workflow n8n', icon: Workflow },
       ]
     },
     {
       title: lang === 'en' ? 'Data & Build' : 'Données & Build',
       items: [
-        { id: 'osint', label: 'IANA & OSINT', icon: Database },
         { id: 'packaging', label: lang === 'en' ? 'Build & Release' : 'Build & Release', icon: Package },
-      ]
-    },
-    {
-      title: lang === 'en' ? 'Resources' : 'Ressources',
-      items: [
-        { id: 'gallery', label: t[lang].gallery.title, icon: ImageIcon },
-        { id: 'roadmap', label: t[lang].roadmap.title, icon: Map },
-        { id: 'faq', label: t[lang].faq.title, icon: HelpCircle },
       ]
     }
   ]
@@ -82,7 +69,7 @@ export default function Documentation() {
           }}>
             <BookOpen size={13} /> {lang === 'en' ? 'DOCUMENTATION' : 'DOCUMENTATION'}
           </div>
-          <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.75rem, 5vw, 3rem)', marginBottom: '1rem', color: 'var(--text-primary)' }}>
+          <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.5rem, 4vw, 3rem)', marginBottom: '1rem', color: 'var(--text-primary)' }}>
             {lang === 'en' ? 'Get' : 'Pour'} <span className="gradient-text">{t[lang].hero.btnStart}</span>
           </h2>
           <p style={{ color: 'var(--text-secondary)', maxWidth: '36rem', margin: '0 auto' }}>
@@ -92,72 +79,93 @@ export default function Documentation() {
           </p>
         </motion.div>
 
-        {/* Documentation Layout: Sidebar + Main Content */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }} className="md-flex-row">
+        {/* Documentation Layout: Top Navigation + Main Content */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           
-          {/* Style hack for media query since inline styles don't support it directly */}
+          {/* Top Navigation Lists */}
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            
+            {/* Level 1: Categories (Une seule liste) */}
+            <div style={{ 
+              display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center',
+              background: 'rgba(0,0,0,0.2)', padding: '0.5rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)'
+            }}>
+              {categories.map((cat, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setActiveCatIdx(idx)
+                    setActiveTab(cat.items[0].id) // Auto-select first item
+                  }}
+                  className="font-orbitron"
+                  style={{
+                    padding: '0.75rem 1.5rem', borderRadius: '0.75rem', border: 'none', cursor: 'pointer',
+                    fontSize: '0.9rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em',
+                    background: activeCatIdx === idx ? 'rgba(0,255,255,0.1)' : 'transparent',
+                    color: activeCatIdx === idx ? 'var(--cyan)' : 'var(--text-secondary)',
+                    transition: 'all 0.2s',
+                  }}
+                >
+                  {cat.title}
+                </button>
+              ))}
+            </div>
+
+            {/* Style hack for media query since inline styles don't support it directly */}
           <style dangerouslySetInnerHTML={{__html: `
             .md-flex-row { flex-direction: column; }
             .sidebar-sticky { position: static; }
-            .content-area { min-height: 500px; }
+            .content-area { min-height: 500px; padding: 0 0.75rem; }
             @media (min-width: 768px) {
               .md-flex-row { flex-direction: row !important; }
               .sidebar-sticky { position: sticky !important; top: 6rem; height: calc(100vh - 8rem); overflow-y: auto; }
-              .content-area { padding-left: 2rem; border-left: 1px solid rgba(255,255,255,0.05); }
+              .content-area { padding: 0 0 0 2rem; border-left: 1px solid rgba(255,255,255,0.05); }
             }
-            .sidebar-scrollbar::-webkit-scrollbar { width: 4px; }
-            .sidebar-scrollbar::-webkit-scrollbar-track { background: transparent; }
-            .sidebar-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.2); border-radius: 4px; }
           `}} />
 
-          {/* Left Sidebar */}
-          <div style={{ width: '100%', maxWidth: '260px', flexShrink: 0 }} className="sidebar-sticky sidebar-scrollbar">
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              {categories.map((cat, idx) => (
-                <div key={idx}>
-                  <h4 className="font-orbitron" style={{
-                    fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)',
-                    textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem',
-                    paddingLeft: '0.5rem'
-                  }}>
-                    {cat.title}
-                  </h4>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                    {cat.items.map((tab) => {
-                      const Icon = tab.icon
-                      const isActive = activeTab === tab.id
-                      return (
-                        <li key={tab.id}>
-                          <button
-                            onClick={() => setActiveTab(tab.id)}
-                            style={{
-                              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                              padding: '0.625rem 0.75rem', borderRadius: '0.5rem',
-                              border: 'none', cursor: 'pointer', textAlign: 'left',
-                              background: isActive ? 'rgba(0,255,255,0.08)' : 'transparent',
-                              color: isActive ? 'var(--cyan)' : 'var(--text-secondary)',
-                              transition: 'all 0.2s',
-                            }}
-                            onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--text-primary)' }}
-                            onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)' }}
-                          >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-                              <Icon size={16} style={{ color: isActive ? 'var(--cyan)' : 'var(--text-muted)' }} />
-                              <span style={{ fontSize: '0.9rem', fontWeight: isActive ? 600 : 400 }}>{tab.label}</span>
-                            </div>
-                            {isActive && <ChevronRight size={14} />}
-                          </button>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </div>
-              ))}
-            </nav>
+            {/* Level 2: Choices below (les autres choix en dessous) */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeCatIdx}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2 }}
+                style={{ 
+                  display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center',
+                  padding: '0 1rem'
+                }}
+              >
+                {categories[activeCatIdx].items.map((tab) => {
+                  const Icon = tab.icon
+                  const isActive = activeTab === tab.id
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '0.5rem',
+                        padding: '0.625rem 1.25rem', borderRadius: '2rem', border: 'none', cursor: 'pointer',
+                        background: isActive ? 'var(--cyan)' : 'rgba(255,255,255,0.03)',
+                        color: isActive ? '#000' : 'var(--text-secondary)',
+                        fontSize: '0.85rem', fontWeight: 500,
+                        transition: 'all 0.2s',
+                        boxShadow: isActive ? '0 4px 15px rgba(0,255,255,0.3)' : 'none'
+                      }}
+                      onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--text-primary)' }}
+                      onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = 'var(--text-secondary)' }}
+                    >
+                      <Icon size={16} style={{ color: isActive ? '#000' : 'var(--text-muted)' }} />
+                      {tab.label}
+                    </button>
+                  )
+                })}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           {/* Right Main Content */}
-          <div style={{ flex: 1, minWidth: 0 }} className="content-area">
+          <div style={{ flex: 1, minWidth: 0, marginTop: '1rem' }} className="content-area">
             <AnimatePresence mode="wait">
               {activeTab === 'installation' && (
                 <motion.div key="install" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
@@ -184,39 +192,14 @@ export default function Documentation() {
                   <UMLDiagrams isEmbed />
                 </motion.div>
               )}
-              {activeTab === 'gallery' && (
-                <motion.div key="gallery" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
-                  <Gallery isEmbed />
-                </motion.div>
-              )}
               {activeTab === 'developer' && (
                 <motion.div key="developer" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
                   <Developer isEmbed />
                 </motion.div>
               )}
-              {activeTab === 'roadmap' && (
-                <motion.div key="roadmap" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
-                  <Roadmap isEmbed />
-                </motion.div>
-              )}
-              {activeTab === 'faq' && (
-                <motion.div key="faq" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
-                  <FAQ isEmbed />
-                </motion.div>
-              )}
               {activeTab === 'n8n' && (
                 <motion.div key="n8n" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
                   <N8NWorkflow isEmbed />
-                </motion.div>
-              )}
-              {activeTab === 'testing' && (
-                <motion.div key="testing" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
-                  <TestingQuality isEmbed />
-                </motion.div>
-              )}
-              {activeTab === 'osint' && (
-                <motion.div key="osint" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
-                  <IANAOsint isEmbed />
                 </motion.div>
               )}
               {activeTab === 'packaging' && (

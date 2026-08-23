@@ -12,31 +12,24 @@ function NavLink({ label, href, onClick }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        position: 'relative',
-        padding: '0.5rem 0.875rem',
-        fontSize: '0.85rem',
-        fontWeight: 500,
-        color: hovered ? 'var(--cyan)' : 'var(--text-secondary)',
-        background: 'none',
+        padding: '0.5rem 1rem',
+        fontSize: '0.75rem',
+        fontWeight: 600,
+        color: hovered ? '#fff' : 'var(--text-secondary)',
+        background: hovered ? 'rgba(255,255,255,0.08)' : 'transparent',
+        borderRadius: '9999px',
         border: 'none',
         cursor: 'pointer',
-        transition: 'color 0.2s',
+        transition: 'all 0.2s',
         fontFamily: 'var(--font-heading)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.1em',
         whiteSpace: 'nowrap',
-        minHeight: '44px',
         display: 'flex',
         alignItems: 'center',
       }}
     >
       {label}
-      <motion.span
-        animate={{ width: hovered ? '70%' : '0%' }}
-        transition={{ duration: 0.22, ease: 'easeOut' }}
-        style={{
-          position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
-          height: '1px', background: 'var(--cyan)', display: 'block',
-        }}
-      />
     </button>
   )
 }
@@ -106,56 +99,59 @@ export default function Navbar() {
   return (
     <>
       <motion.nav
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        initial={{ y: -80, x: '-50%', opacity: 0 }}
+        animate={{ y: 0, x: '-50%', opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         style={{
-          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-          background: scrolled || open ? 'rgba(5,5,8,0.35)' : 'transparent',
-          backdropFilter: scrolled || open ? 'blur(20px)' : 'none',
-          WebkitBackdropFilter: scrolled || open ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(0,255,255,0.08)' : 'none',
-          transition: 'background 0.3s',
+          position: 'fixed', top: '1rem', left: '50%', zIndex: 1000,
+          background: 'rgba(10, 15, 30, 0.85)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255,255,255,0.05)',
+          borderRadius: '9999px',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+          transition: 'all 0.3s',
+          width: 'fit-content',
+          maxWidth: 'calc(100% - 2rem)',
         }}
       >
         <div style={{
-          maxWidth: '80rem', margin: '0 auto', padding: '0 1.25rem',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '4rem',
+          padding: '0.5rem 0.75rem',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.5rem',
         }}>
           {/* Logo */}
           <button
             onClick={() => { setOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', minHeight: '44px' }}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', padding: '0 0.5rem' }}
           >
-            <motion.span
-              animate={{ opacity: [1, 0.4, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--cyan)', boxShadow: '0 0 10px var(--cyan)', display: 'inline-block', flexShrink: 0 }}
-            />
-            <span className="font-orbitron glow-cyan" style={{ color: 'var(--cyan)', fontWeight: 700, fontSize: '1.1rem', letterSpacing: '0.2em' }}>
+            <span className="font-orbitron glow-cyan" style={{ color: 'var(--cyan)', fontWeight: 700, fontSize: '1rem', letterSpacing: '0.1em' }}>
               SNM
             </span>
           </button>
 
           {/* Desktop links */}
-          <div className="nav-desktop" style={{ alignItems: 'center', gap: '0' }}>
+          <div className="nav-desktop" style={{ alignItems: 'center', gap: '0.25rem' }}>
             {LINKS.map((l) => <NavLink key={l.href} label={l.label} href={l.href} onClick={scrollTo} />)}
+            
+            <div style={{ width: '1px', height: '1.5rem', background: 'rgba(255,255,255,0.1)', margin: '0 0.5rem' }} />
+            
             <LangToggle />
+            
             <a
-              href="https://github.com/Amine-NAHLI"
+              href="https://github.com/Amine-NAHLI/smart-network-mapper"
               target="_blank" rel="noreferrer"
               style={{
-                marginLeft: '0.75rem', padding: '0.375rem 1rem', fontSize: '0.85rem', fontWeight: 600,
-                borderRadius: '9999px', border: '1px solid rgba(0,255,255,0.35)', color: 'var(--cyan)',
-                background: 'transparent', cursor: 'pointer', textDecoration: 'none',
-                transition: 'background 0.2s, border-color 0.2s, box-shadow 0.2s',
-                fontFamily: 'var(--font-heading)', whiteSpace: 'nowrap', minHeight: '44px',
-                display: 'flex', alignItems: 'center',
+                marginLeft: '0.5rem', padding: '0.5rem 1.25rem', fontSize: '0.8rem', fontWeight: 700,
+                borderRadius: '9999px', border: 'none', color: '#0A0F1C',
+                background: '#ffffff', cursor: 'pointer', textDecoration: 'none',
+                transition: 'all 0.2s',
+                fontFamily: 'var(--font-heading)', whiteSpace: 'nowrap',
+                display: 'flex', alignItems: 'center', textTransform: 'uppercase', letterSpacing: '0.05em'
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,255,255,0.08)'; e.currentTarget.style.borderColor = 'var(--cyan)'; e.currentTarget.style.boxShadow = '0 0 20px rgba(0,255,255,0.2)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(0,255,255,0.35)'; e.currentTarget.style.boxShadow = 'none' }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; e.currentTarget.style.transform = 'scale(1.02)' }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'scale(1)' }}
             >
-              GitHub
+              GITHUB
             </a>
           </div>
 
