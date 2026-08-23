@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #050508;
-  --bg-secondary: #0d0d14;
+  --bg-primary: #0A0D1F;
+  --bg-secondary: #130B24;
   --bg-card: rgba(255, 255, 255, 0.03);
   --border-color: rgba(0, 255, 255, 0.15);
   --cyan: #00ffff;
@@ -28,7 +28,8 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #050508;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  background-attachment: fixed;
 }
 
 body {
@@ -439,3 +440,37 @@ code, pre {
   overflow-wrap: normal;
   white-space: pre;
 }
+
+/* Custom Global Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 255, 0.4);
+}
+
+
+/* Animated Gradient Text */
+.animated-gradient-text {
+  background: linear-gradient(to right, var(--cyan), var(--purple), var(--cyan));
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+

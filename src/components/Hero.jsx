@@ -98,9 +98,9 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
           className="font-orbitron"
-          style={{ fontWeight: 900, fontSize: 'clamp(2.5rem, 8vw, 5.5rem)', lineHeight: 1.05, marginBottom: '1.5rem' }}
+          style={{ fontWeight: 900, fontSize: 'clamp(1.75rem, 7vw, 5.5rem)', lineHeight: 1.05, marginBottom: '1.5rem' }}
         >
-          <span className="gradient-text">{tx.title1}</span>
+          <span className="animated-gradient-text">{tx.title1}</span>
           <br />
           <span style={{ color: 'var(--text-primary)' }}>{tx.title2}</span>
         </motion.h1>
@@ -141,13 +141,19 @@ export default function Hero() {
           style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '2.5rem' }}
         >
           {BADGES.map((b) => (
-            <span key={b} style={{
-              padding: '0.25rem 0.875rem', fontSize: '0.75rem', fontWeight: 500,
-              borderRadius: '9999px', border: '1px solid rgba(124,58,237,0.3)',
-              background: 'rgba(124,58,237,0.08)', color: '#a78bfa', fontFamily: 'var(--font-mono)',
-            }}>
+            <motion.span 
+              key={b} 
+              whileHover={{ scale: 1.05, boxShadow: '0 0 15px rgba(124,58,237,0.5)', borderColor: 'rgba(124,58,237,0.8)' }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                padding: '0.25rem 0.875rem', fontSize: '0.75rem', fontWeight: 500,
+                borderRadius: '9999px', border: '1px solid rgba(124,58,237,0.3)',
+                background: 'rgba(124,58,237,0.08)', color: '#a78bfa', fontFamily: 'var(--font-mono)',
+                cursor: 'default', transition: 'border-color 0.2s'
+              }}
+            >
               {b}
-            </span>
+            </motion.span>
           ))}
         </motion.div>
 
