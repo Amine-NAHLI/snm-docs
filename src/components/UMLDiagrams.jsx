@@ -12,7 +12,7 @@ export default function UMLDiagrams({ isEmbed = false }) {
       id: 'architecture',
       title: lang === 'en' ? 'Global Architecture' : 'Architecture Globale',
       titleFr: 'Diagramme d\'Architecture Globale',
-      file: 'Diagramme d\'Architecture Globale.png',
+      file: 'archi-global.jpg',
       description: lang === 'en' 
         ? 'Complete system architecture showing all modules and their interactions'
         : 'Architecture système complète montrant tous les modules et leurs interactions'
@@ -21,7 +21,7 @@ export default function UMLDiagrams({ isEmbed = false }) {
       id: 'usecase',
       title: lang === 'en' ? 'Use Case Diagram' : 'Diagramme de Cas d\'Utilisation',
       titleFr: 'Diagramme de Cas d\'Utilisation UML',
-      file: 'Diagramme de Cas d\'Utilisation UML.png',
+      file: 'use-case.png',
       description: lang === 'en'
         ? 'UML use case diagram showing user interactions and system functionalities'
         : 'Diagramme UML des cas d\'utilisation montrant les interactions utilisateur et fonctionnalités système'
@@ -48,19 +48,10 @@ export default function UMLDiagrams({ isEmbed = false }) {
       id: 'sequence',
       title: lang === 'en' ? 'Scanner Sequence Diagram' : 'Diagramme de Séquence du Scanner',
       titleFr: 'Diagramme de Séquence du Scanner',
-      file: 'Diagramme de Séquence du Scanner.png',
+      file: 'seq.png',
       description: lang === 'en'
         ? 'UML sequence diagram showing scanner workflow and interactions'
         : 'Diagramme UML de séquence montrant le workflow du scanner et les interactions'
-    },
-    {
-      id: 'database',
-      title: lang === 'en' ? 'Database Entity-Relation' : 'Base de Données Entité-Relation',
-      titleFr: 'Diagramme Entité-Relation de la Base de Données',
-      file: 'Diagramme Entité-Relation de la Base de Données.png',
-      description: lang === 'en'
-        ? 'Entity-relationship diagram showing database schema and relationships'
-        : 'Diagramme entité-relation montrant le schéma de base de données et les relations'
     }
   ]
 
