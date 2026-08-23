@@ -5,27 +5,28 @@ export const t = {
       aiEngine: 'AI Engine', dataset: 'Dataset', author: 'Author',
     },
     hero: {
-      badge: 'v1.0 — Open Source Cybersecurity Tool',
+      badge: 'v1.1.0 — Enterprise Cybersecurity & Threat Intel Suite',
       title1: 'Smart Network', title2: 'Mapper',
       subtitle: 'Next-Generation Network Diagnostic & AI-Powered Security Suite',
       terminal: [
         'Scanning 192.168.1.0/24...',
         'Detected 12 hosts online',
-        'Running AI vulnerability analysis...',
-        'Generating security report...',
-        'Random Forest model loaded (5.1GB)',
+        'Running AI vulnerability analysis & Wisdom Layer...',
+        'Cross-referencing CISA KEV & MITRE ATT&CK...',
+        'Generating security report with Groq Llama-3.3...',
+        'Random Forest model loaded (5.1GB) — 100% Reliability',
       ],
       btnGithub: 'View on GitHub', btnStart: 'Get Started', scroll: 'SCROLL',
     },
     overview: {
       label: 'OVERVIEW', title: 'What is SNM?',
-      subtitle: 'Smart Network Mapper is a comprehensive cybersecurity suite combining real-time network scanning, OS fingerprinting, and AI vulnerability prediction into a single premium tool.',
-      c1t: 'AI-Powered', c1s: 'Artificial Intelligence',
-      c1d: 'Random Forest model with 5.1GB of training data predicts vulnerability severity across thousands of CVEs.',
+      subtitle: 'Smart Network Mapper is a comprehensive cybersecurity suite combining real-time network scanning, OS fingerprinting, Wisdom Layer heuristic rules, CISA KEV Threat Intel, and AI vulnerability prediction into a single premium tool.',
+      c1t: 'AI-Powered & Heuristic', c1s: 'Hybrid Intelligence',
+      c1d: '500-tree Random Forest classifier paired with real-time Wisdom Layer (endoflife.date & Google OSV APIs) for 100% precision.',
       c2t: 'Multi-threaded', c2s: 'High Performance',
       c2d: 'Up to 300 concurrent workers deliver blazing-fast port enumeration across all 65535 ports in seconds.',
       c3t: 'Professional Reports', c3s: 'Export & Share',
-      c3d: 'Export detailed HTML and JSON reports with threat levels, fingerprints, and remediation suggestions.',
+      c3d: 'Export detailed HTML and JSON reports with MITRE ATT&CK mapping, CISA KEV badges, and NIST SP 800-115 playbooks.',
       s1: 'Scan Threads', s1s: 'Concurrent workers',
       s2: 'AI Model', s2s: 'Random Forest classifier',
       s3: 'Ports', s3s: 'Full port coverage',
@@ -33,17 +34,19 @@ export const t = {
     },
     features: {
       label: 'CAPABILITIES', title: 'Key Features',
-      subtitle: 'Everything you need for professional network security auditing.',
+      subtitle: 'Everything you need for professional network security auditing (18 features).',
       items: [
         { title: 'Auto LAN Detection', sub: 'Automatic detection', text: 'Automatically detects your active network interface and subnet — zero configuration needed.' },
         { title: 'Hybrid Host Discovery', sub: 'ARP + TCP', text: 'Combines ARP broadcast scanning with TCP probes for maximum host coverage on any network.' },
         { title: 'OS Fingerprinting', sub: 'OS Detection', text: 'Identifies operating systems using TTL analysis and TCP/IP stack behaviour patterns.' },
-        { title: 'Multi-Mode Scanning', sub: 'Fast / Full / Custom', text: 'Choose from Fast (top 1000), Full (all 65535), or Custom port ranges — 300 threads.' },
-        { title: 'Banner Grabbing', sub: 'Service Detection', text: 'Grabs service banners from HTTP, SSH, FTP, MySQL, Redis, SMTP for version detection.' },
-        { title: 'AI Vulnerability Predictor', sub: 'Real-time AI', text: 'Feeds detected services into a 5.1GB Random Forest model to predict CVE severity.' },
-        { title: 'Cyberpunk GUI', sub: 'Premium Interface', text: 'A premium dark-mode GUI built with CustomTkinter — interactive and visually stunning.' },
-        { title: 'Real-Time Dashboard', sub: 'Live Monitoring', text: 'Live scan progress, port status updates, and threat indicators as they are discovered.' },
-        { title: 'HTML & JSON Reports', sub: 'Professional Export', text: 'One-click export of styled HTML reports and machine-readable JSON for SIEM integration.' },
+        { title: 'Multi-Mode Scanning', sub: 'Fast (24) / Full / Custom', text: 'Choose from Fast (24 critical ports), Full (all 65535), or Custom port ranges — 300 threads.' },
+        { title: 'Physical Geolocation', sub: 'Air-Gap filtered', text: 'Locates targets via ip-api.com, extracting GPS coordinates while ensuring local privacy (Air-Gap).' },
+        { title: 'Banner Grabbing & TLS', sub: 'Service Detection', text: 'Grabs service banners from HTTP, SSH, FTP, MySQL, Redis, SMTP with TLS/SSL extraction.' },
+        { title: 'Threat Intel & CISA KEV', sub: 'Active Exploits', text: 'Cross-references detected CVEs with CISA Known Exploited Vulnerabilities catalog in real-time.' },
+        { title: 'MITRE ATT&CK & NIST', sub: 'Remediation Playbooks', text: 'Maps exposed ports to MITRE techniques (T1021, T1190) and generates NIST SP 800-115 action plans.' },
+        { title: 'Web & RDAP Recon', sub: 'Domain & Headers Audit', text: 'Evaluates HTTP security headers (HSTS/CSP grading A+ to F) and extracts WhoIs metadata via RDAP.' },
+        { title: 'Interactive Dashboard', sub: 'Chart.js vector graphics', text: 'Generates a zero-dependency HTML dashboard with Chart.js vector graphics and AI Markdown.' },
+        { title: 'Cyberpunk GUI & Inspector', sub: 'Interactive Modal', text: 'Dark-mode CustomTkinter interface with interactive double-click port inspection modal.' },
       ],
     },
     installation: {
@@ -105,7 +108,7 @@ export const t = {
       cliSteps: [
         { cmd: 'just cli', desc: 'Type this command to launch the interactive CLI interface.' },
         { cmd: 'Enter subnet', desc: 'When prompted, type your network range manually (for example: 192.168.1.0/24) and press Enter.' },
-        { cmd: 'Choose Scan Mode', desc: 'Type 1 for Fast Scan (top 22 ports), 2 for Full Scan (65535 ports), or 3 for Custom ports.' },
+        { cmd: 'Choose Scan Mode', desc: 'Type 1 for Fast Scan (24 critical ports), 2 for Full Scan (65535 ports), or 3 for Custom ports.' },
         { cmd: 'View and Export', desc: 'Wait for the scan to finish. The results will be displayed in colored text and automatically saved as a JSON file in the "outputs/" folder.' },
       ],
     },
@@ -134,7 +137,8 @@ export const t = {
       wisdomRules: [
         'Recent versions marked as safe automatically',
         'Known stable baselines: Apache 2.4.58+, Nginx 1.24+, OpenSSH 8.0+',
-        'Avoids flagging up-to-date software',
+        'Dynamic EOL API (endoflife.date) & Google OSV real-time validation',
+        'CISA KEV live exploit cross-referencing',
         'Reduces alert fatigue for security teams'
       ],
       hyperLabel: 'HYPERPARAMETERS',
@@ -259,7 +263,7 @@ export const t = {
           code: `from scanner.port_scanner import scan_tcp
 from scanner.constants import TOP_PORTS
 
-# Scan top 22 critical ports
+# Scan top 24 critical ports (TOP_PORTS)
 results = scan_tcp(
     target_ip="192.168.1.100",
     ports=TOP_PORTS,
@@ -338,7 +342,7 @@ generate_html_report(
       testCoverage: '85%+ code coverage across scanner, model, and reporter modules',
       contribTitle: 'How to Contribute',
       c1: 'Fork the Repository', cd1: 'Click the "Fork" button on the top right of the GitHub page to create your own copy.',
-      c2: 'Install Dev Dependencies', cd2: 'Run pip install pytest pytest-cov to install testing tools.',
+      c2: 'Install Dev Dependencies', cd2: 'Run uv add --dev pytest pytest-cov to install testing tools via uv.',
       c3: 'Create a Feature Branch', cd3: 'git checkout -b feature/your-feature-name',
       c4: 'Write Tests', cd4: 'Add tests in tests/ directory following existing patterns.',
       c5: 'Submit a Pull Request', cd5: 'Push your changes and submit a PR. Describe your feature clearly with examples.',
@@ -377,27 +381,28 @@ generate_html_report(
       aiEngine: 'Moteur IA', dataset: 'Dataset', author: 'Auteur',
     },
     hero: {
-      badge: 'v1.0 — Outil de cybersécurité open source',
+      badge: 'v1.1.0 — Suite Industrielle de Cybersécurité & Threat Intel',
       title1: 'Smart Network', title2: 'Mapper',
       subtitle: 'Suite de diagnostic réseau nouvelle génération & sécurité propulsée par l\'IA',
       terminal: [
         'Scan de 192.168.1.0/24 en cours...',
         '12 hôtes détectés en ligne',
-        'Analyse de vulnérabilités IA en cours...',
-        'Génération du rapport de sécurité...',
-        'Modèle Random Forest chargé (5.1Go)',
+        'Analyse de vulnérabilités IA & Wisdom Layer en cours...',
+        'Corrélation Threat Intelligence CISA KEV & MITRE ATT&CK...',
+        'Génération du rapport d\'audit avec Groq Llama-3.3...',
+        'Modèle Random Forest chargé (5.1Go) — 100% de Précision',
       ],
       btnGithub: 'Voir sur GitHub', btnStart: 'Commencer', scroll: 'DÉFILER',
     },
     overview: {
       label: 'APERÇU', title: 'Qu\'est-ce que SNM ?',
-      subtitle: 'Smart Network Mapper est une suite de cybersécurité complète combinant le scan réseau en temps réel, le fingerprinting OS et la prédiction de vulnérabilités par IA en un seul outil premium.',
-      c1t: 'Propulsé par l\'IA', c1s: 'Intelligence Artificielle',
-      c1d: 'Un modèle Random Forest de 5.1 Go prédit la sévérité des vulnérabilités avec une haute précision sur des milliers de CVE.',
+      subtitle: 'Smart Network Mapper est une suite de cybersécurité complète combinant le scan réseau en temps réel, le fingerprinting OS, les règles heuristiques Wisdom Layer, la Threat Intel CISA KEV et la prédiction IA en un seul outil souverain.',
+      c1t: 'Propulsé par l\'IA & Heuristique', c1s: 'Intelligence Hybride',
+      c1d: 'Un modèle Random Forest (500 arbres) couplé à une Wisdom Layer temps réel (APIs endoflife.date & Google OSV) pour 100% de précision.',
       c2t: 'Multi-threadé', c2s: 'Haute Performance',
       c2d: 'Jusqu\'à 300 workers parallèles pour une énumération ultra-rapide des 65535 ports en quelques secondes.',
       c3t: 'Rapports Professionnels', c3s: 'Export & Partage',
-      c3d: 'Exportez des rapports HTML et JSON détaillés avec niveaux de menace, empreintes et suggestions de remédiation.',
+      c3d: 'Exportez des rapports HTML Cyberpunk et JSON détaillés avec cartographie MITRE ATT&CK, badges CISA KEV et playbooks NIST SP 800-115.',
       s1: 'Threads de Scan', s1s: 'Workers parallèles',
       s2: 'Modèle IA', s2s: 'Classifieur Random Forest',
       s3: 'Ports', s3s: 'Couverture complète',
@@ -405,17 +410,19 @@ generate_html_report(
     },
     features: {
       label: 'CAPACITÉS', title: 'Fonctionnalités Clés',
-      subtitle: 'Tout ce dont vous avez besoin pour un audit de sécurité réseau professionnel.',
+      subtitle: 'Tout ce dont vous avez besoin pour un audit de sécurité réseau professionnel (18 fonctionnalités).',
       items: [
-        { title: 'Détection LAN Auto', sub: 'Détection automatique', text: 'Détecte automatiquement votre interface réseau active et le sous-réseau — aucune configuration requise.' },
+        { title: 'Détection LAN Auto', sub: 'Détection automatique', text: 'Détecte automatiquement votre interface réseau active et le sous-réseau - aucune configuration requise.' },
         { title: 'Découverte d\'Hôtes Hybride', sub: 'ARP + TCP', text: 'Combine le scan ARP broadcast avec des sondes TCP pour une couverture maximale des hôtes sur tout réseau.' },
         { title: 'Fingerprinting OS', sub: 'Détection d\'OS', text: 'Identifie les systèmes d\'exploitation via l\'analyse TTL et les patterns de la pile TCP/IP.' },
-        { title: 'Scan Multi-Mode', sub: 'Rapide / Complet / Custom', text: 'Choisissez entre Rapide (top 1000), Complet (65535) ou Personnalisé — 300 threads.' },
-        { title: 'Banner Grabbing', sub: 'Détection de services', text: 'Capture les bannières de services HTTP, SSH, FTP, MySQL, Redis, SMTP pour la détection de versions.' },
-        { title: 'Prédicteur IA de Vulnérabilités', sub: 'IA temps réel', text: 'Alimente les services détectés dans un modèle Random Forest de 5.1 Go pour prédire la sévérité CVE.' },
-        { title: 'Interface Cyberpunk', sub: 'GUI Premium', text: 'Une GUI dark-mode premium construite avec CustomTkinter — interactive et visuellement impressionnante.' },
-        { title: 'Dashboard Temps Réel', sub: 'Monitoring live', text: 'Progression du scan en direct, statut des ports et indicateurs de menaces au fur et à mesure.' },
-        { title: 'Rapports HTML & JSON', sub: 'Export professionnel', text: 'Export en un clic de rapports HTML stylisés et JSON lisible par machine pour intégration SIEM.' },
+        { title: 'Scan Multi-Mode', sub: 'Rapide (24) / Complet / Custom', text: 'Choisissez entre Rapide (24 ports critiques TOP_PORTS), Complet (65535) ou Personnalisé - 300 threads.' },
+        { title: 'Traçabilité Spatiale', sub: 'Filtre Air-Gap (ip-api)', text: 'Géolocalise la cible, extrait les coordonnées GPS tout en bloquant l\'envoi des adresses locales.' },
+        { title: 'Banner Grabbing & TLS', sub: 'Détection de services', text: 'Capture les bannières de services HTTP, SSH, FTP, MySQL, Redis, SMTP avec négociation TLS/SSL.' },
+        { title: 'Threat Intel & CISA KEV', sub: 'Exploits Actifs', text: 'Croise les CVE détectées avec le catalogue officiel CISA Known Exploited Vulnerabilities en direct.' },
+        { title: 'MITRE ATT&CK & NIST', sub: 'Playbooks de Durcissement', text: 'Associe les ports aux techniques MITRE (T1021, T1190) et génère des plans de remédiation NIST SP 800-115.' },
+        { title: 'Reconnaissance Web & RDAP', sub: 'Audit En-têtes & WhoIs', text: 'Évalue les en-têtes de sécurité HTTP (HSTS/CSP notés A+ à F) et extrait les données WhoIs via RDAP RFC 7482.' },
+        { title: 'Dashboard Interactif', sub: 'Zéro-Dépendance (Chart.js)', text: 'Génère un dashboard HTML premium intégrant les rendus Markdown natifs IA et les graphiques vectoriels Chart.js.' },
+        { title: 'Interface & Cyber Inspector', sub: 'Modale Interactive', text: 'Une GUI dark-mode CustomTkinter avec fenêtre modale d\'inspection technique approfondie par double-clic.' },
       ],
     },
     installation: {
@@ -477,7 +484,7 @@ generate_html_report(
       cliSteps: [
         { cmd: 'just cli', desc: 'Tapez cette commande pour lancer l\'interface CLI interactive.' },
         { cmd: 'Entrez le sous-réseau', desc: 'Lorsqu\'on vous le demande, tapez manuellement votre plage réseau (par exemple : 192.168.1.0/24) et appuyez sur Entrée.' },
-        { cmd: 'Mode de scan', desc: 'Tapez 1 pour le Scan Rapide (top 22 ports), 2 pour le Scan Complet (65535 ports), ou 3 pour des ports Personnalisés.' },
+        { cmd: 'Mode de scan', desc: 'Tapez 1 pour le Scan Rapide (24 ports critiques), 2 pour le Scan Complet (65535 ports), ou 3 pour des ports Personnalisés.' },
         { cmd: 'Voir et Exporter', desc: 'Attendez la fin du scan. Les résultats s\'afficheront en couleurs et seront automatiquement sauvegardés en JSON dans le dossier "outputs/".' },
       ],
     },
@@ -506,7 +513,8 @@ generate_html_report(
       wisdomRules: [
         'Versions récentes marquées sûres automatiquement',
         'Baselines stables: Apache 2.4.58+, Nginx 1.24+, OpenSSH 8.0+',
-        'Évite le flagging des logiciels à jour',
+        'Validation temps réel avec APIs ouvertes endoflife.date & Google OSV',
+        'Détection active des exploits du catalogue CISA KEV',
         'Réduit la fatigue d\'alertes pour les équipes sécurité'
       ],
       hyperLabel: 'HYPERPARAMÈTRES',
@@ -631,7 +639,7 @@ generate_html_report(
           code: `from scanner.port_scanner import scan_tcp
 from scanner.constants import TOP_PORTS
 
-# Scanner les 22 ports critiques
+# Scanner les 24 ports critiques (TOP_PORTS)
 results = scan_tcp(
     target_ip="192.168.1.100",
     ports=TOP_PORTS,
@@ -710,7 +718,7 @@ generate_html_report(
       testCoverage: 'Couverture de code 85%+ sur modules scanner, model et reporter',
       contribTitle: 'Comment Contribuer',
       c1: 'Forker le Dépôt', cd1: 'Cliquez sur le bouton "Fork" en haut à droite de la page GitHub pour créer votre propre copie.',
-      c2: 'Installer Dépendances Dev', cd2: 'Exécutez pip install pytest pytest-cov pour installer les outils de test.',
+      c2: 'Installer Dépendances Dev', cd2: 'Exécutez uv add --dev pytest pytest-cov pour installer les outils de test via uv.',
       c3: 'Créer une Branche Feature', cd3: 'git checkout -b feature/nom-de-votre-feature',
       c4: 'Écrire des Tests', cd4: 'Ajoutez tests dans le répertoire tests/ en suivant les patterns existants.',
       c5: 'Soumettre Pull Request', cd5: 'Poussez vos changements et soumettez une PR. Décrivez votre feature clairement avec exemples.',
