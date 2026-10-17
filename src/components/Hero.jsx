@@ -83,12 +83,12 @@ export default function Hero() {
           transition={{ duration: 0.6 }}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.375rem 1rem', borderRadius: '9999px',
-            border: '1px solid rgba(0,255,255,0.25)', background: 'rgba(0,255,255,0.05)',
-            marginBottom: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--cyan)',
+            padding: '0.35rem 0.9rem', borderRadius: '0.375rem',
+            border: '1px solid rgba(255, 255, 255, 0.12)', background: 'rgba(255, 255, 255, 0.03)',
+            marginBottom: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#e2e8f0',
           }}
         >
-          <span className="animate-pulse-dot" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--cyan)', boxShadow: '0 0 6px var(--cyan)' }} />
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
           {tx.badge}
         </motion.div>
 
@@ -97,12 +97,18 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="font-orbitron"
-          style={{ fontWeight: 900, fontSize: 'clamp(1.75rem, 7vw, 5.5rem)', lineHeight: 1.05, marginBottom: '1.5rem' }}
+          style={{
+            fontFamily: 'var(--font-heading)',
+            fontWeight: 800,
+            fontSize: 'clamp(2.2rem, 7vw, 5.25rem)',
+            lineHeight: 1.08,
+            marginBottom: '1.5rem',
+            letterSpacing: '-0.03em',
+          }}
         >
           <span className="animated-gradient-text">{tx.title1}</span>
           <br />
-          <span style={{ color: 'var(--text-primary)' }}>{tx.title2}</span>
+          <span style={{ color: '#ffffff' }}>{tx.title2}</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -111,8 +117,8 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
           style={{
-            color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
-            margin: '0 auto 1.25rem', lineHeight: 1.6, maxWidth: '40rem',
+            color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 2.5vw, 1.15rem)',
+            margin: '0 auto 1.5rem', lineHeight: 1.65, maxWidth: '42rem',
           }}
         >
           {tx.subtitle}
@@ -125,12 +131,18 @@ export default function Hero() {
           transition={{ delay: 0.4 }}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            gap: '0.5rem', marginBottom: '2.5rem', height: '2rem',
+            gap: '0.5rem', marginBottom: '2.5rem', height: '2.25rem',
             maxWidth: '100%', overflow: 'hidden',
           }}
         >
-          <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.875rem' }}>$</span>
-          <TypingText phrases={tx.terminal} />
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.25rem 0.85rem', borderRadius: '0.375rem',
+            background: 'rgba(15, 23, 42, 0.65)', border: '1px solid rgba(255, 255, 255, 0.08)',
+          }}>
+            <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.825rem' }}>$</span>
+            <TypingText phrases={tx.terminal} />
+          </div>
         </motion.div>
 
         {/* Tech badges */}
@@ -141,19 +153,17 @@ export default function Hero() {
           style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '2.5rem' }}
         >
           {BADGES.map((b) => (
-            <motion.span 
+            <span 
               key={b} 
-              whileHover={{ scale: 1.05, boxShadow: '0 0 15px rgba(124,58,237,0.5)', borderColor: 'rgba(124,58,237,0.8)' }}
-              whileTap={{ scale: 0.95 }}
               style={{
-                padding: '0.25rem 0.875rem', fontSize: '0.75rem', fontWeight: 500,
-                borderRadius: '9999px', border: '1px solid rgba(124,58,237,0.3)',
-                background: 'rgba(124,58,237,0.08)', color: '#a78bfa', fontFamily: 'var(--font-mono)',
-                cursor: 'default', transition: 'border-color 0.2s'
+                padding: '0.25rem 0.75rem', fontSize: '0.725rem', fontWeight: 500,
+                borderRadius: '0.375rem', border: '1px solid rgba(255, 255, 255, 0.08)',
+                background: 'rgba(255, 255, 255, 0.03)', color: '#94a3b8', fontFamily: 'var(--font-mono)',
+                cursor: 'default', transition: 'border-color 0.2s',
               }}
             >
               {b}
-            </motion.span>
+            </span>
           ))}
         </motion.div>
 
@@ -170,17 +180,17 @@ export default function Hero() {
             className="hero-btn"
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-              padding: '0.875rem 2rem', borderRadius: '9999px',
+              padding: '0.75rem 1.75rem', borderRadius: '0.5rem',
               fontWeight: 700, fontSize: '0.9rem',
-              background: 'linear-gradient(135deg, var(--cyan) 0%, var(--purple) 100%)',
-              color: '#050508', textDecoration: 'none',
-              boxShadow: '0 0 30px rgba(0,255,255,0.25)',
-              transition: 'box-shadow 0.3s, transform 0.2s',
+              background: 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+              color: '#ffffff', textDecoration: 'none',
+              boxShadow: '0 4px 15px rgba(2, 132, 199, 0.25)',
+              transition: 'all 0.2s',
               fontFamily: 'var(--font-heading)',
-              minHeight: '52px',
+              minHeight: '48px',
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 0 50px rgba(0,255,255,0.45)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 0 30px rgba(0,255,255,0.25)'; e.currentTarget.style.transform = 'translateY(0)' }}
+            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(2, 132, 199, 0.4)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 4px 15px rgba(2, 132, 199, 0.25)'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
             <GithubIcon size={16} /> {tx.btnGithub} →
           </a>
@@ -189,16 +199,16 @@ export default function Hero() {
             className="hero-btn"
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-              padding: '0.875rem 2rem', borderRadius: '9999px',
+              padding: '0.75rem 1.75rem', borderRadius: '0.5rem',
               fontWeight: 600, fontSize: '0.9rem',
-              border: '1px solid rgba(0,255,255,0.35)', color: 'var(--cyan)',
-              background: 'transparent', cursor: 'pointer',
-              transition: 'background 0.2s, border-color 0.2s, transform 0.2s',
+              border: '1px solid rgba(255, 255, 255, 0.15)', color: '#f8fafc',
+              background: 'rgba(255, 255, 255, 0.03)', cursor: 'pointer',
+              transition: 'all 0.2s',
               fontFamily: 'var(--font-heading)',
-              minHeight: '52px',
+              minHeight: '48px',
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,255,255,0.08)'; e.currentTarget.style.borderColor = 'var(--cyan)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(0,255,255,0.35)'; e.currentTarget.style.transform = 'translateY(0)' }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'; e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
             {tx.btnStart} ↓
           </button>

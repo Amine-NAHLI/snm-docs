@@ -17,7 +17,7 @@
   --glow-magenta: 0 0 20px rgba(255, 0, 255, 0.3);
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
   --font-heading: 'Space Grotesk', sans-serif;
-  --font-orbitron: 'Orbitron', sans-serif;
+  --font-orbitron: 'Space Grotesk', sans-serif;
 }
 
 *, *::before, *::after {
@@ -77,7 +77,7 @@ img, canvas {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #00ffff 0%, #7c3aed 50%, #ff00ff 100%);
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -460,7 +460,7 @@ code, pre {
 
 /* Animated Gradient Text */
 .animated-gradient-text {
-  background: linear-gradient(to right, var(--cyan), var(--purple), var(--cyan));
+  background: linear-gradient(to right, #38bdf8, #818cf8, #38bdf8);
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
