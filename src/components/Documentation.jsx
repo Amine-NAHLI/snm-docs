@@ -58,19 +58,29 @@ export default function Documentation() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          style={{ textAlign: 'center', marginBottom: '4rem' }}
+          style={{ textAlign: 'center', marginBottom: '3.5rem' }}
         >
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.375rem 1rem', borderRadius: '9999px',
-            border: '1px solid rgba(0,255,255,0.2)', background: 'rgba(0,255,255,0.04)',
-            color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.7rem',
-            marginBottom: '1.5rem', letterSpacing: '0.12em',
+          <p style={{
+            color: 'var(--cyan)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            marginBottom: '0.75rem',
           }}>
-            <BookOpen size={13} /> {lang === 'en' ? 'DOCUMENTATION' : 'DOCUMENTATION'}
-          </div>
-          <h2 className="font-orbitron" style={{ fontWeight: 700, fontSize: 'clamp(1.5rem, 4vw, 3rem)', marginBottom: '1rem', color: 'var(--text-primary)' }}>
-            {lang === 'en' ? 'Get' : 'Pour'} <span className="gradient-text">{t[lang].hero.btnStart}</span>
+            {lang === 'en' ? 'DOCUMENTATION' : 'DOCUMENTATION'}
+          </p>
+          <h2 style={{
+            fontFamily: 'var(--font-heading)',
+            fontWeight: 800,
+            fontSize: 'clamp(1.85rem, 4.5vw, 2.75rem)',
+            marginBottom: '1rem',
+            color: '#f8fafc',
+            letterSpacing: '-0.02em',
+          }}>
+            {lang === 'en' ? 'Technical ' : 'Documentation '}
+            <span className="gradient-text">{lang === 'en' ? 'Documentation' : 'Technique'}</span>
           </h2>
           <p style={{ color: 'var(--text-secondary)', maxWidth: '36rem', margin: '0 auto' }}>
             {lang === 'en'

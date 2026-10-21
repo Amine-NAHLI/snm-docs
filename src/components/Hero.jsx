@@ -76,22 +76,6 @@ export default function Hero() {
         textAlign: 'center', padding: '0 1.5rem',
         maxWidth: '64rem', margin: '0 auto',
       }}>
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.35rem 0.9rem', borderRadius: '0.375rem',
-            border: '1px solid rgba(255, 255, 255, 0.12)', background: 'rgba(255, 255, 255, 0.03)',
-            marginBottom: '2rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#e2e8f0',
-          }}
-        >
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 6px #10b981' }} />
-          {tx.badge}
-        </motion.div>
-
         {/* Title */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -100,7 +84,7 @@ export default function Hero() {
           style={{
             fontFamily: 'var(--font-heading)',
             fontWeight: 800,
-            fontSize: 'clamp(2.2rem, 7vw, 5.25rem)',
+            fontSize: 'clamp(2.5rem, 7.5vw, 5.5rem)',
             lineHeight: 1.08,
             marginBottom: '1.5rem',
             letterSpacing: '-0.03em',
@@ -118,7 +102,7 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.2 }}
           style={{
             color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 2.5vw, 1.15rem)',
-            margin: '0 auto 1.5rem', lineHeight: 1.65, maxWidth: '42rem',
+            margin: '0 auto 2rem', lineHeight: 1.65, maxWidth: '42rem',
           }}
         >
           {tx.subtitle}
@@ -128,7 +112,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.35 }}
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             gap: '0.5rem', marginBottom: '2.5rem', height: '2.25rem',
@@ -137,34 +121,13 @@ export default function Hero() {
         >
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.25rem 0.85rem', borderRadius: '0.375rem',
-            background: 'rgba(15, 23, 42, 0.65)', border: '1px solid rgba(255, 255, 255, 0.08)',
+            padding: '0.3rem 0.95rem', borderRadius: '0.5rem',
+            background: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
           }}>
             <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.825rem' }}>$</span>
             <TypingText phrases={tx.terminal} />
           </div>
-        </motion.div>
-
-        {/* Tech badges */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '2.5rem' }}
-        >
-          {BADGES.map((b) => (
-            <span 
-              key={b} 
-              style={{
-                padding: '0.25rem 0.75rem', fontSize: '0.725rem', fontWeight: 500,
-                borderRadius: '0.375rem', border: '1px solid rgba(255, 255, 255, 0.08)',
-                background: 'rgba(255, 255, 255, 0.03)', color: '#94a3b8', fontFamily: 'var(--font-mono)',
-                cursor: 'default', transition: 'border-color 0.2s',
-              }}
-            >
-              {b}
-            </span>
-          ))}
         </motion.div>
 
         {/* CTA buttons */}

@@ -25,22 +25,23 @@ export default function AIEngine() {
     >
       <div style={{ maxWidth: '78rem', margin: '0 auto', position: 'relative', zIndex: 10 }} ref={ref}>
         
-        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
           style={{ textAlign: 'center', marginBottom: '3.5rem' }}
         >
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.35rem 0.85rem', borderRadius: '0.375rem',
-            border: '1px solid rgba(129, 140, 248, 0.25)', background: 'rgba(129, 140, 248, 0.06)',
-            color: '#a5b4fc', fontFamily: 'var(--font-mono)', fontSize: '0.725rem',
-            marginBottom: '1.25rem', letterSpacing: '0.08em', fontWeight: 600,
+          <p style={{
+            color: 'var(--cyan)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            marginBottom: '0.75rem',
           }}>
-            <Brain size={14} /> {tx.label}
-          </div>
+            {tx.label}
+          </p>
           <h2 style={{
             fontFamily: 'var(--font-heading)',
             fontWeight: 800,
@@ -317,7 +318,6 @@ export default function AIEngine() {
           </motion.div>
         </div>
 
-        {/* Wisdom Layer Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -331,25 +331,12 @@ export default function AIEngine() {
             marginBottom: '3rem',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '1rem' }}>
-            <span style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.7rem',
-              fontWeight: 700,
-              color: '#818cf8',
-              background: 'rgba(129, 140, 248, 0.1)',
-              border: '1px solid rgba(129, 140, 248, 0.25)',
-              padding: '0.2rem 0.5rem',
-              borderRadius: '0.375rem',
-              letterSpacing: '0.05em',
-            }}>
-              HEURISTIC ENGINE
-            </span>
+          <div style={{ marginBottom: '1rem' }}>
             <h3 style={{
               color: '#f8fafc',
               fontFamily: 'var(--font-heading)',
               fontWeight: 700,
-              fontSize: '1.15rem',
+              fontSize: '1.2rem',
               margin: 0,
             }}>
               {tx.wisdomLabel}

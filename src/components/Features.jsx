@@ -63,15 +63,17 @@ export default function Features() {
           transition={{ duration: 0.5 }}
           style={{ textAlign: 'center', marginBottom: '3rem' }}
         >
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.35rem 0.85rem', borderRadius: '0.375rem',
-            border: '1px solid rgba(129, 140, 248, 0.25)', background: 'rgba(129, 140, 248, 0.05)',
-            color: '#a5b4fc', fontFamily: 'var(--font-mono)', fontSize: '0.725rem',
-            marginBottom: '1.25rem', letterSpacing: '0.08em', fontWeight: 600,
+          <p style={{
+            color: 'var(--cyan)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            marginBottom: '0.75rem',
           }}>
-            <Cpu size={14} /> {tx.label}
-          </div>
+            {tx.label}
+          </p>
           <h2 style={{
             fontFamily: 'var(--font-heading)',
             fontWeight: 800,

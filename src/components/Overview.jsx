@@ -62,7 +62,7 @@ function TechnicalCard({ config, title, sub, desc, i, inView }) {
       }}
     >
       {/* Top Meta Line */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
         <div style={{
           width: '2.5rem',
           height: '2.5rem',
@@ -75,19 +75,6 @@ function TechnicalCard({ config, title, sub, desc, i, inView }) {
         }}>
           <Icon size={18} style={{ color: config.color }} />
         </div>
-        <span style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.675rem',
-          fontWeight: 600,
-          color: config.color,
-          background: `${config.color}12`,
-          border: `1px solid ${config.color}25`,
-          padding: '0.2rem 0.55rem',
-          borderRadius: '0.375rem',
-          letterSpacing: '0.05em',
-        }}>
-          {config.badge}
-        </span>
       </div>
 
       {/* Title */}
@@ -143,9 +130,9 @@ export default function Overview() {
 
   const STATS = [
     { value: '300', label: tx.s1, sub: tx.s1s, color: '#06b6d4' },
-    { value: '5.1 GB', label: tx.s2, sub: tx.s2s, color: '#818cf8' },
+    { value: '500', label: lang === 'en' ? 'Decision Trees' : 'Arbres de Décision', sub: 'Random Forest (F1: 0.89)', color: '#818cf8' },
     { value: '65 535', label: tx.s3, sub: tx.s3s, color: '#38bdf8' },
-    { value: '4+', label: tx.s4, sub: tx.s4s, color: '#10b981' },
+    { value: '96.3%', label: lang === 'en' ? 'L7 Extraction' : 'Extraction L7', sub: lang === 'en' ? 'Banner Accuracy' : 'Précision Bannières', color: '#10b981' },
   ]
 
   return (
@@ -161,15 +148,17 @@ export default function Overview() {
           variants={fadeUp} custom={0} initial="hidden" animate={inView ? 'show' : 'hidden'}
           style={{ textAlign: 'center', marginBottom: '3.5rem' }}
         >
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.35rem 0.85rem', borderRadius: '0.375rem',
-            border: '1px solid rgba(6, 182, 212, 0.25)', background: 'rgba(6, 182, 212, 0.05)',
-            color: 'var(--cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.725rem',
-            marginBottom: '1.25rem', letterSpacing: '0.08em', fontWeight: 600,
+          <p style={{
+            color: 'var(--cyan)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.75rem',
+            fontWeight: 600,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            marginBottom: '0.75rem',
           }}>
-            <ShieldCheck size={14} /> {tx.label}
-          </div>
+            {tx.label}
+          </p>
           <h2 style={{
             fontFamily: 'var(--font-heading)',
             fontWeight: 800,
